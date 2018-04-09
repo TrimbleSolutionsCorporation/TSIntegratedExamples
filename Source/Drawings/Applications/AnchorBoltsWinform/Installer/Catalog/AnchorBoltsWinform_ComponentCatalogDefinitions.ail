@@ -1,0 +1,75 @@
+﻿string_utf8 albl_AnchorBoltsWinform
+{
+    entry = ("enu", "Anchor Bolts Winform");
+    entry = ("chs", "Anchor Bolts Winform");
+    entry = ("cht", "Anchor Bolts Winform");
+    entry = ("csy", "Anchor Bolts Winform");
+    entry = ("deu", "Anchor Bolts Winform");
+    entry = ("esp", "Anchor Bolts Winform");
+    entry = ("fra", "Anchor Bolts Winform");
+    entry = ("hun", "Anchor Bolts Winform");
+    entry = ("ita", "Anchor Bolts Winform");
+    entry = ("jpn", "Anchor Bolts Winform");
+    entry = ("nld", "Anchor Bolts Winform");
+    entry = ("plk", "Anchor Bolts Winform");
+    entry = ("ptb", "Anchor Bolts Winform");
+    entry = ("ptg", "Anchor Bolts Winform");
+    entry = ("rus", "Anchor Bolts Winform");
+};
+
+string_utf8 albl_AnchorBoltsWinform_Description
+{
+    entry = ("enu", "Creates dimensions to anchor bolts in existing drawing view.");
+    entry = ("chs", "Creates dimensions to anchor bolts in existing drawing view.");
+    entry = ("cht", "Creates dimensions to anchor bolts in existing drawing view.");
+    entry = ("csy", "Creates dimensions to anchor bolts in existing drawing view.");
+    entry = ("deu", "Creates dimensions to anchor bolts in existing drawing view.");
+    entry = ("esp", "Creates dimensions to anchor bolts in existing drawing view.");
+    entry = ("fra", "Creates dimensions to anchor bolts in existing drawing view.");
+    entry = ("hun", "Creates dimensions to anchor bolts in existing drawing view.");
+    entry = ("ita", "Creates dimensions to anchor bolts in existing drawing view.");
+    entry = ("jpn", "Creates dimensions to anchor bolts in existing drawing view.");
+    entry = ("nld", "Creates dimensions to anchor bolts in existing drawing view.");
+    entry = ("plk", "Creates dimensions to anchor bolts in existing drawing view.");
+    entry = ("ptb", "Creates dimensions to anchor bolts in existing drawing view.");
+    entry = ("ptg", "Creates dimensions to anchor bolts in existing drawing view.");
+    entry = ("rus", "Creates dimensions to anchor bolts in existing drawing view.");
+};
+
+string_utf8 albl_Example_Extensions
+{
+    entry = ("enu", "Example Extensions");
+    entry = ("chs", "Example Extensions");
+    entry = ("cht", "Example Extensions");
+    entry = ("csy", "Example Extensions");
+    entry = ("deu", "Example Extensions");
+    entry = ("esp", "Example Extensions");
+    entry = ("fra", "Example Extensions");
+    entry = ("hun", "Example Extensions");
+    entry = ("ita", "Example Extensions");
+    entry = ("jpn", "Example Extensions");
+    entry = ("nld", "Example Extensions");
+    entry = ("plk", "Example Extensions");
+    entry = ("ptb", "Example Extensions");
+    entry = ("ptg", "Example Extensions");
+    entry = ("rus", "Example Extensions");
+};
+
+string_utf8 albl_Example_Extensions_Description
+{
+    entry = ("enu", "Example extensions catalog folder");
+    entry = ("chs", "Example extensions catalog folder");
+    entry = ("cht", "Example extensions catalog folder");
+    entry = ("csy", "Example extensions catalog folder");
+    entry = ("deu", "Example extensions catalog folder");
+    entry = ("esp", "Example extensions catalog folder");
+    entry = ("fra", "Example extensions catalog folder");
+    entry = ("hun", "Example extensions catalog folder");
+    entry = ("ita", "Example extensions catalog folder");
+    entry = ("jpn", "Example extensions catalog folder");
+    entry = ("nld", "Example extensions catalog folder");
+    entry = ("plk", "Example extensions catalog folder");
+    entry = ("ptb", "Example extensions catalog folder");
+    entry = ("ptg", "Example extensions catalog folder");
+    entry = ("rus", "Example extensions catalog folder");
+};
