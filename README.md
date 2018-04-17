@@ -1,6 +1,12 @@
 # TSIntegratedExamples
 
 Tekla Structures API Examples with integrated build system and installers
+Repo Goal:
+1. Show integrated TSEP installer, msbuild setup, nuget packages all integrated together
+2. Example TSEP type installers using wildcards and folder structure
+3. Specific examples requested by various customers
+
+Contents:
 1. AnchorBoltsSimple: Console application to add dimensions to plan views on active drawing for anchor bolts, no user interface, free placement.
 2. AnchorBoltsWinform: Winform application to add dimensions to plan views on active drawing for anchor bolts. Has user interface allowing for settings.
       Calculates offset from pier solid and places dimensions outside pier with offset distance, fixed placement.
