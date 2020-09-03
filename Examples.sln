@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnchorBoltsSimple", "Source
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnchorBoltsWinform", "Source\Drawings\Applications\AnchorBoltsWinform\AnchorBoltsWinform.csproj", "{EC5075CA-3FC3-4A22-93FD-C79740CEBE13}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpreadsheetReinforcement", "Source\Modeling\Applications\SpreadsheetReinforcement\SpreadsheetReinforcement.csproj", "{9708004D-52AF-4ACE-B2F1-79BC2C5B8996}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -33,6 +35,10 @@ Global
 		{EC5075CA-3FC3-4A22-93FD-C79740CEBE13}.Debug|x64.Build.0 = Debug|x64
 		{EC5075CA-3FC3-4A22-93FD-C79740CEBE13}.Release|x64.ActiveCfg = Release|x64
 		{EC5075CA-3FC3-4A22-93FD-C79740CEBE13}.Release|x64.Build.0 = Release|x64
+		{9708004D-52AF-4ACE-B2F1-79BC2C5B8996}.Debug|x64.ActiveCfg = Debug|x64
+		{9708004D-52AF-4ACE-B2F1-79BC2C5B8996}.Debug|x64.Build.0 = Debug|x64
+		{9708004D-52AF-4ACE-B2F1-79BC2C5B8996}.Release|x64.ActiveCfg = Release|x64
+		{9708004D-52AF-4ACE-B2F1-79BC2C5B8996}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -44,6 +50,7 @@ Global
 		{69D4C219-4DE6-4229-BEE6-5996D718AE4A} = {C8506E64-64A9-4012-A900-F1E4B8CC8BE7}
 		{631E51A9-AD61-48FD-B384-83E3EF0701F0} = {8BACC041-CB83-4EE8-903E-B73B7F035D1A}
 		{EC5075CA-3FC3-4A22-93FD-C79740CEBE13} = {8BACC041-CB83-4EE8-903E-B73B7F035D1A}
+		{9708004D-52AF-4ACE-B2F1-79BC2C5B8996} = {4DFD7348-0650-4D26-9449-7C63A0C0787D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0F3C73B6-0090-4C33-ACD6-0524B977AA67}

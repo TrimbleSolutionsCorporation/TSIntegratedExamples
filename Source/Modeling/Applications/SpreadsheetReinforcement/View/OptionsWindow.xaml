@@ -1,0 +1,185 @@
+﻿<Window x:Class="SpreadsheetReinforcement.View.OptionsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:viewModel="clr-namespace:SpreadsheetReinforcement.ViewModel"
+        Icon="/SpreadsheetReinforcement;component/Resources/TeklaStructuresExtension.ico"
+        Title="OptionsWindow" MinHeight="300" MinWidth="300" MaxHeight="900" MaxWidth="500"
+        SizeToContent="WidthAndHeight">
+
+    <Window.DataContext>
+        <viewModel:VmMainWindow />
+    </Window.DataContext>
+
+    <Window.InputBindings>
+        <KeyBinding Key="F1" Command="{Binding HelpRequestedCommand}" />
+        <KeyBinding Key="F3" Command="{Binding LogRequestedCommand}" />
+    </Window.InputBindings>
+
+
+    <Window.Resources>
+        <viewModel:TsLengthConverter x:Key="TsLengthConverter" />
+        <viewModel:TsAreaConverter x:Key="TsAreaConverter" />
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <GroupBox Grid.Row="0" Header="Cover Settings">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="165" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="26" />
+                    <RowDefinition Height="26" />
+                    <RowDefinition Height="26" />
+                </Grid.RowDefinitions>
+
+                <Label Grid.Column="0" Grid.Row="0" Content="Minimum Pillar Top" />
+                <TextBox Grid.Column="1" Grid.Row="0"
+                         Text="{Binding Path=CurrentSetting.MinClearCoverTop, Mode=TwoWay, 
+                    Converter={StaticResource TsLengthConverter}}" />
+
+                <Label Grid.Column="0" Grid.Row="1" Content="Footing Sides" />
+                <TextBox Grid.Column="1" Grid.Row="1"
+                         Text="{Binding Path=CurrentSetting.MinClearCoverSides, Mode=TwoWay, 
+                    Converter={StaticResource TsLengthConverter}}" />
+
+                <Label Grid.Column="0" Grid.Row="2" Content="Minimum Footing Bottom" />
+                <TextBox Grid.Column="1" Grid.Row="2"
+                         Text="{Binding Path=CurrentSetting.MinClearCoverBottom, Mode=TwoWay, 
+                    Converter={StaticResource TsLengthConverter}}" />
+
+            </Grid>
+        </GroupBox>
+
+        <GroupBox Grid.Row="1" Header="Spacing">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="165" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="26" />
+                    <RowDefinition Height="26" />
+                    <RowDefinition Height="26" />
+                </Grid.RowDefinitions>
+
+                <Label Grid.Column="0" Grid.Row="0" Content="Footing Bar Max" />
+                <TextBox Grid.Column="1" Grid.Row="0"
+                         Text="{Binding Path=CurrentSetting.MaxSpacing, Mode=TwoWay, 
+                    Converter={StaticResource TsLengthConverter}}" 
+                         ToolTip="Max spacing distance."/>
+
+                <Label Grid.Column="0" Grid.Row="1" Content="Footing Bar Min Factor" />
+                <TextBox Grid.Column="1" Grid.Row="1"
+                         Text="{Binding Path=CurrentSetting.MinBarSpacingFactor, Mode=TwoWay}"
+                         ToolTip="Minimum spacing factor for spacing E.g. '6' where 6 * db is one part of minimum check."/>
+
+                <Label Grid.Column="0" Grid.Row="2" Content="Minimum Bar Step Increment" />
+                <TextBox Grid.Column="1" Grid.Row="2"
+                         Text="{Binding Path=CurrentSetting.SpacingStepInterval, Mode=TwoWay, 
+                    Converter={StaticResource TsLengthConverter}}" 
+                         ToolTip="Each incremental step increase in sizing logic to check spacing (min next value step increase)."/>
+
+            </Grid>
+        </GroupBox>
+
+        <!--<GroupBox Grid.Row="2" Header="Pilar Component">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="165" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="26" />
+                    <RowDefinition Height="26" />
+                    <RowDefinition Height="26" />
+                </Grid.RowDefinitions>
+
+                <Label Grid.Column="0" Grid.Row="0" Content="Component Name" />
+                <TextBox Grid.Column="1" Grid.Row="0"
+                         Text="{Binding Path=CurrentSetting.PillarComponentName, Mode=TwoWay}" />
+
+                <Label Grid.Column="0" Grid.Row="1" Content="Component Number" />
+                <TextBox Grid.Column="1" Grid.Row="1"
+                         Text="{Binding Path=CurrentSetting.PillarComponentNumber, Mode=TwoWay}" />
+
+                <Label Grid.Column="0" Grid.Row="2" Content="Component Settings" />
+                <TextBox Grid.Column="1" Grid.Row="2"
+                         Text="{Binding Path=CurrentSetting.PillarComponentSettings, Mode=TwoWay}" />
+
+            </Grid>
+        </GroupBox>
+
+        <GroupBox Grid.Row="3" Header="Footing Component">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="165" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="26" />
+                    <RowDefinition Height="26" />
+                    <RowDefinition Height="26" />
+                </Grid.RowDefinitions>
+
+                <Label Grid.Column="0" Grid.Row="0" Content="Component Name" />
+                <TextBox Grid.Column="1" Grid.Row="0"
+                         Text="{Binding Path=CurrentSetting.FootingComponentName, Mode=TwoWay}" />
+
+                <Label Grid.Column="0" Grid.Row="1" Content="Component Number" />
+                <TextBox Grid.Column="1" Grid.Row="1"
+                         Text="{Binding Path=CurrentSetting.FootingComponentNumber, Mode=TwoWay}" />
+
+                <Label Grid.Column="0" Grid.Row="2" Content="Component Settings" />
+                <TextBox Grid.Column="1" Grid.Row="2"
+                         Text="{Binding Path=CurrentSetting.FootingComponentSettings, Mode=TwoWay}" />
+
+            </Grid>
+        </GroupBox>-->
+
+        <GroupBox Grid.Row="4" Header="General">
+            <StackPanel Orientation="Vertical">
+
+                <!--Binding Type-->
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="165" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="26" />
+                    </Grid.RowDefinitions>
+
+                    <Label Grid.Column="0" Grid.Row="0" Content="Rebar Grade" />
+                    <ComboBox Grid.Column="1" Grid.Row="0" ItemsSource="{Binding Path=RebarGradeOptions, Mode=Oneway}"
+                              SelectedValue="{Binding Path=CurrentSetting.RebarGrade, Mode=TwoWay}" Height="25" />
+                </Grid>
+
+                <!--Binding Type-->
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="165" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="26" />
+                    </Grid.RowDefinitions>
+
+                    <Label Grid.Column="0" Grid.Row="0" Content="Binding Type" />
+                    <ComboBox Grid.Column="1" Grid.Row="0" ItemsSource="{Binding Path=BindingTypeOptions, Mode=Oneway}"
+                              SelectedValue="{Binding Path=CurrentSetting.BindingName, Mode=TwoWay}" Height="25" />
+                </Grid>
+            </StackPanel>
+        </GroupBox>
+
+    </Grid>
+</Window>
