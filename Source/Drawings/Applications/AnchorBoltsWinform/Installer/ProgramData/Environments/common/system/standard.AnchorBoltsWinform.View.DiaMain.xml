@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+  <DmSettingsName>standard</DmSettingsName>
+  <DimOffset>
+    <Millimeters>3.0</Millimeters>
+  </DimOffset>
+  <AnFilerName>Steel_Anchor_Rod</AnFilerName>
+</config>
