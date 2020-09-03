@@ -16,7 +16,7 @@
         <InteropSHDocVw                                            Condition="'$(InteropSHDocVw)'==''">1.1.0.0</InteropSHDocVw>
         
         <!-- TeklaVerNo is used for specifying the API version numbers. Change the numbers above when branching. -->
-        <TeklaPackageVerNo   Condition="'$(TeklaPackageVerNo)'==''">2018.1.17267</TeklaPackageVerNo>
+        <TeklaPackageVerNo   Condition="'$(TeklaPackageVerNo)'==''">2018.0.13815</TeklaPackageVerNo>
         <TSVersion           Condition="'$(TSVersion)'==''">2018.0</TSVersion>
 
         <!-- US Custom build settings -->
