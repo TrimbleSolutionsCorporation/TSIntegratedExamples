@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+    <!-- Custom USA build settings -->
+    <PropertyGroup>
+        
+        <!-- Version number of Other Libs -->
+        <NLogVersion                                                  Condition="'$(NLogVersion)'==''">2.0.0.0</NLogVersion>
+        <Log4NetVersion                                            Condition="'$(Log4NetVersion)'==''">1.2.10.0</Log4NetVersion>
+        <IonicZipVersion                                          Condition="'$(IonicZipVersion)'==''">1.9.1.8</IonicZipVersion>
+        <ZipperToolsVersion                                    Condition="'$(ZipperToolsVersion)'==''">1.0.0.0</ZipperToolsVersion>
+        <ObjectListViewVersion                              Condition="'$(ObjectListViewVersion)'==''">2.4.0.23538</ObjectListViewVersion>
+        <WindowsAPICodePackVersion                      Condition="'$(WindowsAPICodePackVersion)'==''">1.1.0.0</WindowsAPICodePackVersion>
+        <WindowsAPICodePackShellVersion            Condition="'$(WindowsAPICodePackShellVersion)'==''">1.1.0.0</WindowsAPICodePackShellVersion>
+        <SharpZipLib                                                  Condition="'$(SharpZipLib)'==''">0.85.5.452</SharpZipLib>
+        <InteropSHDocVw                                            Condition="'$(InteropSHDocVw)'==''">1.1.0.0</InteropSHDocVw>
+        
+        <!-- TeklaVerNo is used for specifying the API version numbers. Change the numbers above when branching. -->
+        <TeklaPackageVerNo   Condition="'$(TeklaPackageVerNo)'==''">2018.1.17267</TeklaPackageVerNo>
+        <TSVersion           Condition="'$(TSVersion)'==''">2018.0</TSVersion>
+
+        <!-- US Custom build settings -->
+        <PurgeOutputPathAfterClean>False</PurgeOutputPathAfterClean>
+        <CleanOutputForTeklaLibraries>False</CleanOutputForTeklaLibraries>
+        <OutputPath2></OutputPath2>
+        <AssemblyPatcherTaskOn>False</AssemblyPatcherTaskOn>
+        <SetSrcForTesting Condition="'$(SetSrcForTesting)'==''">True</SetSrcForTesting>
+
+    </PropertyGroup>
+
+    <Target Name="PrintPaths">
+        <Message Text="NLogVersion:                      $(NLogVersion)" />
+        <Message Text="Log4NetVersion:                   $(Log4NetVersion)" />
+        <Message Text="IonicZipVersion:                  $(IonicZipVersion)" />
+        <Message Text="ZipperToolsVersion:               $(ZipperToolsVersion)" />
+        <Message Text="ObjectListViewVersion:            $(ObjectListViewVersion)" />
+        <Message Text="WindowsAPICodePackVersion:        $(WindowsAPICodePackVersion)" />
+        <Message Text="WindowsAPICodePackShellVersion:   $(WindowsAPICodePackShellVersion)" />
+        <Message Text="SharpZipLib:                      $(SharpZipLib)" />
+        <Message Text="InteropSHDocVw:                   $(InteropSHDocVw)" />
+        <Message Text="TeklaPackageVerNo:                $(TeklaPackageVerNo)" />
+        <Message Text="TSVersion:                        $(TSVersion)" />
+    </Target>
+  
+</Project>
+

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SpreadsheetReinforcement xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <MinClearCoverTop>50.8</MinClearCoverTop>
+  <MinBarSpacingFactor>6</MinBarSpacingFactor>
+  <MinClearCoverBottom>50.8</MinClearCoverBottom>
+  <MinClearCoverSides>50.8</MinClearCoverSides>
+  <MaxSpacing>152.39999999999998</MaxSpacing>
+  <SpacingStepInterval>6.35</SpacingStepInterval>
+  <BindingName>Name</BindingName>
+  <PillarComponentNumber>30000086</PillarComponentNumber>
+  <PillarComponentName>Starter bars for pillar (86)</PillarComponentName>
+  <PillarComponentSettings>standard</PillarComponentSettings>
+  <FootingComponentNumber>30000077</FootingComponentNumber>
+  <FootingComponentName>Pad footing reinforcement (77)</FootingComponentName>
+  <FootingComponentSettings>standard</FootingComponentSettings>
+  <SaveName>standard</SaveName>
+  <FootingFilter>Cip_Pad_Footing</FootingFilter>
+  <PillarFilter>Cip_Pile</PillarFilter>
+  <ImportFilePath></ImportFilePath>
+</SpreadsheetReinforcement>

@@ -1,0 +1,75 @@
+﻿string_utf8 albl_US_Extensions
+{
+    entry = ("enu", "US Extensions");
+    entry = ("chs", "US Extensions");
+    entry = ("cht", "US Extensions");
+    entry = ("csy", "US Extensions");
+    entry = ("deu", "US Extensions");
+    entry = ("esp", "US Extensions");
+    entry = ("fra", "US Extensions");
+    entry = ("hun", "US Extensions");
+    entry = ("ita", "US Extensions");
+    entry = ("jpn", "US Extensions");
+    entry = ("nld", "US Extensions");
+    entry = ("plk", "US Extensions");
+    entry = ("ptb", "US Extensions");
+    entry = ("ptg", "US Extensions");
+    entry = ("rus", "US Extensions");
+};
+
+string_utf8 albl_Spreadsheet_Reinforcement
+{
+    entry = ("enu", "Spreadsheet Reinforcement");
+    entry = ("chs", "Spreadsheet Reinforcement");
+    entry = ("cht", "Spreadsheet Reinforcement");
+    entry = ("csy", "Spreadsheet Reinforcement");
+    entry = ("deu", "Spreadsheet Reinforcement");
+    entry = ("esp", "Spreadsheet Reinforcement");
+    entry = ("fra", "Spreadsheet Reinforcement");
+    entry = ("hun", "Spreadsheet Reinforcement");
+    entry = ("ita", "Spreadsheet Reinforcement");
+    entry = ("jpn", "Spreadsheet Reinforcement");
+    entry = ("nld", "Spreadsheet Reinforcement");
+    entry = ("plk", "Spreadsheet Reinforcement");
+    entry = ("ptb", "Spreadsheet Reinforcement");
+    entry = ("ptg", "Spreadsheet Reinforcement");
+    entry = ("rus", "Spreadsheet Reinforcement");
+};
+
+string_utf8 albl_SpreadsheetReinforcement_Description
+{
+    entry = ("enu", "Applies reinforcement components to the model per spreadsheet design");
+    entry = ("chs", "Applies reinforcement components to the model per spreadsheet design");
+    entry = ("cht", "Applies reinforcement components to the model per spreadsheet design");
+    entry = ("csy", "Applies reinforcement components to the model per spreadsheet design");
+    entry = ("deu", "Applies reinforcement components to the model per spreadsheet design");
+    entry = ("esp", "Applies reinforcement components to the model per spreadsheet design");
+    entry = ("fra", "Applies reinforcement components to the model per spreadsheet design");
+    entry = ("hun", "Applies reinforcement components to the model per spreadsheet design");
+    entry = ("ita", "Applies reinforcement components to the model per spreadsheet design");
+    entry = ("jpn", "Applies reinforcement components to the model per spreadsheet design");
+    entry = ("nld", "Applies reinforcement components to the model per spreadsheet design");
+    entry = ("plk", "Applies reinforcement components to the model per spreadsheet design");
+    entry = ("ptb", "Applies reinforcement components to the model per spreadsheet design");
+    entry = ("ptg", "Applies reinforcement components to the model per spreadsheet design");
+    entry = ("rus", "Applies reinforcement components to the model per spreadsheet design");
+};
+
+string_utf8 albl_US_Extensions_Description
+{
+    entry = ("enu", "US extensions catalog folder");
+    entry = ("chs", "US extensions catalog folder");
+    entry = ("cht", "US extensions catalog folder");
+    entry = ("csy", "US extensions catalog folder");
+    entry = ("deu", "US extensions catalog folder");
+    entry = ("esp", "US extensions catalog folder");
+    entry = ("fra", "US extensions catalog folder");
+    entry = ("hun", "US extensions catalog folder");
+    entry = ("ita", "US extensions catalog folder");
+    entry = ("jpn", "US extensions catalog folder");
+    entry = ("nld", "US extensions catalog folder");
+    entry = ("plk", "US extensions catalog folder");
+    entry = ("ptb", "US extensions catalog folder");
+    entry = ("ptg", "US extensions catalog folder");
+    entry = ("rus", "US extensions catalog folder");
+};
