@@ -6,7 +6,7 @@
         Description= "Creates anchor bolt dimensions on existing drawing plan views."
         IconPath="%TEPDEFINITIONFILEFOLDER%\Icon.png">
         <TeklaVersions>
-            <TeklaVersion Name="2018.1"/>
+            <TeklaVersion Name="2019.0"/>
             <MinTeklaVersion Name="2017.0"/>
             <MaxTeklaVersion Name="2099.1"/>
         </TeklaVersions>
