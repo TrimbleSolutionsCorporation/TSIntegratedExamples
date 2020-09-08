@@ -6,7 +6,7 @@
 		Description= "This extension reads in spreadsheet design data and applies reinforcement component footings and piles in the model to match."
 		IconPath="%TEPDEFINITIONFILEFOLDER%\Icon.png">
 		<TeklaVersions>
-			<TeklaVersion Name="2017.0"/>
+			<TeklaVersion Name="2017.1"/>
 			<MinTeklaVersion Name="2017.0"/>
 			<MaxTeklaVersion Name="2099.1"/>		
 		</TeklaVersions>
