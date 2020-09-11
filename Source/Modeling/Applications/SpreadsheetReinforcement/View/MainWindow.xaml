@@ -169,8 +169,7 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Guid" Binding="{Binding Guid}" Visibility="Hidden" />
                     <DataGridTextColumn Header="Mark" Binding="{Binding Mark}" />
-                    <DataGridTextColumn Header="Footing Name" Binding="{Binding FootingName}" Visibility="Hidden"
-                                        SortDirection="Ascending" />
+                    <DataGridTextColumn Header="Footing Name" Binding="{Binding FootingName}" SortDirection="Ascending" />
                     <DataGridTextColumn Header="Btm X Steel"
                                         Binding="{Binding BottomXSteel, Converter={StaticResource TsAreaConverter}}" />
                     <DataGridTextColumn Header="Bottom Z Steel"
