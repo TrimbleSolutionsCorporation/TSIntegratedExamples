@@ -17,7 +17,7 @@
         
         <!-- TeklaVerNo is used for specifying the API version numbers. Change the numbers above when branching. -->
         <TeklaPackageVerNo   Condition="'$(TeklaPackageVerNo)'==''">2019.0.45003</TeklaPackageVerNo>
-        <TSVersion           Condition="'$(TSVersion)'==''">2019.0</TSVersion>
+        <TeklaVersion           Condition="'$(TeklaVersion)'==''">2019.0.0.0</TeklaVersion>
 
         <!-- US Custom build settings -->
         <PurgeOutputPathAfterClean>False</PurgeOutputPathAfterClean>
