@@ -1,14 +1,15 @@
-﻿namespace SpreadsheetReinforcement.View
+﻿using System;
+using System.Diagnostics;
+using System.Threading;
+using System.Windows;
+using SpreadsheetReinforcement.Tools;
+using Tekla.Structures;
+using Tekla.Structures.Model;
+using Assembly = System.Reflection.Assembly;
+
+namespace SpreadsheetReinforcement.View
 {
     using Services;
-    using System;
-    using System.Diagnostics;
-    using System.Threading;
-    using System.Windows;
-    using Tools;
-    using Tekla.Structures;
-    using Tekla.Structures.Model;
-    using Assembly = System.Reflection.Assembly;
 
     public sealed partial class App
     {
@@ -40,7 +41,7 @@
                             _mainLog = new LogListener();
                             _mainLog.WriteLineOccured += ListerWriteLineOccured;
                             Trace.Listeners.Add(_mainLog);
-                            PrintSystemInformation();
+                            PrintSystmInformation();
 
                             //Initialize Events
                             TeklaStructures.Connect();
@@ -53,8 +54,7 @@
                         }
                     }
                     //Application already open, exit
-                    Trace.WriteLine(
-                        $"No more than one instance of {ApplicationName} can run simultaneously, closing down new instance.");
+                    Trace.WriteLine(string.Format("No more than one instance of {0} can run simultaneously, closing down new instance.", ApplicationName));
                     Shutdown();
                 }
             }
@@ -66,15 +66,15 @@
             }
         }
 
-        private static void PrintSystemInformation()
+        private static void PrintSystmInformation()
         {
             Trace.WriteLine("System Info:");
             var username = System.Environment.UserName;
-            Trace.WriteLine($"User logged on: {username}");
-            Trace.WriteLine($"Machine Name: {Environment.MachineName}");
-            Trace.WriteLine($"Is 64 bit OS: {Environment.Is64BitOperatingSystem}");
-            Trace.WriteLine($"OS Version: {Environment.OSVersion}");
-            Trace.WriteLine($"Processor Count: {Environment.ProcessorCount}\n");
+            Trace.WriteLine(string.Format("User logged on: {0}", username));
+            Trace.WriteLine(string.Format("Machine Name: {0}", System.Environment.MachineName));
+            Trace.WriteLine(string.Format("Is 64 bit OS: {0}", System.Environment.Is64BitOperatingSystem));
+            Trace.WriteLine(string.Format("OS Version: {0}", System.Environment.OSVersion));
+            Trace.WriteLine(string.Format("Processor Count: {0}\n", System.Environment.ProcessorCount));
         }
 
         private static bool CheckTeklaConfiguration()
@@ -93,7 +93,7 @@
         /// Shows message box when no connection or model open
         /// </summary>
         /// <returns>Is TS running, model is open, and connection successful?</returns>
-        private static bool ConnectWithDialog()
+        public static bool ConnectWithDialog()
         {
             //Create new model connection without creating channel.
             var tModel = new Model();
@@ -128,7 +128,7 @@
         private static void ShutDown()
         {
             //Stop logging
-            _mainLog?.CloseLog();
+            if (_mainLog != null) _mainLog.CloseLog();
 
             //Force end application
             System.Environment.Exit(0);
@@ -138,8 +138,8 @@
         {
             var ex = e.Exception;
             var nl = Environment.NewLine;
-            var msg =
-                $"Unhandled exception: Message {ex.Message + nl}, InnerMessage{ex.InnerException + nl}, StackTrace{ex.StackTrace}";
+            var msg = string.Format("Unhandled exception: Mesage {0}, InnerMessage{1}, StackTrace{2}", ex.Message + nl,
+                                    ex.InnerException + nl, ex.StackTrace);
             Trace.WriteLine(msg);
             MessageBox.Show(msg);
         }
