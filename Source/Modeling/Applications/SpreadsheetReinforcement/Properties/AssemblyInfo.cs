@@ -7,7 +7,7 @@ using System.Resources;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("SpreadsheetReinforcement")]
-[assembly: AssemblyDescription("Tekla Structures Extension")]
+[assembly: AssemblyDescription("Tekla Structures Example")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Trimble Solutions USA Inc")]
 [assembly: AssemblyProduct("SpreadsheetReinforcement")]
