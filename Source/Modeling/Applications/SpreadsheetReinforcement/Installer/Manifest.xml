@@ -38,15 +38,19 @@
 		<PathVariable Id="BitmapsDir" Value="%ENVDIR%\..\bitmaps"/>
 		<PathVariable Id="ExtensionsDir" Value="%ENVDIR%\..\Extensions"/>	
 		<PathVariable Id="TargetUsaRoot" Value="%ENVDIR%\USA"/>
+		<PathVariable Id="TargetUsimp" Value="%ENVDIR%\usimp"/>
+		<PathVariable Id="TargetUsmet" Value="%ENVDIR%\usmet"/>
 		<PathVariable Id="TargetCommonDir" Value="%commonEnvFolder%"/>
 	</TargetPathVariables>
 
 	<Component Id="TheExtensionComponent" Guid="E3C646FA-12CA-49C9-8BDF-3D9258CCE46A">
-		<File Id="CatalogBitmaps" Source="%SourceBitmaps%\*.*" Target="%BitmapsDir%" Recursive="yes" />
+		<!-- <File Id="CatalogBitmaps" Source="%SourceBitmaps%\*.*" Target="%BitmapsDir%" Recursive="yes" /> -->
 		<File Id="RibbonImages" Source="%SourceImages%\*.*" Target="%ExtensionsDir%\Images" Recursive="yes" />
 		<File Id="ApplicationFiles" Source="%SourceModelApps%\*.*" Target="%ModelAppsDir%" Recursive="yes" />
 		<!-- <File Id="TranslationsFiles" Source="%SourceMessages%\*.*" Target="%ModelAppsDir%" Recursive="yes" /> -->
 		<File Id="GlobalCommon" Source="%SourceCommmon%\*.*" Target="%TargetCommonDir%" Recursive="yes" />
+		<File Id="GlobalComCopyImp" Source="%SourceCommmon%\*.*" Target="%TargetUsimp%" Recursive="yes" />
+		<File Id="GlobalComCopyMet" Source="%SourceCommmon%\*.*" Target="%TargetUsmet%" Recursive="yes" />
 		<!-- <File Id="USARootFiles" Source="%SourceUsaRoot%\*.*" Target="%TargetUsaRoot%" Recursive="yes" /> -->
 		<File Id="ComponentCatalogFiles" Source="%SourceCatalog%\*.*" Target="%ModelAppsDir%" Recursive="yes" />
 	</Component>
