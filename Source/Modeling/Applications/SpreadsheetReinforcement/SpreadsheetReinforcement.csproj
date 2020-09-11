@@ -61,7 +61,7 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
-    <Reference Include="Tekla.Application.Library, Version=$(TSVersionNumber), Culture=neutral, PublicKeyToken=2f04dbe497b71114, processorArchitecture=MSIL">
+    <Reference Include="Tekla.Application.Library, Version=$(TSVersion), Culture=neutral, PublicKeyToken=2f04dbe497b71114, processorArchitecture=MSIL">
       <HintPath>..\..\Packages\TeklaOpenAPI.$(TeklaPackageVerNo)\lib\Tekla.Application.Library.dll</HintPath>
       <Private>True</Private>
       <SpecificVersion>True</SpecificVersion>
@@ -70,32 +70,32 @@
       <HintPath>..\..\..\..\Library\Tekla.BIM.Toolkit.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Tekla.Structures, Version=$(TSVersionNumber), Culture=neutral, PublicKeyToken=2f04dbe497b71114, processorArchitecture=MSIL">
+    <Reference Include="Tekla.Structures, Version=$(TSVersion), Culture=neutral, PublicKeyToken=2f04dbe497b71114, processorArchitecture=MSIL">
       <HintPath>..\..\Packages\TeklaOpenAPI.$(TeklaPackageVerNo)\lib\Tekla.Structures.dll</HintPath>
       <Private>False</Private>
       <SpecificVersion>True</SpecificVersion>
     </Reference>
-    <Reference Include="Tekla.Structures.Catalogs, Version=$(TSVersionNumber), Culture=neutral, PublicKeyToken=2f04dbe497b71114, processorArchitecture=MSIL">
+    <Reference Include="Tekla.Structures.Catalogs, Version=$(TSVersion), Culture=neutral, PublicKeyToken=2f04dbe497b71114, processorArchitecture=MSIL">
       <HintPath>..\..\Packages\TeklaOpenAPI.$(TeklaPackageVerNo)\lib\Tekla.Structures.Catalogs.dll</HintPath>
       <Private>False</Private>
       <SpecificVersion>True</SpecificVersion>
     </Reference>
-    <Reference Include="Tekla.Structures.Dialog, Version=$(TSVersionNumber), Culture=neutral, PublicKeyToken=2f04dbe497b71114, processorArchitecture=MSIL">
+    <Reference Include="Tekla.Structures.Dialog, Version=$(TSVersion), Culture=neutral, PublicKeyToken=2f04dbe497b71114, processorArchitecture=MSIL">
       <HintPath>..\..\Packages\TeklaOpenAPI.$(TeklaPackageVerNo)\lib\Tekla.Structures.Dialog.dll</HintPath>
       <Private>False</Private>
       <SpecificVersion>True</SpecificVersion>
     </Reference>
-    <Reference Include="Tekla.Structures.DataType, Version=$(TSVersionNumber), Culture=neutral, PublicKeyToken=2f04dbe497b71114, processorArchitecture=MSIL">
+    <Reference Include="Tekla.Structures.DataType, Version=$(TSVersion), Culture=neutral, PublicKeyToken=2f04dbe497b71114, processorArchitecture=MSIL">
       <HintPath>..\..\Packages\TeklaOpenAPI.$(TeklaPackageVerNo)\lib\Tekla.Structures.DataType.dll</HintPath>
       <Private>False</Private>
       <SpecificVersion>True</SpecificVersion>
     </Reference>
-    <Reference Include="Tekla.Structures.Drawing, Version=$(TSVersionNumber), Culture=neutral, PublicKeyToken=2f04dbe497b71114, processorArchitecture=MSIL">
+    <Reference Include="Tekla.Structures.Drawing, Version=$(TSVersion), Culture=neutral, PublicKeyToken=2f04dbe497b71114, processorArchitecture=MSIL">
       <HintPath>..\..\Packages\TeklaOpenAPI.$(TeklaPackageVerNo)\lib\Tekla.Structures.Drawing.dll</HintPath>
       <Private>False</Private>
       <SpecificVersion>True</SpecificVersion>
     </Reference>
-    <Reference Include="Tekla.Structures.Model, Version=$(TSVersionNumber), Culture=neutral, PublicKeyToken=2f04dbe497b71114, processorArchitecture=MSIL">
+    <Reference Include="Tekla.Structures.Model, Version=$(TSVersion), Culture=neutral, PublicKeyToken=2f04dbe497b71114, processorArchitecture=MSIL">
       <HintPath>..\..\Packages\TeklaOpenAPI.$(TeklaPackageVerNo)\lib\Tekla.Structures.Model.dll</HintPath>
       <Private>False</Private>
       <SpecificVersion>True</SpecificVersion>
