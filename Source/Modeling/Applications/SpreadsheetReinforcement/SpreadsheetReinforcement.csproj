@@ -63,7 +63,7 @@
     </Reference>
     <Reference Include="Tekla.BIM.Toolkit">
       <HintPath>..\..\..\..\Library\Tekla.BIM.Toolkit.dll</HintPath>
-      <Private>False</Private>
+      <Private>True</Private>
     </Reference>
 	<Reference Include="Tekla.Application.Library, Version=$(TeklaVersion), Culture=neutral, PublicKeyToken=2f04dbe497b71114, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\TeklaOpenAPI.$(TeklaPackageVerNo)\lib\Tekla.Application.Library.dll</HintPath>
