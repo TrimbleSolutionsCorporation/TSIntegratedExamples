@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TEP Version="2.0">
 
-    <Product Id="SpreadsheetReinforcement" UpgradeCode="F4B705B9-9BC8-4CF3-A41E-EA78569A85C9" Version="1.1" Language="1033"
+    <Product Id="SpreadsheetReinforcement" UpgradeCode="F4B705B9-9BC8-4CF3-A41E-EA78569A85C9" Version="1.12" Language="1033"
 		Name="Spreadsheet Reinforcement" Manufacturer="Trimble Solutions, Inc."
 		Description= "This extension reads in spreadsheet design data and applies reinforcement component footings and piles in the model to match."
 		IconPath="%TEPDEFINITIONFILEFOLDER%\Icon.png">
