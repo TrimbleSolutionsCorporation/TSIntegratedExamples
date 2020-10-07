@@ -20,7 +20,7 @@ namespace SpreadsheetReinforcement.View
             get
             {
                 var assm = Assembly.GetExecutingAssembly();
-                return string.Format("{0}_{1}.{2}", assm.GetName().Name, assm.GetName().Version.Major, assm.GetName().Version.Minor);
+                return $"{DisplayApplicationName}_{assm.GetName().Version.Major}.{assm.GetName().Version.Minor}";
             }
         }
         private const string UnauthorizedMessage = "This program requires Engineering configuration or above to run.";
@@ -41,7 +41,7 @@ namespace SpreadsheetReinforcement.View
                             _mainLog = new LogListener();
                             _mainLog.WriteLineOccured += ListerWriteLineOccured;
                             Trace.Listeners.Add(_mainLog);
-                            PrintSystmInformation();
+                            PrintSystemInformation();
 
                             //Initialize Events
                             TeklaStructures.Connect();
@@ -54,7 +54,9 @@ namespace SpreadsheetReinforcement.View
                         }
                     }
                     //Application already open, exit
-                    Trace.WriteLine(string.Format("No more than one instance of {0} can run simultaneously, closing down new instance.", ApplicationName));
+                    var msg = $"No more than one instance of {ApplicationName} can run simultaneously, closing down new instance.";
+                    Trace.WriteLine(msg);
+                    MessageBox.Show(msg, "Launch Error", MessageBoxButton.OK, MessageBoxImage.Error);
                     Shutdown();
                 }
             }
@@ -66,15 +68,15 @@ namespace SpreadsheetReinforcement.View
             }
         }
 
-        private static void PrintSystmInformation()
+        private static void PrintSystemInformation()
         {
             Trace.WriteLine("System Info:");
-            var username = System.Environment.UserName;
-            Trace.WriteLine(string.Format("User logged on: {0}", username));
-            Trace.WriteLine(string.Format("Machine Name: {0}", System.Environment.MachineName));
-            Trace.WriteLine(string.Format("Is 64 bit OS: {0}", System.Environment.Is64BitOperatingSystem));
-            Trace.WriteLine(string.Format("OS Version: {0}", System.Environment.OSVersion));
-            Trace.WriteLine(string.Format("Processor Count: {0}\n", System.Environment.ProcessorCount));
+            var username = Environment.UserName;
+            Trace.WriteLine($"User logged on: {username}");
+            Trace.WriteLine($"Machine Name: {Environment.MachineName}");
+            Trace.WriteLine($"Is 64 bit OS: {Environment.Is64BitOperatingSystem}");
+            Trace.WriteLine($"OS Version: {Environment.OSVersion}");
+            Trace.WriteLine($"Processor Count: {Environment.ProcessorCount}\n");
         }
 
         private static bool CheckTeklaConfiguration()
@@ -93,7 +95,7 @@ namespace SpreadsheetReinforcement.View
         /// Shows message box when no connection or model open
         /// </summary>
         /// <returns>Is TS running, model is open, and connection successful?</returns>
-        public static bool ConnectWithDialog()
+        private static bool ConnectWithDialog()
         {
             //Create new model connection without creating channel.
             var tModel = new Model();
@@ -116,6 +118,7 @@ namespace SpreadsheetReinforcement.View
         private static void TeklaStructuresExited(object sender, EventArgs eventArgs)
         {
             //Forced shutdown, TS already closed now
+            //MessageBox.Show($"Tekla Structures exited, closing {ApplicationName}.", "TeklaStructuresExited");
             ShutDown();
         }
 
@@ -128,20 +131,19 @@ namespace SpreadsheetReinforcement.View
         private static void ShutDown()
         {
             //Stop logging
-            if (_mainLog != null) _mainLog.CloseLog();
+            _mainLog?.CloseLog();
 
             //Force end application
-            System.Environment.Exit(0);
+            Environment.Exit(0);
         }
 
         private void UnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
             var ex = e.Exception;
             var nl = Environment.NewLine;
-            var msg = string.Format("Unhandled exception: Mesage {0}, InnerMessage{1}, StackTrace{2}", ex.Message + nl,
-                                    ex.InnerException + nl, ex.StackTrace);
+            var msg = $"Unhandled exception: Message {ex.Message + nl}, InnerMessage{ex.InnerException + nl}, StackTrace{ex.StackTrace}";
             Trace.WriteLine(msg);
-            MessageBox.Show(msg);
+            MessageBox.Show(msg, $"{ApplicationName} Exception encountered.");
         }
 
         private static void ListerWriteLineOccured(object sender, StringArg e)
