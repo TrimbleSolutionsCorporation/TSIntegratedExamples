@@ -12,7 +12,6 @@
 
     public sealed partial class App
     {
-
         private const string DisplayApplicationName = "Spreadsheet Reinforcement";
 
         private static string ApplicationNameAndVersion
