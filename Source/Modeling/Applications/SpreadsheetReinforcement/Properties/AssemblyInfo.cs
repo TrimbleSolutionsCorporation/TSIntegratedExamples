@@ -29,7 +29,7 @@ using System.Resources;
 //
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
-[assembly: AssemblyVersion("1.1.0.0")]
-[assembly: AssemblyFileVersion("1.1.0.0")]
+[assembly: AssemblyVersion("1.1.5.0")]
+[assembly: AssemblyFileVersion("1.1.5.0")]
 [assembly: NeutralResourcesLanguageAttribute("en-US")]
 [assembly: Guid("3d8d042c-e9f9-472c-a1fd-d220441c8686")]
