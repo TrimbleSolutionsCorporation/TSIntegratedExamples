@@ -1,0 +1,326 @@
+﻿<tsd:PluginWindowBase
+    x:Class="JoistArea.View.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:UIControls="clr-namespace:Tekla.Structures.Dialog.UIControls;assembly=Tekla.Structures.Dialog"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:tsd="clr-namespace:Tekla.Structures.Dialog;assembly=Tekla.Structures.Dialog"
+    xmlns:viewModel="clr-namespace:JoistArea.ViewModel"
+    Title="{tsd:Loc Joist Area}"
+    SizeToContent="WidthAndHeight" MaxHeight="900" MaxWidth="1000"
+    mc:Ignorable="d">
+
+    <d:UserControl.DataContext>
+        <viewModel:MainViewModel />
+    </d:UserControl.DataContext>
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <viewModel:NegativeBooleanConverter x:Key="NegativeBooleanConverter" />
+
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Fusion;component/Themes/Generic.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <!--Parent Grid setup for entire Window-->
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" MinHeight="48" />
+            <RowDefinition />
+            <RowDefinition Height="Auto" MinHeight="48" />
+        </Grid.RowDefinitions>
+        <UIControls:WpfSaveLoad
+            Grid.Row="0"
+            Margin="0,0,0,0"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Top" />
+
+        <!--Main plugin data controls-->
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <!--Profile and spacing setup-->
+            <GroupBox Grid.Row="0" Header="{tsd:Loc albl_Setup}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+
+                    <!--Profile selection-->
+                    <Grid Grid.Row="0" Grid.Column="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="20" />
+                            <ColumnDefinition Width="100" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="25" />
+                        </Grid.ColumnDefinitions>
+
+                        <UIControls:WpfFilterCheckBox Grid.Column="0" VerticalAlignment="Center"
+                                                      AttributeName="JoistProfile" />
+                        <Label Grid.Column="1" VerticalAlignment="Center" Content="{tsd:Loc albl_Joist_Profile}"
+                               RenderTransformOrigin="0.754,-0.24" />
+                        <TextBox Grid.Column="2" VerticalAlignment="Center"
+                                 Text="{Binding Path=JoistProfile, Mode=TwoWay}" />
+                        <UIControls:WpfProfileCatalog Grid.Column="3" x:Name="JoistProfileCatalog"
+                                                      VerticalAlignment="Center"
+                                                      SelectClicked="JoistProfile_SelectClicked"
+                                                      SelectionDone="JoistProfile_SelectionDone" />
+                    </Grid>
+
+                    <!--Spacing type control-->
+                    <Grid Grid.Row="1" Grid.Column="0" >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="20" />
+                            <ColumnDefinition Width="100" />
+                            <ColumnDefinition Width="*" />
+
+                        </Grid.ColumnDefinitions>
+
+                        <UIControls:WpfFilterCheckBox Grid.Column="0" VerticalAlignment="Center"
+                                                      AttributeName="SpacingType" />
+                        <Label Grid.Column="1" VerticalAlignment="Center" Content="{tsd:Loc albl_Spacing_Type}"
+                               RenderTransformOrigin="0.754,-0.24" />
+                        <ComboBox Grid.Column="2" ItemsSource="{Binding AllSpacingTypes, Mode=OneWay}"
+                                 SelectedIndex="{Binding Path=SpacingType, Mode=TwoWay}" IsEditable="False"/>
+                    </Grid>
+
+                    <!--Center spacing list-->
+                    <Grid Grid.Row="2" Grid.Column="0" IsEnabled="{Binding IsSpacingListType}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="20" />
+                            <ColumnDefinition Width="100" />
+                            <ColumnDefinition Width="*" />
+
+                        </Grid.ColumnDefinitions>
+
+                        <UIControls:WpfFilterCheckBox Grid.Column="0" VerticalAlignment="Center"
+                                                      AttributeName="CenterSpacingList" />
+                        <Label Grid.Column="1" VerticalAlignment="Center" Content="{tsd:Loc albl_Spacing_List}"
+                               RenderTransformOrigin="0.754,-0.24" />
+                        <TextBox Grid.Column="2" VerticalAlignment="Center"
+                                 Text="{Binding Path=CenterSpacingList, Mode=TwoWay}" />
+                    </Grid>
+
+                    <!--Center max distance-->
+                    <Grid Grid.Row="3" Grid.Column="0"
+                          IsEnabled="{Binding IsSpacingListType, Converter={StaticResource NegativeBooleanConverter}}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="20" />
+                            <ColumnDefinition Width="100" />
+                            <ColumnDefinition Width="*" />
+
+                        </Grid.ColumnDefinitions>
+
+                        <UIControls:WpfFilterCheckBox Grid.Column="0" VerticalAlignment="Center"
+                                                      AttributeName="CenterSpacingMax" />
+                        <Label Grid.Column="1" VerticalAlignment="Center" Content="{tsd:Loc albl_Spacing_Center}"
+                               RenderTransformOrigin="0.754,-0.24" />
+                        <TextBox Grid.Column="2" VerticalAlignment="Center"
+                                 Text="{Binding Path=CenterSpacingMax, Mode=TwoWay}" />
+                    </Grid>
+
+                    <!--Depth offset-->
+                    <Grid Grid.Row="4" Grid.Column="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="20" />
+                            <ColumnDefinition Width="100" />
+                            <ColumnDefinition Width="*" />
+
+                        </Grid.ColumnDefinitions>
+
+                        <UIControls:WpfFilterCheckBox Grid.Column="0" VerticalAlignment="Center"
+                                                      AttributeName="DepthOffset" />
+                        <Label Grid.Column="1" VerticalAlignment="Center" Content="{tsd:Loc albl_Depth_Offset}"
+                               RenderTransformOrigin="0.754,-0.24" />
+                        <TextBox Grid.Column="2" VerticalAlignment="Center"
+                                 Text="{Binding Path=DepthOffset, Mode=TwoWay}" />
+                    </Grid>
+
+                </Grid>
+            </GroupBox>
+
+            <!--Part settings-->
+            <GroupBox Grid.Row="2" Header="{tsd:Loc albl_Part_Settings}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+
+                    <!--Class-->
+                    <Grid Grid.Row="0" Grid.Column="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="20" />
+                            <ColumnDefinition Width="140" />
+                            <ColumnDefinition Width="120" />
+                        </Grid.ColumnDefinitions>
+
+                        <UIControls:WpfFilterCheckBox Grid.Column="0" VerticalAlignment="Center"
+                                                      AttributeName="Class" />
+                        <Label Grid.Column="1" VerticalAlignment="Center" Content="{tsd:Loc albl_Class}"
+                               RenderTransformOrigin="0.754,-0.24" />
+                        <TextBox Grid.Column="2" VerticalAlignment="Center"
+                                 Text="{Binding Path=Class, Mode=TwoWay}" />
+                    </Grid>
+
+                    <!--Material-->
+                    <Grid Grid.Row="1" Grid.Column="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="20" />
+                            <ColumnDefinition Width="140" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="25" />
+                        </Grid.ColumnDefinitions>
+
+                        <UIControls:WpfFilterCheckBox Grid.Column="0" VerticalAlignment="Center"
+                                                      AttributeName="Material" />
+                        <Label Grid.Column="1" VerticalAlignment="Center" Content="{tsd:Loc albl_Material}"
+                               RenderTransformOrigin="0.754,-0.24" />
+                        <TextBox Grid.Column="2" VerticalAlignment="Center"
+                                 Text="{Binding Path=Material, Mode=TwoWay}" />
+                        <UIControls:WpfMaterialCatalog Grid.Column="3" x:Name="PartMaterialCatalog"
+                            VerticalAlignment="Center"
+                            BorderThickness="0"
+                            FontSize="6"
+                            SelectClicked="PartMaterial_SelectClicked"
+                            SelectionDone="PartMaterial_SelectDone" />
+                    </Grid>
+
+                    <!--Finish-->
+                    <Grid Grid.Row="2" Grid.Column="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="20" />
+                            <ColumnDefinition Width="140" />
+                            <ColumnDefinition Width="120" />
+                        </Grid.ColumnDefinitions>
+
+                        <UIControls:WpfFilterCheckBox Grid.Column="0" VerticalAlignment="Center"
+                                                      AttributeName="Finish" />
+                        <Label Grid.Column="1" VerticalAlignment="Center" Content="{tsd:Loc albl_Finish}"
+                               RenderTransformOrigin="0.754,-0.24" />
+                        <TextBox Grid.Column="2" VerticalAlignment="Center"
+                                 Text="{Binding Path=Finish, Mode=TwoWay}" />
+                    </Grid>
+
+                    <!--Part Numbering Settings Group-->
+                    <Grid Grid.Row="3" Grid.Column="0" ColumnSpan="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <!--Prefix-->
+                        <Grid Grid.Column="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="20" />
+                                <ColumnDefinition Width="140" />
+                                <ColumnDefinition Width="40" />
+                            </Grid.ColumnDefinitions>
+
+                            <UIControls:WpfFilterCheckBox Grid.Column="0" VerticalAlignment="Center"
+                                                          AttributeName="PartNoPrefix" />
+                            <Label Grid.Column="1" VerticalAlignment="Center" Content="{tsd:Loc albl_Part_Prefix}"
+                                   RenderTransformOrigin="0.754,-0.24" />
+                            <TextBox Grid.Column="2" VerticalAlignment="Center"
+                                     Text="{Binding Path=PartNoPrefix, Mode=TwoWay}" />
+                        </Grid>
+
+                        <!--Start Number-->
+                        <Grid Grid.Column="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="20" />
+                                <ColumnDefinition Width="140" />
+                                <ColumnDefinition Width="40" />
+                            </Grid.ColumnDefinitions>
+
+                            <UIControls:WpfFilterCheckBox Grid.Column="0" VerticalAlignment="Center"
+                                                          AttributeName="PartStartNo" />
+                            <Label Grid.Column="1" VerticalAlignment="Center" Content="{tsd:Loc albl_Part_Start_No}"
+                                   RenderTransformOrigin="0.754,-0.24" />
+                            <TextBox Grid.Column="2" VerticalAlignment="Center"
+                                     Text="{Binding Path=PartStartNo, Mode=TwoWay}" />
+                        </Grid>
+                    </Grid>
+
+                    <!--Assembly Numbering Settings Group-->
+                    <Grid Grid.Row="4" Grid.Column="0" ColumnSpan="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <!--Prefix-->
+                        <Grid Grid.Column="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="20" />
+                                <ColumnDefinition Width="140" />
+                                <ColumnDefinition Width="40" />
+                            </Grid.ColumnDefinitions>
+
+                            <UIControls:WpfFilterCheckBox Grid.Column="0" VerticalAlignment="Center"
+                                                          AttributeName="AssmNoPrefix" />
+                            <Label Grid.Column="1" VerticalAlignment="Center" Content="{tsd:Loc albl_Assmembly_Prefix}"
+                                   RenderTransformOrigin="0.754,-0.24" />
+                            <TextBox Grid.Column="2" VerticalAlignment="Center"
+                                     Text="{Binding Path=AssmNoPrefix, Mode=TwoWay}" />
+                        </Grid>
+
+                        <!--Start Number-->
+                        <Grid Grid.Column="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="20" />
+                                <ColumnDefinition Width="140" />
+                                <ColumnDefinition Width="40" />
+                            </Grid.ColumnDefinitions>
+
+                            <UIControls:WpfFilterCheckBox Grid.Column="0" VerticalAlignment="Center"
+                                                          AttributeName="AssmStartNo" />
+                            <Label Grid.Column="1" VerticalAlignment="Center" Content="{tsd:Loc albl_Assembly_Start_No}"
+                                   RenderTransformOrigin="0.754,-0.24" />
+                            <TextBox Grid.Column="2" VerticalAlignment="Center"
+                                     Text="{Binding Path=AssmStartNo, Mode=TwoWay}" />
+                        </Grid>
+                    </Grid>
+
+                </Grid>
+            </GroupBox>
+
+        </Grid>
+
+
+        <UIControls:WpfOkApplyModifyGetOnOffCancel
+            Grid.Row="2"
+            ApplyClicked="ApplyClicked"
+            CancelClicked="CancelClicked"
+            GetClicked="GetClicked"
+            ModifyClicked="ModifyClicked"
+            OkClicked="OkClicked"
+            OnOffClicked="OnOffClicked" />
+    </Grid>
+</tsd:PluginWindowBase>
