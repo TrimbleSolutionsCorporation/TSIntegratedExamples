@@ -18,6 +18,7 @@
         <!-- TeklaVerNo is used for specifying the API version numbers. Change the numbers above when branching. -->
         <TeklaPackageVerNo   Condition="'$(TeklaPackageVerNo)'==''">2020.0.2</TeklaPackageVerNo>
         <TeklaVersion           Condition="'$(TeklaVersion)'==''">2020.0.0.0</TeklaVersion>
+		<BranchVersion           Condition="'$(BranchVersion)'==''">2020.0</BranchVersion>
 
         <!-- US Custom build settings -->
         <PurgeOutputPathAfterClean>False</PurgeOutputPathAfterClean>

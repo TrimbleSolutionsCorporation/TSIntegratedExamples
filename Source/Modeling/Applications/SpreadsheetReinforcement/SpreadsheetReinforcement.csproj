@@ -73,10 +73,6 @@
       <HintPath>..\..\..\..\packages\TeklaOpenAPI.$(TeklaPackageVerNo)\lib\Tekla.Structures.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Tekla.Structures.Analysis, Version=$(TeklaVersion), Culture=neutral, PublicKeyToken=2f04dbe497b71114, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\TeklaOpenAPI.$(TeklaPackageVerNo)\lib\Tekla.Structures.Analysis.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="Tekla.Structures.Catalogs, Version=$(TeklaVersion), Culture=neutral, PublicKeyToken=2f04dbe497b71114, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\TeklaOpenAPI.$(TeklaPackageVerNo)\lib\Tekla.Structures.Catalogs.dll</HintPath>
       <Private>False</Private>
