@@ -1,10 +1,25 @@
 ﻿namespace JoistAreaFeatures.Services
 {
+    using Tekla.Structures;
     using Tekla.Structures.Model;
     using Tekla.Structures.Plugins.DirectManipulation.Services.Tools.Picking;
 
     public static class DmCommon
     {
+        public static void ModifyComponent(Component component, string key, object value)
+        {
+            if (component == null || component.Identifier.Equals(new Identifier()) || !component.Select())
+            {
+                return;
+            }
+
+            if (value is string) component.SetAttribute(key, (string)value);
+            else if (value is int) component.SetAttribute(key, (int)value);
+            else if (value is double) component.SetAttribute(key, (double)value);
+            component.Modify();
+            new Model().CommitChanges();
+        }
+
         public static Part GetCurrentMainPart(this Component component)
         {
             Part primaryPart = null;

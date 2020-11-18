@@ -118,7 +118,6 @@
     <Compile Include="Services\DmCommon.cs" />
     <Compile Include="Services\FeatureLogic.cs" />
     <Compile Include="Services\PluginDataFetcher.cs" />
-    <Compile Include="Services\WorkplaneArrowGraphic.cs" />
     <Compile Include="Tools\TxComponent.cs" />
     <Compile Include="Tools\TxPoint.cs" />
     <Compile Include="Tools\TxPolygon.cs" />

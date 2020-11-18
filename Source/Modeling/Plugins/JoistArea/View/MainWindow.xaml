@@ -137,7 +137,7 @@
                     </Grid>
 
                     <!--Depth offset-->
-                    <Grid Grid.Row="4" Grid.Column="0">
+                    <Grid Grid.Row="1" Grid.Column="1">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="20" />
                             <ColumnDefinition Width="100" />
@@ -151,6 +151,23 @@
                                RenderTransformOrigin="0.754,-0.24" />
                         <TextBox Grid.Column="2" VerticalAlignment="Center"
                                  Text="{Binding Path=DepthOffset, Mode=TwoWay}" />
+                    </Grid>
+
+                    <!--First Joist offset-->
+                    <Grid Grid.Row="2" Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="20" />
+                            <ColumnDefinition Width="100" />
+                            <ColumnDefinition Width="*" />
+
+                        </Grid.ColumnDefinitions>
+
+                        <UIControls:WpfFilterCheckBox Grid.Column="0" VerticalAlignment="Center"
+                                                      AttributeName="FirstJoistOffset" />
+                        <Label Grid.Column="1" VerticalAlignment="Center" Content="{tsd:Loc albl_First_Offset}"
+                               RenderTransformOrigin="0.754,-0.24" />
+                        <TextBox Grid.Column="2" VerticalAlignment="Center"
+                                 Text="{Binding Path=FirstJoistOffset, Mode=TwoWay}" />
                     </Grid>
 
                 </Grid>
@@ -167,14 +184,31 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
 
-                    <!--Class-->
+                    <!--Name-->
                     <Grid Grid.Row="0" Grid.Column="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="20" />
+                            <ColumnDefinition Width="140" />
+                            <ColumnDefinition Width="120" />
+                        </Grid.ColumnDefinitions>
+
+                        <UIControls:WpfFilterCheckBox Grid.Column="0" VerticalAlignment="Center"
+                                                      AttributeName="Name" />
+                        <Label Grid.Column="1" VerticalAlignment="Center" Content="{tsd:Loc albl_Name}"
+                               RenderTransformOrigin="0.754,-0.24" />
+                        <TextBox Grid.Column="2" VerticalAlignment="Center"
+                                 Text="{Binding Path=Name, Mode=TwoWay}" />
+                    </Grid>
+
+                    <!--Class-->
+                    <Grid Grid.Row="1" Grid.Column="0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="20" />
                             <ColumnDefinition Width="140" />
@@ -190,7 +224,7 @@
                     </Grid>
 
                     <!--Material-->
-                    <Grid Grid.Row="1" Grid.Column="0">
+                    <Grid Grid.Row="2" Grid.Column="0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="20" />
                             <ColumnDefinition Width="140" />
@@ -213,7 +247,7 @@
                     </Grid>
 
                     <!--Finish-->
-                    <Grid Grid.Row="2" Grid.Column="0">
+                    <Grid Grid.Row="3" Grid.Column="0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="20" />
                             <ColumnDefinition Width="140" />
@@ -229,7 +263,7 @@
                     </Grid>
 
                     <!--Part Numbering Settings Group-->
-                    <Grid Grid.Row="3" Grid.Column="0" ColumnSpan="2">
+                    <Grid Grid.Row="4" Grid.Column="0" ColumnSpan="2">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="*" />
@@ -269,7 +303,7 @@
                     </Grid>
 
                     <!--Assembly Numbering Settings Group-->
-                    <Grid Grid.Row="4" Grid.Column="0" ColumnSpan="2">
+                    <Grid Grid.Row="5" Grid.Column="0" ColumnSpan="2">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="*" />

@@ -7,6 +7,7 @@
     using JoistArea.Tools;
     using JoistArea.ViewModel;
     using Services;
+    using Tekla.Structures.Datatype;
     using Tekla.Structures.Geometry3d;
     using Tekla.Structures.Model;
     using Tekla.Structures.Plugins.DirectManipulation.Core;
@@ -15,59 +16,78 @@
     using Tekla.Structures.Plugins.DirectManipulation.Services.Tools;
     using Distance = Tekla.Structures.Datatype.Distance;
 
-    /// <summary>
-    /// Manipulation context class for the <see cref="JoistAreaManipulationFeature"/> class.
-    /// </summary>
     public sealed class JoistAreaManipulationContext : ManipulationContext
     {
         private IHandleManager _handleManager;
         private List<PointHandle> _polygonHandles;
         private List<PointHandle> _guidelineHandles;
         private List<LineHandle> _guideLine;
-        private List<LineHandle> _edgeLines;
         private readonly IGraphicsDrawer _graphics;
-        private JoistAreaManipulationFeature _featureBase;
+        private JoistAreaManipulationFeature _feature;
         private List<DistanceManipulator> _distanceManipulators;
         private JoistAreaData _uiData;
         private readonly JoistAreaMainLogic _liftingLogic;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="JoistAreaManipulationContext"/> class.
-        /// </summary>
-        /// <param name="component">The component to be manipulated.</param>
-        /// <param name="feature">The parent feature.</param>
         public JoistAreaManipulationContext(Component component, JoistAreaManipulationFeature feature)
             : base(component, feature)
         {
             if (component == null) throw new ArgumentNullException(nameof(component));
             if (feature == null) throw new ArgumentNullException(nameof(feature));
 
-            _featureBase = feature;
-            _graphics = feature.Graphics;
-            _handleManager = feature.HandleManager;
+            try
+            {
+                _feature = feature;
+                _graphics = feature.Graphics;
+                _handleManager = feature.HandleManager;
 
-            //Get part and plugin information
-            _uiData = component.GetDataFromComponent();
-            //var uiDataStored = _featureBase.GetUserInterfaceData(component); //all blank
-            var componentInput = GetCurrentInput(component);
+                //Get part and plugin information
+                _uiData = component.GetDataFromComponent();
+                //var uiDataStored = _featureBase.GetUserInterfaceData(component); //all blank
+                var componentInput = GetCurrentInput(component);
 
-            //Create new instance of logic service class
-            _liftingLogic = new JoistAreaMainLogic();
+                //Create new instance of logic service class
+                _liftingLogic = new JoistAreaMainLogic();
+                _liftingLogic.ExternalInitialize(componentInput.Item1, componentInput.Item2, _uiData);
+
+                //Create point, distance, and line manipulators
+                CreatePointManipulators(component);
+                CreateJoistDistanceManipulators(component);
+                CreateLineManipulators(component);
+
+                //Draw custom graphics
+                ReCreateGraphics();
+            }
+            catch (Exception ex)
+            {
+                GlobalServices.LogException(ex);
+            }
+        }
+
+        public override void UpdateContext()
+        {
+            base.UpdateContext();
+            Component.Select();
+
+            //Update internal logic to take into account changes from plugin
+            _uiData = Component.GetDataFromComponent();
+            var componentInput = GetCurrentInput(Component);
             _liftingLogic.ExternalInitialize(componentInput.Item1, componentInput.Item2, _uiData);
 
-            //Create point, distance, and line manipulators
-            CreatePointManipulators(component);
-            CreateJoistDistanceManipulators(component);
-            CreateLineManipulators(component);
+            //Refresh existing manipulator handles from plugin input
+            UpdatePolygonHandleManipulators(componentInput);
+            UpdateLineManipulators(componentInput);
+            UpdateGuideHandleManipulators(componentInput);
 
-            //Draw custom graphics
-            ReCreateGraphics();
+            //Re-create all Joist center to center manipulators
+            ReCreateJoistDistanceManipulators(Component);
+
+            //Update graphics based on plugin and manipulators
+            ReCreateGraphics(); //todo?
         }
 
         private void ReCreateGraphics()
         {
             _graphics.Clear();
-            DrawFaceWorkPlane();
             DrawGuidelineArrow();
         }
 
@@ -75,7 +95,7 @@
         {
             if (_liftingLogic == null) throw new ArgumentNullException(nameof(_liftingLogic));
             if (_graphics == null) throw new ArgumentNullException(nameof(_graphics));
-            if(_guidelineHandles == null || _guidelineHandles.Count != 2) return;
+            if (_guidelineHandles == null || _guidelineHandles.Count != 2) return;
 
             const double TipLength = 125.0;
             const double ShaftThickness = 25.0;
@@ -86,13 +106,13 @@
             {
                 var guideLine = new LineSegment
                 {
-                    Point1 = _guidelineHandles[0].Point, 
-                    Point2 = _guidelineHandles[1].Point
+                    Point1 = _guidelineHandles[0].Point, Point2 = _guidelineHandles[1].Point
                 };
                 var globalCs = _liftingLogic.GlobalCoordinateSystem;
                 var p0 = new Point(guideLine.Point1);
                 var arrowHeadProfile = $"HXGON{ArrowThickness}-{ShaftThickness}";
                 var shaftProfile = $"D{ShaftThickness}";
+                var yAxisCalc = Vector.Cross(globalCs.GetAxisZ(), guideLine.GetDirectionVector()).GetNormal();
 
                 //Define x-axis arrow
                 {
@@ -111,38 +131,18 @@
                 //Define y-axis arrow
                 {
                     var yEnd = new Point(p0);
-                    yEnd.Translate(globalCs.AxisY.GetNormal() * yAxisLength);
+                    yEnd.Translate(yAxisCalc * yAxisLength);
                     var pyTrans = new Point(yEnd);
-                    pyTrans.Translate(globalCs.AxisY.GetNormal() * -TipLength);
+                    pyTrans.Translate(yAxisCalc * -TipLength);
 
                     var yShaft = new LineSegment(p0, pyTrans);
                     var yHead = new LineSegment(pyTrans, yEnd);
 
                     _graphics.DrawProfile(shaftProfile, yShaft, new Vector(0, 0, 0));
                     _graphics.DrawProfile(arrowHeadProfile, yHead, new Vector(0, 0, 0));
-                    var textPt = new Point(yEnd).GetTranslated(globalCs.AxisY.GetNormal() * 75);
+                    var textPt = new Point(yEnd).GetTranslated(yAxisCalc * 75);
                     _graphics.DrawText("Y", textPt, TextRepresentationTypes.Label);
                 }
-            }
-            catch (Exception ex)
-            {
-                GlobalServices.LogException(ex);
-            }
-        }
-
-        private void DrawFaceWorkPlane()
-        {
-            if (_liftingLogic == null) throw new ArgumentNullException(nameof(_liftingLogic));
-            if (_graphics == null) throw new ArgumentNullException(nameof(_graphics));
-
-            try
-            {
-                var globalCs = _liftingLogic.GlobalCoordinateSystem;
-                var transMatrixFc = MatrixFactory.ToCoordinateSystem(globalCs);
-
-                // Draw UCS Graphic
-                var ucsGraphics = new WorkplaneArrowGraphic(transMatrixFc);
-                ucsGraphics.DrawGraphics(_graphics, false);
             }
             catch (Exception ex)
             {
@@ -167,8 +167,11 @@
 
                 //Setup guideline point handles
                 _guidelineHandles = GetGuidelineHandles(component);
-                //Drag events already set in above method ---
-
+                _guidelineHandles.ForEach(handle =>
+                {
+                    handle.DragOngoing += GuidelineHandle_DragOngoing;
+                    handle.DragEnded += GuidelineHandle_DragEnded;
+                });
             }
             catch (Exception ex)
             {
@@ -180,7 +183,6 @@
         {
             if (component == null) throw new ArgumentNullException(nameof(component));
             _guideLine = new List<LineHandle>();
-            _edgeLines = new List<LineHandle>();
 
             try
             {
@@ -188,44 +190,12 @@
                 var pts = componentInput.Item1;
                 var ls = componentInput.Item2;
 
-                //Add line manipulators for polygon segments
-                {
-                    var edgeSegments = new List<LineSegment>();
-                    Point lastPoint = null;
-                    for (var i = 0; i < pts.Count; i++)
-                    {
-                        var pt = new Point(pts[i]);
-                        if (i == 0)
-                        {
-                            lastPoint = new Point(pt);
-                            continue;
-                        }
-                        edgeSegments.Add(new LineSegment(lastPoint, pt));
-                        lastPoint = new Point(pt);
-
-                        //Complete loop if last point in array
-                        if (i == pts.Count - 1)
-                        {
-                            edgeSegments.Add(new LineSegment(pt, pts[0]));
-                        }
-                    }
-
-                    foreach (var es in edgeSegments)
-                    {
-                        var edgeSeg =
-                            _handleManager.CreateLineHandle(es, HandleLocationType.Other, HandleEffectType.Geometry);
-                        edgeSeg.DragOngoing += EdgeSegment_DragOngoing;
-                        edgeSeg.DragEnded += EdgeSegment_DragEnded;
-                        _edgeLines.Add(edgeSeg);
-                    }
-                }
-
                 //Add line manipulator for Guidline segment
                 {
                     var guidSegment =
                         _handleManager.CreateLineHandle(ls, HandleLocationType.First, HandleEffectType.Geometry);
-                    guidSegment.DragOngoing += GuideLine_DragOngoing;
-                    guidSegment.DragEnded += GuideLine_DragEnded;
+                    guidSegment.DragOngoing += Guideline_DragOngoing;
+                    guidSegment.DragEnded += Guideline_DragEnded;
                     _guideLine.Add(guidSegment);
                 }
             }
@@ -239,26 +209,30 @@
         {
             if (component == null) throw new ArgumentNullException(nameof(component));
             if (_liftingLogic == null) throw new ArgumentNullException(nameof(_liftingLogic));
-
-            if (_distanceManipulators != null)
-            {
-                //todo: how to dispose of old manipulators, qty changed, need new?
-                //todo: below code causes distance manipulators to not generate/show
-                //foreach (var dm in _distanceManipulators)
-                //{
-                //    dm.MeasureChangeOngoing -= delegate { };
-                //    dm.MeasureChanged -= delegate { };
-                //}
-                //_distanceManipulators.ForEach(f => f.Dispose());
-                _distanceManipulators.Clear();
-            }
             _distanceManipulators = new List<DistanceManipulator>();
 
             try
             {
                 //Get joist spacings and distance values from base plugin logic
+                var componentInput = GetCurrentInput(component);
                 var joistSpacingsGlobal = FeatureLogic.GetJoistSpanSegments(_liftingLogic);
+                if (joistSpacingsGlobal == null || joistSpacingsGlobal.Count < 1) return;
                 var distValues = new ArrayList(_liftingLogic.DistanceList.DistanceValues);
+
+                //Create first joist to guideline offset
+                var j1 = joistSpacingsGlobal[0];
+                var px = Projection.PointToLine(j1.Point1, new Line(componentInput.Item2));
+                if (px != null)
+                {
+                    var spacingSeg1 = new LineSegment(j1.Point1, px);
+                    var distStartMan = new DistanceManipulator(component, this, spacingSeg1);
+                    distStartMan.MeasureChanged += delegate
+                    {
+                        DmCommon.ModifyComponent(component, "FirstJoistOffset", distStartMan.Segment.Length());
+                    };
+                    AddManipulator(distStartMan);
+                    _distanceManipulators.Add(distStartMan);
+                }
 
                 //Depending on spacing type add distance manipulator between each joist
                 switch (_liftingLogic.SpacingTyp)
@@ -269,21 +243,7 @@
                         {
                             var ls = joistSpacingsGlobal[i];
                             var distMan = new DistanceManipulator(component, this, ls);
-                            distMan.MeasureChanged += delegate
-                            {
-                                if (distValues.Count > i - 1)
-                                {
-                                    //Replace spacing value at position in distance value list
-                                    distValues[i] = new Distance(distMan.Segment.Length());
-                                    var modDistList = new TxDistanceList(distValues);
-
-                                    //Modify plugin spacing list string value and call to update
-                                    component.SetAttribute("CenterSpacingList", modDistList.FormattedDistanceString);
-                                    //component.Modify();
-                                    //ModifyPluginInputFromManipulators();
-                                    ModifyComponentInput(component.GetComponentInput());
-                                }
-                            };
+                            distMan.MeasureChanged += DistManExact_OnMeasureChanged;
                             AddManipulator(distMan);
                             _distanceManipulators.Add(distMan);
                         }
@@ -297,10 +257,7 @@
                             distMan.MeasureChanged += delegate
                             {
                                 //Modify plugin spacing max value and call to update
-                                component.SetAttribute("CenterSpacingMax", distMan.Segment.Length());
-                                //component.Modify();
-                                //ModifyPluginInputFromManipulators();
-                                ModifyComponentInput(component.GetComponentInput());
+                                DmCommon.ModifyComponent(component, "CenterSpacingMax", distMan.Segment.Length());
                             };
                             AddManipulator(distMan);
                             _distanceManipulators.Add(distMan);
@@ -316,6 +273,50 @@
             }
         }
 
+        private void DistManExact_OnMeasureChanged(object sender, EventArgs e)
+        {
+            var allSpacings = new List<Distance>();
+            for (var i = 1; i < _distanceManipulators.Count; i++)
+            {
+                var distMan = _distanceManipulators[i];
+                allSpacings.Add(new Distance(distMan.Segment.Length()));
+            }
+
+            var modDistList = new DistanceList(allSpacings);
+            var modDistList2 = new TxDistanceList(allSpacings);
+            DmCommon.ModifyComponent(Component, "CenterSpacingList", modDistList.ToString());
+        }
+
+        //private static EventHandler<EventArgs> DistManExact_OnMeasureChanged(Component component, ArrayList distValues,
+        //    int i, DistanceManipulator distMan)
+        //{
+        //    return delegate
+        //    {
+        //        //Replace spacing value at position in distance value list
+        //        distValues[i] = new Distance(distMan.Segment.Length());
+        //        var modDistList = new TxDistanceList(distValues);
+
+        //        //Modify plugin spacing list string value and call to update
+        //        DmCommon.ModifyComponent(component,"CenterSpacingList", modDistList.FormattedDistanceString);
+        //    };
+        //}
+
+        private void ReCreateJoistDistanceManipulators(Component component)
+        {
+            if (component == null) throw new ArgumentNullException(nameof(component));
+            if (_liftingLogic == null) throw new ArgumentNullException(nameof(_liftingLogic));
+
+            if (_distanceManipulators != null)
+            {
+                //todo: how to dispose of old manipulators, qty changed, need new?
+                //todo: below code causes distance manipulators to not generate/show
+                //_distanceManipulators.ForEach(f => f.Dispose());
+                _distanceManipulators.Clear();
+            }
+
+            CreateJoistDistanceManipulators(component);
+        }
+
         private List<PointHandle> GetPolygonPointHandles(Component component)
         {
             if (component == null) throw new ArgumentNullException(nameof(component));
@@ -325,9 +326,11 @@
             var componentInput = GetCurrentInput(component);
             foreach (var pt in componentInput.Item1)
             {
-                var handle = _handleManager.CreatePointHandle(pt, HandleLocationType.InputPoint, HandleEffectType.Geometry);
+                var handle =
+                    _handleManager.CreatePointHandle(pt, HandleLocationType.InputPoint, HandleEffectType.Geometry);
                 handles.Add(handle);
             }
+
             return handles;
         }
 
@@ -340,73 +343,27 @@
             var componentInput = GetCurrentInput(component);
             var guideLine = componentInput.Item2;
 
-            var h1 = _handleManager.CreatePointHandle(guideLine.Point1, HandleLocationType.First, HandleEffectType.Property);
-            h1.DragOngoing += GuidelineHandleStart_DragOngoing;
-            h1.DragEnded += GuidelineHandleStart_DragEnded;
-
-            var h2 = _handleManager.CreatePointHandle(guideLine.Point2, HandleLocationType.Last, HandleEffectType.Property);
-            h2.DragOngoing += GuidelineHandleEnd_DragOngoing;
-            h2.DragEnded += GuidelineHandleEnd_DragEnded;
-
+            var h1 = _handleManager.CreatePointHandle(guideLine.Point1,
+                HandleLocationType.First, HandleEffectType.Property);
             handles.Add(h1);
+
+            var h2 = _handleManager.CreatePointHandle(guideLine.Point2,
+                HandleLocationType.Last, HandleEffectType.Property);
             handles.Add(h2);
+
             return handles;
         }
-
-        /// <summary>
-        /// Happens before Feature refreshes
-        /// </summary>
-        public override void UpdateContext()
-        {
-            if(Component == null) return;
-
-            //Update internal logic to take into account changes from plugin
-            _uiData = Component.GetDataFromComponent();
-            var componentInput = GetCurrentInput(Component);
-            _liftingLogic.ExternalInitialize(componentInput.Item1, componentInput.Item2, _uiData);
-
-            //Refresh existing manipulator handles from plugin input
-            UpdatePolygonHandleManipulators(componentInput);
-            UpdateLineManipulators(componentInput);
-            UpdateGuideHandleManipulators(componentInput);
-
-            //Re-create all Joist center to center manipulators
-            CreateJoistDistanceManipulators(Component);
-
-            //Update graphics based on plugin and manipulators
-            ReCreateGraphics(); //todo?
-        }
-
 
 
         private void UpdateLineManipulators(Tuple<List<Point>, LineSegment> componentInput)
         {
             if (componentInput == null) throw new ArgumentNullException(nameof(componentInput));
-            if(_guideLine == null || _guideLine.Count !=2) return;
+            if (_guideLine == null || _guideLine.Count != 2) return;
 
             //Update guideline manipulator
             var ls = componentInput.Item2;
             _guideLine[0].Line.Point1 = new Point(ls.Point1);
             _guideLine[0].Line.Point2 = new Point(ls.Point2);
-
-            //Update edge line manipulators
-            Point lastPoint = null;
-            for (var i = 0; i < _polygonHandles.Count; i++)
-            {
-                var pt = new Point(_polygonHandles[i].Point);
-                if (i==0)
-                {
-                    lastPoint = new Point(pt);
-                    continue;
-                }
-                _edgeLines[i-1].Line = new LineSegment(lastPoint, pt);
-
-                //Complete loop if last point in array
-                if (i == _polygonHandles.Count - 1)
-                {
-                    _edgeLines[i].Line = new LineSegment(pt, _polygonHandles[0].Point);
-                }
-            }
         }
 
         private void UpdateGuideHandleManipulators(Tuple<List<Point>, LineSegment> componentInput)
@@ -422,7 +379,7 @@
         private void UpdatePolygonHandleManipulators(Tuple<List<Point>, LineSegment> componentInput)
         {
             if (componentInput == null) throw new ArgumentNullException(nameof(componentInput));
-            if(_polygonHandles == null) return;
+            if (_polygonHandles == null) return;
 
             var index = 0;
             foreach (var pt in componentInput.Item1)
@@ -440,7 +397,7 @@
 
             var originalInput = Component.GetComponentInput();
             if (originalInput == null) return;
-            var input = new ComponentInput();
+            var adjustedInput = new ComponentInput();
 
             //Add polygon input
             var polygon = new Polygon();
@@ -448,83 +405,67 @@
             {
                 polygon.Points.Add(new Point(pg.Point));
             }
-            input.AddInputPolygon(polygon);
+
+            adjustedInput.AddInputPolygon(polygon);
 
             //Add guideline input
             var gp1 = new Point(_guidelineHandles[0].Point);
             var gp2 = new Point(_guidelineHandles[1].Point);
-            input.AddTwoInputPositions(gp1, gp2);
+            adjustedInput.AddTwoInputPositions(gp1, gp2);
 
             //Call component to update
-            ModifyComponentInput(input);
+            ModifyComponentInput(adjustedInput);
         }
 
-
-
-
-        private void GuidelineHandleEnd_DragEnded(object sender, DragEventArgs e)
+        private void Guideline_DragEnded(object sender, DragEventArgs e)
         {
             if (_guidelineHandles == null || _guideLine == null) return;
-            if (_guidelineHandles.Count != 2 || _guideLine.Count != 2) return;
+            if (_guidelineHandles.Count != 2 || _guideLine.Count != 1) return;
 
             //Update main Guidline handle objects from dragged line
-            var ls = _guideLine[0].Line;
-            _guidelineHandles[0].Point = new Point(ls.Point1);
-            _guidelineHandles[1].Point = new Point(ls.Point2);
+            _guidelineHandles[0].Point = new Point(_guideLine[0].Line.Point1);
+            _guidelineHandles[1].Point = new Point(_guideLine[0].Line.Point2);
 
             //Update plugin input from manipulators
             ModifyPluginInputFromManipulators();
         }
 
-        private void GuidelineHandleEnd_DragOngoing(object sender, DragEventArgs e)
-        { }
-
-        private void GuidelineHandleStart_DragEnded(object sender, DragEventArgs e)
+        private void Guideline_DragOngoing(object sender, DragEventArgs e)
         {
-            ModifyPluginInputFromManipulators();
-        }
+            if (_guidelineHandles == null || _guideLine == null) return;
+            if (_guidelineHandles.Count != 2 || _guideLine.Count != 1) return;
 
-        private void GuidelineHandleStart_DragOngoing(object sender, DragEventArgs e)
-        {
+            //Update main Guidline handle objects from dragged line
+            _guidelineHandles[0].Point = new Point(_guideLine[0].Line.Point1);
+            _guidelineHandles[1].Point = new Point(_guideLine[0].Line.Point2);
+
             ReCreateGraphics();
         }
 
-        private void GuideLine_DragEnded(object sender, DragEventArgs e)
+        private void GuidelineHandle_DragEnded(object sender, DragEventArgs e)
         {
-            ModifyPluginInputFromManipulators();
-        }
-
-        private void GuideLine_DragOngoing(object sender, DragEventArgs e)
-        {
-            ReCreateGraphics();
-        }
-
-        private void EdgeSegment_DragEnded(object sender, DragEventArgs e)
-        {
-            var originalPt = new Point(e.StartPosition);
-            var movedLocation = new Point(e.StartPosition);
-            movedLocation.Translate(e.TotalTranslation);
-            FindUpdatePolygonFromEdgePtChange(originalPt, movedLocation);
-
-            ModifyPluginInputFromManipulators();
-        }
-
-        private void FindUpdatePolygonFromEdgePtChange(Point originalPt, Point movedLocation)
-        {
-            if(originalPt==null || movedLocation == null || _polygonHandles==null) return;
-            for (var i = 0; i < _polygonHandles.Count; i++)
+            //Update guideline manipulator
+            if (_guideLine != null && _guideLine.Count == 1 && _guidelineHandles != null &&
+                _guidelineHandles.Count == 2)
             {
-                var pt = _polygonHandles[i].Point;
-                if (Tekla.Structures.Geometry3d.Distance.PointToPoint(originalPt, pt) <
-                    GeometryConstants.DISTANCE_EPSILON)
-                {
-                    _polygonHandles[i].Point = movedLocation;
-                }
+                _guideLine[0].Line.Point1 = new Point(_guidelineHandles[0].Point);
+                _guideLine[0].Line.Point2 = new Point(_guidelineHandles[1].Point);
             }
+
+            //Update plugin input from manipulators
+            ModifyPluginInputFromManipulators();
         }
 
-        private void EdgeSegment_DragOngoing(object sender, DragEventArgs e)
+        private void GuidelineHandle_DragOngoing(object sender, DragEventArgs e)
         {
+            //Update guideline manipulator
+            if (_guideLine != null && _guideLine.Count == 1 && _guidelineHandles != null &&
+                _guidelineHandles.Count == 2)
+            {
+                _guideLine[0].Line.Point1 = new Point(_guidelineHandles[0].Point);
+                _guideLine[0].Line.Point2 = new Point(_guidelineHandles[1].Point);
+            }
+
             ReCreateGraphics();
         }
 
@@ -551,30 +492,20 @@
             });
 
             //Detach guideline individual two handles
-            if (_guidelineHandles != null && _guidelineHandles.Count == 2)
+            _guidelineHandles?.ForEach(handle =>
             {
-                var h1 = _guidelineHandles[0];
-                h1.DragOngoing -= GuidelineHandleStart_DragOngoing;
-                h1.DragEnded -= GuidelineHandleStart_DragEnded;
-
-                var h2 = _guidelineHandles[1];
-                h2.DragOngoing -= GuidelineHandleEnd_DragOngoing;
-                h2.DragEnded -= GuidelineHandleEnd_DragEnded;
-            }
+                handle.DragOngoing -= GuidelineHandle_DragOngoing;
+                handle.DragEnded -= GuidelineHandle_DragEnded;
+            });
 
             //Detach Guideline line modifier
             _guideLine?.ForEach(handle =>
             {
-                handle.DragOngoing -= GuideLine_DragOngoing;
-                handle.DragEnded -= GuideLine_DragEnded;
+                handle.DragOngoing -= Guideline_DragOngoing;
+                handle.DragEnded -= Guideline_DragOngoing;
             });
 
-            //Detach Edges line modifiers
-            _edgeLines?.ForEach(handle =>
-            {
-                handle.DragOngoing -= EdgeSegment_DragOngoing;
-                handle.DragEnded -= EdgeSegment_DragEnded;
-            });
+            //todo: Any need to detach handles for distance manipulators?
         }
 
         /// <summary>
@@ -586,9 +517,9 @@
             base.Dispose(disposing);
             DetachHandlers();
             _polygonHandles.ForEach(f => f.Dispose());
-            _guidelineHandles.ForEach(f=>f.Dispose());
+            _guidelineHandles.ForEach(f => f.Dispose());
             _guideLine.ForEach(f => f.Dispose());
-            _edgeLines.ForEach(f=>f.Dispose());
+            _distanceManipulators.ForEach(f => f.Dispose());
         }
 
         private static Tuple<List<Point>, LineSegment> GetCurrentInput(Component component)
@@ -616,9 +547,11 @@
                         polygonPts = pts.ToList();
                         break;
                     default:
-                        throw new ApplicationException("GetCurrentInput: failed, Unexpected plugin input encountered...");
+                        throw new ApplicationException(
+                            "GetCurrentInput: failed, Unexpected plugin input encountered...");
                 }
             }
+
             return new Tuple<List<Point>, LineSegment>(polygonPts, guideLine);
         }
     }

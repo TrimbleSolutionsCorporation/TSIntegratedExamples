@@ -1,7 +1,6 @@
 ﻿namespace JoistArea.Tools
 {
     using System;
-    using System.Collections;
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
@@ -13,112 +12,54 @@
     /// </summary>
     public class TxDistanceList
     {
-        private readonly ArrayList _rawDistanceList = new ArrayList();
-        private readonly ArrayList _formattedList = new ArrayList();
-
         /// <summary>
         /// List of distances parsed from raw distance list as input
         /// </summary>
-        public List<Distance> DistanceValues
+        public List<Distance> DistanceValues { get; private set; }
+
+        private LengthUnit CurrentLengthUnit { get; set; }
+
+        public string LengthFormat { get; set; }
+
+        public string FormattedStringList
         {
             get
             {
-                var result = new List<Distance>();
-                foreach (var mmStr in _rawDistanceList)
+                var result = string.Empty;
+                foreach (var ds in DistanceValues)
                 {
-                    double mmValue;
-                    if (!double.TryParse(mmStr.ToString(), out mmValue)) continue;
-                    var dist = new Distance(mmValue);
-                    result.Add(dist);
+                    var length = new Length(ds.Millimeters);
+                    result += length.ToString(CurrentLengthUnit, LengthFormat) + " ";
                 }
                 return result;
             }
         }
 
-        /// <summary>
-        /// Distance list string formatted
-        /// </summary>
-        public string FormattedDistanceString
+        public TxDistanceList(string formattedDistListStr)
         {
-            get { return _formattedList.Cast<object>().Aggregate(string.Empty, (current, str) => current + (str + " ")); }
-        }
+            if(string.IsNullOrEmpty(formattedDistListStr)) return;
+            var distList = DistanceList.Parse(formattedDistListStr, CultureInfo.InvariantCulture, Distance.UnitType.Millimeter);
+            DistanceValues = distList.ToList();
 
-        /// <summary>
-        /// Unformated distance list string
-        /// </summary>
-        public string RawDistanceString
-        {
-            get { return _rawDistanceList.Cast<object>().Aggregate(string.Empty, (current, str) => current + (str + " ")); }
-        }
-
-        /// <summary>
-        /// Creates new distance list proxy object and parses string
-        /// </summary>
-        /// <param name="stringList">Distance list string from core Tekla</param>
-        /// <param name="lengthUnit">Current units to use</param>
-        /// <param name="lengthFormatString">Current formatting to use</param>
-        public TxDistanceList(ArrayList stringList, LengthUnit lengthUnit, string lengthFormatString)
-        {
-            if (stringList == null) throw new ArgumentNullException();
-            _rawDistanceList = stringList;
-            TryParseList(stringList, lengthUnit, lengthFormatString);
-        }
-
-        /// <summary>
-        /// Creates new distance list proxy object and parses string
-        /// </summary>
-        public TxDistanceList(ArrayList stringList)
-        {
-            if (stringList == null) throw new ArgumentNullException();
-            _rawDistanceList = stringList;
-            var currentUnit = TxModel.IsImperial ? LengthUnit.Foot : LengthUnit.Millimeter;
-            var currentFormat = TxModel.IsImperial ? "1/16" : "0.00";
-            TryParseList(_rawDistanceList, currentUnit, currentFormat);
-        }
-
-        /// <summary>
-        /// Creates new distance list proxy object and parses string
-        /// </summary>
-        public TxDistanceList(string combinedStringList, Distance.UnitType unitType)
-        {
-            if (combinedStringList == null) throw new ArgumentNullException(nameof(combinedStringList));
-            var distList = DistanceList.Parse(combinedStringList, CultureInfo.InvariantCulture, unitType);
-            foreach (var dist in distList) _rawDistanceList.Add(dist.Millimeters);
-            var currentUnit = TxModel.IsImperial ? LengthUnit.Foot : LengthUnit.Millimeter;
-            var currentFormat = TxModel.IsImperial ? "1/16" : "0.00";
-            TryParseList(_rawDistanceList, currentUnit, currentFormat);
-        }
-
-        /// <summary>
-        /// Creates new distance list proxy object and parses string
-        /// </summary>
-        public TxDistanceList(string combinedStringList)
-        {
-            if (combinedStringList == null) throw new ArgumentNullException(nameof(combinedStringList));
-            var distList = DistanceList.Parse(combinedStringList, CultureInfo.InvariantCulture, Distance.UnitType.Millimeter);
-            foreach (var dist in distList) _rawDistanceList.Add(dist.Millimeters);
-            var currentUnit = TxModel.IsImperial ? LengthUnit.Foot : LengthUnit.Millimeter;
-            var currentFormat = TxModel.IsImperial ? "1/16" : "0.00";
-            TryParseList(_rawDistanceList, currentUnit, currentFormat);
+            CurrentLengthUnit = TxModel.IsImperial ? LengthUnit.Foot : LengthUnit.Millimeter;
+            LengthFormat = TxModel.IsImperial ? "1/16" : "0.00";
         }
 
         public TxDistanceList(List<Distance> distances)
         {
             if (distances == null) throw new ArgumentNullException(nameof(distances));
-            _rawDistanceList = new ArrayList(distances);
+            DistanceValues = distances;
+
+            CurrentLengthUnit = TxModel.IsImperial ? LengthUnit.Foot : LengthUnit.Millimeter;
+            LengthFormat = TxModel.IsImperial ? "1/16" : "0.00";
         }
 
-        private void TryParseList(IEnumerable stringList, LengthUnit lengthUnit, string lengthFormatString)
+        public TxDistanceList(List<Distance> distances, LengthUnit currentUnit, string lengthFormat)
         {
-            if (stringList == null) throw new ArgumentNullException();
-            foreach (var str in stringList)
-            {
-                var tempValue = str.ToString();
-                double dblValue;
-                if (!double.TryParse(tempValue, out dblValue)) continue;
-                var tempLength = new Length(dblValue);
-                _formattedList.Add(tempLength.ToString(lengthUnit, lengthFormatString, null, QuantityUnitSymbols.NoSymbols));
-            }
+            if (distances == null) throw new ArgumentNullException(nameof(distances));
+            DistanceValues = distances;
+            CurrentLengthUnit = currentUnit;
+            LengthFormat = lengthFormat;
         }
     }
 }

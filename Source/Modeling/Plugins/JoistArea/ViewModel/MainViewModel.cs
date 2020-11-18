@@ -21,6 +21,13 @@
             set { SetDynamicValue(value); }
         }
 
+        [StructuresDialog("FirstJoistOffset", typeof(TD.Distance))]
+        public TD.Distance FirstJoistOffset
+        {
+            get { return GetDynamicValue<TD.Distance>(); }
+            set { SetDynamicValue(value); }
+        }
+
         [StructuresDialog("JoistProfile", typeof(TD.String))]
         public string JoistProfile
         {

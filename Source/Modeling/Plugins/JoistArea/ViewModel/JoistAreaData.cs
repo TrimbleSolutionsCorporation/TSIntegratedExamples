@@ -18,7 +18,8 @@
         [StructuresField("AssmNoPrefix")] public string AssmNoPrefix;
         [StructuresField("DepthOffset")] public double DepthOffset;
         [StructuresField("SpacingType")] public int SpacingType;
-        
+        [StructuresField("FirstJoistOffset")] public double FirstJoistOffset;
+
         public override void CheckDefaults()
         {
             if (IsDefaultValue(CenterSpacingList)) CenterSpacingList = "900 800 750 900";
@@ -33,6 +34,7 @@
             if (IsDefaultValue(AssmNoPrefix)) AssmNoPrefix = string.Empty;
             if (IsDefaultValue(DepthOffset)) DepthOffset = 0.0;
             if (IsDefaultValue(SpacingType)) SpacingType = 0;
+            if (IsDefaultValue(FirstJoistOffset)) FirstJoistOffset = 0.0;
         }
     }
 }

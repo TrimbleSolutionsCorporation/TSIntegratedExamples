@@ -29,7 +29,7 @@
                 {
                     var lastJoistLineGlobal = lastJoist.BeamLine.Transform(transMatrix);
                     var currentJoistLineGlobal = currentJoist.BeamLine.Transform(transMatrix);
-                    currentJoistLineGlobal.PaintLine(new Color(1,0,0));
+                    //currentJoistLineGlobal.PaintLine(new Color(1,0,0));
 
                     var p1 = Projection.PointToLine(firstCenterGlobal, new Line(lastJoistLineGlobal));
                     var p2 = Projection.PointToLine(firstCenterGlobal, new Line(currentJoistLineGlobal));

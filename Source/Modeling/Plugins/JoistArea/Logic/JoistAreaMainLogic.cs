@@ -89,7 +89,7 @@
         /// <summary>
         /// Transformation from local plugin coordinate system to global
         /// </summary>
-        public Matrix TransGlobalMatrix {get; set;}
+        public Matrix TransGlobalMatrix { get; set; }
 
         /// <summary>
         /// Main Logic helper class - to be called from plugin
@@ -127,11 +127,13 @@
                 var pluginCalculatedCoordSys = JoistAreaPlugin.GetJointCoordinateSystem(pickedPoints, guideLine);
                 if (pluginCalculatedCoordSys == null) return false;
                 TransGlobalMatrix = MatrixFactory.ToCoordinateSystem(pluginCalculatedCoordSys);
-                new Model().GetWorkPlaneHandler().SetCurrentTransformationPlane(new TransformationPlane(pluginCalculatedCoordSys));
+                new Model().GetWorkPlaneHandler()
+                    .SetCurrentTransformationPlane(new TransformationPlane(pluginCalculatedCoordSys));
 
                 //Set local data in new Cs
                 LocalCoordinateSystem = new CoordinateSystem();
-                GlobalCoordinateSystem = new Model().GetWorkPlaneHandler().GetCurrentTransformationPlane().TransformationMatrixToGlobal.Transform(new CoordinateSystem());
+                GlobalCoordinateSystem = new Model().GetWorkPlaneHandler().GetCurrentTransformationPlane()
+                    .TransformationMatrixToGlobal.Transform(new CoordinateSystem());
                 PickedPoints = pickedPoints.Transform(TransGlobalMatrix);
                 GuideLine = guideLine.Transform(TransGlobalMatrix);
                 SetMaxPolygonDistance();
@@ -142,6 +144,7 @@
                     GlobalServices.LogException("CalculateJoistBeams...failed!");
                     return false;
                 }
+
                 return true;
             }
             catch (Exception ex)
@@ -174,7 +177,8 @@
                 PickedPoints = pickedPoints;
                 GuideLine = guideLine;
                 LocalCoordinateSystem = new CoordinateSystem(); //Set by plugin run code already local
-                GlobalCoordinateSystem = new Model().GetWorkPlaneHandler().GetCurrentTransformationPlane().TransformationMatrixToGlobal.Transform(LocalCoordinateSystem);
+                GlobalCoordinateSystem = new Model().GetWorkPlaneHandler().GetCurrentTransformationPlane()
+                    .TransformationMatrixToGlobal.Transform(LocalCoordinateSystem);
                 SetMaxPolygonDistance();
                 TransGlobalMatrix = new Matrix();
                 //DebugPaintPoints();
@@ -290,7 +294,11 @@
 
             try
             {
+                //Start at midpoint of guideline
                 var currentPosition = GuideLine.GetMidPoint();
+
+                //Get offset from guideline
+                currentPosition.Translate(SpanDir * _uiData.FirstJoistOffset);
                 var boundaryPt = GetPtIntersectPolygon(currentPosition, SpanDir, false, true);
                 if (boundaryPt == null) return false;
 
@@ -302,7 +310,7 @@
                         foreach (var dv in DistanceList.DistanceValues)
                         {
                             //Calculate position to next spacing value and distance to edge boundary
-                            currentPosition.Translate(SpanDir * dv.Millimeters);
+
                             var distLeft = new Vector(boundaryPt - currentPosition).Dot(SpanDir);
                             if (distLeft < 0) break; //Past boundary
                             if (distLeft < MinJoistSpacing) break; //To small distance to place new joist
@@ -310,7 +318,7 @@
                             //Get beam start and end points clipped by polygon edges
                             var startPt = GetPtIntersectPolygon(currentPosition, JoistDir * -1, false, false);
                             var endPt = GetPtIntersectPolygon(currentPosition, JoistDir, false, false);
-                            
+
                             //Add virtual beam joist to results list
                             if (startPt != null && endPt != null &&
                                 Distance.PointToPoint(startPt, endPt) > MinJoistLength)
@@ -318,7 +326,10 @@
                                 var vj = GetVirtualJoist(startPt, endPt);
                                 result.Add(vj);
                             }
+
+                            currentPosition.Translate(SpanDir * dv.Millimeters);
                         }
+
                         break;
                     }
                     case MainViewModel.SpacingTypeEnum.albl_CenterToCenter:
@@ -329,10 +340,6 @@
                         //Check each distance moving along span
                         while (distLeft >= CenterSpacingMax)
                         {
-                            //Move position to next spot along span
-                            currentPosition.Translate(SpanDir * CenterSpacingMax);
-                            distLeft = new Vector(boundaryPt - currentPosition).Dot(SpanDir);
-
                             //Get beam start and end points clipped by polygon edges
                             var startPt = GetPtIntersectPolygon(currentPosition, JoistDir * -1, false, false);
                             var endPt = GetPtIntersectPolygon(currentPosition, JoistDir, false, false);
@@ -344,7 +351,12 @@
                                 var vj = GetVirtualJoist(startPt, endPt);
                                 result.Add(vj);
                             }
+
+                            //Move position to next spot along span
+                            distLeft = new Vector(boundaryPt - currentPosition).Dot(SpanDir);
+                            currentPosition.Translate(SpanDir * CenterSpacingMax);
                         }
+
                         break;
                     }
                     default:
@@ -395,7 +407,8 @@
                 }
 
                 //Return shortest found plane if beam line check, longest if boundary check
-                if(offsetFromOrigin) return boundaryPoints.OrderBy(f => Distance.PointToPoint(currentPosition, f)).Last();
+                if (offsetFromOrigin)
+                    return boundaryPoints.OrderBy(f => Distance.PointToPoint(currentPosition, f)).Last();
                 return boundaryPoints.OrderBy(f => Distance.PointToPoint(currentPosition, f)).First();
             }
             catch (Exception ex)
