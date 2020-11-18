@@ -8,19 +8,18 @@
     <PurgeOutputPathAfterClean>True</PurgeOutputPathAfterClean>
     <CleanOutputForTeklaLibraries>True</CleanOutputForTeklaLibraries>
     <CopyOutputSubfolderName>JoistArea</CopyOutputSubfolderName>
-    <OutputPath2>$(ProjectDir)Installer\ProgramFiles\Nt\bin\plugins\Tekla\Model\$(CopyOutputSubfolderName)\</OutputPath2>
+    <OutputPath2>$(ProjectDir)..\JoistArea\Installer\ProgramFiles\Nt\bin\plugins\Tekla\Model\$(CopyOutputSubfolderName)\</OutputPath2>
     <OutputPath3>C:\ProgramData\Trimble\Tekla Structures\$(BranchVersion) Daily\Environments\common\extensions\plugins\tekla\model\$(CopyOutputSubfolderName)</OutputPath3>
     <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
-    <ApplicationIcon>Resources\TeklaStructuresExtension.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x64</Platform>
-    <ProjectGuid>{02705D25-5C13-4344-ADA0-089C33303749}</ProjectGuid>
+    <ProjectGuid>{F22A50DD-C17E-4C77-90CC-B4926B70280A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>JoistArea</RootNamespace>
-    <AssemblyName>JoistArea</AssemblyName>
+    <RootNamespace>JoistAreaFeatures</RootNamespace>
+    <AssemblyName>JoistAreaFeatures</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <WarningLevel>4</WarningLevel>
@@ -38,9 +37,6 @@
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>x64</PlatformTarget>
-  </PropertyGroup>
-  <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -61,33 +57,54 @@
     <Reference Include="Tekla.Application.Library, Version=$(TeklaVersion), Culture=neutral, PublicKeyToken=2f04dbe497b71114, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\TeklaOpenAPI.$(TeklaPackageVerNo)\lib\Tekla.Application.Library.dll</HintPath>
       <Private>False</Private>
+      <SpecificVersion>True</SpecificVersion>
+    </Reference>
+    <Reference Include="Tekla.Common.Geometry.Primitives, Version=4.5.0.0, Culture=neutral, PublicKeyToken=93c0f7e4f1ca9619, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Lib\Tekla.Common.Geometry.Primitives.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Tekla.Structures, Version=$(TeklaVersion), Culture=neutral, PublicKeyToken=2f04dbe497b71114, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\TeklaOpenAPI.$(TeklaPackageVerNo)\lib\Tekla.Structures.dll</HintPath>
       <Private>False</Private>
+      <SpecificVersion>True</SpecificVersion>
     </Reference>
     <Reference Include="Tekla.Structures.Catalogs, Version=$(TeklaVersion), Culture=neutral, PublicKeyToken=2f04dbe497b71114, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\TeklaOpenAPI.$(TeklaPackageVerNo)\lib\Tekla.Structures.Catalogs.dll</HintPath>
       <Private>False</Private>
+      <SpecificVersion>True</SpecificVersion>
     </Reference>
     <Reference Include="Tekla.Structures.Datatype, Version=$(TeklaVersion), Culture=neutral, PublicKeyToken=2f04dbe497b71114, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\TeklaOpenAPI.$(TeklaPackageVerNo)\lib\Tekla.Structures.Datatype.dll</HintPath>
       <Private>False</Private>
+      <SpecificVersion>True</SpecificVersion>
     </Reference>
     <Reference Include="Tekla.Structures.Dialog, Version=$(TeklaVersion), Culture=neutral, PublicKeyToken=2f04dbe497b71114, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\TeklaOpenAPI.$(TeklaPackageVerNo)\lib\Tekla.Structures.Dialog.dll</HintPath>
       <Private>False</Private>
+      <SpecificVersion>True</SpecificVersion>
     </Reference>
     <Reference Include="Tekla.Structures.Drawing, Version=$(TeklaVersion), Culture=neutral, PublicKeyToken=2f04dbe497b71114, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\TeklaOpenAPI.$(TeklaPackageVerNo)\lib\Tekla.Structures.Drawing.dll</HintPath>
       <Private>False</Private>
+      <SpecificVersion>True</SpecificVersion>
     </Reference>
     <Reference Include="Tekla.Structures.Model, Version=$(TeklaVersion), Culture=neutral, PublicKeyToken=2f04dbe497b71114, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\TeklaOpenAPI.$(TeklaPackageVerNo)\lib\Tekla.Structures.Model.dll</HintPath>
       <Private>False</Private>
+      <SpecificVersion>True</SpecificVersion>
     </Reference>
     <Reference Include="Tekla.Structures.Plugins, Version=$(TeklaVersion), Culture=neutral, PublicKeyToken=2f04dbe497b71114, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\TeklaOpenAPI.$(TeklaPackageVerNo)\lib\Tekla.Structures.Plugins.dll</HintPath>
+      <Private>False</Private>
+      <SpecificVersion>True</SpecificVersion>
+    </Reference>
+    <Reference Include="Tekla.BIM.DirectManipulation">
+      <HintPath>Lib\Tekla.BIM.DirectManipulation.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Tekla.Structures.Plugins.DirectManipulation">
+      <HintPath>Lib\Tekla.Structures.Plugins.DirectManipulation.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="WindowsBase" />
@@ -95,78 +112,25 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="JoistAreaPlugin.cs" />
-    <Compile Include="Logic\JoistAreaMainLogic.cs" />
-    <Compile Include="Logic\VirtualJoist.cs" />
-    <Compile Include="Logic\GlobalServices.cs" />
-    <Compile Include="Tools\EnumTools.cs" />
-    <Compile Include="Tools\FaceDifference.cs" />
-    <Compile Include="Tools\FakeFace.cs" />
-    <Compile Include="Tools\IconUtilities.cs" />
-    <Compile Include="Tools\PickerService.cs" />
-    <Compile Include="Tools\SmartBindingBase.cs" />
-    <Compile Include="Tools\TxGeometricPlane.cs" />
-    <Compile Include="Tools\TxPolygon.cs" />
-    <Compile Include="Tools\TxAssembly.cs" />
-    <Compile Include="Tools\TxCoordinateSystem.cs" />
-    <Compile Include="Tools\TxFace.cs" />
-    <Compile Include="Tools\TxLineSegment.cs" />
-    <Compile Include="Tools\TxMatrix.cs" />
-    <Compile Include="Tools\TxPoint.cs" />
-    <Compile Include="Tools\TxSettings.cs" />
-    <Compile Include="Tools\TxTriangle.cs" />
-    <Compile Include="Tools\TxVector.cs" />
-    <Compile Include="Tools\TxAdvancedOptions.cs" />
-    <Compile Include="Tools\TxDimension.cs" />
-    <Compile Include="Tools\TxDistanceList.cs" />
-    <Compile Include="Tools\TxLength.cs" />
-    <Compile Include="Tools\TxModel.cs" />
-    <Compile Include="Tools\TxPathGeometry.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <DependentUpon>Settings.settings</DependentUpon>
-    </Compile>
-    <Compile Include="Tools\TxSolid.cs" />
-    <Compile Include="ViewModel\MainViewModel.cs" />
-    <Compile Include="ViewModel\JoistAreaData.cs" />
-    <Compile Include="Tools\PluginDataHelper.cs" />
-    <Compile Include="ViewModel\ValueConverters.cs" />
-    <Compile Include="View\Constants.cs" />
+    <Compile Include="JoistAreaManipulationContext.cs" />
+    <Compile Include="JoistAreaManipulationFeature.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="View\MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Page Include="View\MainWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\TeklaStructuresExtension.ico" />
+    <Compile Include="Services\DmCommon.cs" />
+    <Compile Include="Services\FeatureLogic.cs" />
+    <Compile Include="Services\PluginDataFetcher.cs" />
+    <Compile Include="Services\WorkplaneArrowGraphic.cs" />
+    <Compile Include="Tools\TxComponent.cs" />
+    <Compile Include="Tools\TxPoint.cs" />
+    <Compile Include="Tools\TxPolygon.cs" />
+    <Compile Include="Tools\TxVector.cs" />
   </ItemGroup>
   <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\JoistArea\JoistArea.csproj">
+      <Project>{02705d25-5c13-4344-ada0-089c33303749}</Project>
+      <Name>JoistArea</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

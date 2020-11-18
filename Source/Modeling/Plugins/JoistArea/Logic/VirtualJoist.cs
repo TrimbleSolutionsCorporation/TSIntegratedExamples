@@ -1,12 +1,17 @@
-﻿namespace JoistArea.Proxy
+﻿namespace JoistArea.Logic
 {
     using System;
-    using Services;
+    using Tekla.Structures.Geometry3d;
     using Tekla.Structures.Model;
+    using Tools;
 
     public class VirtualJoist
     {
         public Beam ModelBeam { get; set; }
+
+        public LineSegment BeamLine => new LineSegment(ModelBeam.StartPoint, ModelBeam.EndPoint);
+
+        public Point CenterBeam => BeamLine?.GetMidPoint();
 
         public VirtualJoist()
         { }

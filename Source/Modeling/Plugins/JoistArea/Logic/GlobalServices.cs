@@ -1,4 +1,4 @@
-﻿namespace JoistArea.Services
+﻿namespace JoistArea.Logic
 {
     using System;
     using System.Diagnostics;

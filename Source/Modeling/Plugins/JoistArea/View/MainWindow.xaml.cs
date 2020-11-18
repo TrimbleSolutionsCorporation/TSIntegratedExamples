@@ -2,7 +2,7 @@
 {
     using System;
     using System.Windows;
-    using Services;
+    using Logic;
     using ViewModel;
 
     /// <summary>

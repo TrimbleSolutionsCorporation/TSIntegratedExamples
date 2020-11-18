@@ -6,6 +6,7 @@
     public class JoistAreaData : PluginDataHelper
     {
         [StructuresField("CenterSpacingList")] public string CenterSpacingList;
+        [StructuresField("CenterSpacingMax")] public double CenterSpacingMax;
         [StructuresField("JoistProfile")] public string JoistProfile;
         [StructuresField("Material")] public string Material;
         [StructuresField("Class")] public int Class;
@@ -17,11 +18,11 @@
         [StructuresField("AssmNoPrefix")] public string AssmNoPrefix;
         [StructuresField("DepthOffset")] public double DepthOffset;
         [StructuresField("SpacingType")] public int SpacingType;
-        [StructuresField("CenterSpacingMax")] public double CenterSpacingMax;
-
+        
         public override void CheckDefaults()
         {
             if (IsDefaultValue(CenterSpacingList)) CenterSpacingList = "900 800 750 900";
+            if (IsDefaultValue(CenterSpacingMax)) CenterSpacingMax = 739.0;
             if (IsDefaultValue(JoistProfile)) JoistProfile = "650*25.0";
             if (IsDefaultValue(Class)) Class = 914;
             if (IsDefaultValue(Name)) Name = string.Empty;
@@ -32,7 +33,6 @@
             if (IsDefaultValue(AssmNoPrefix)) AssmNoPrefix = string.Empty;
             if (IsDefaultValue(DepthOffset)) DepthOffset = 0.0;
             if (IsDefaultValue(SpacingType)) SpacingType = 0;
-            if (IsDefaultValue(CenterSpacingMax)) CenterSpacingMax = 739.0;
         }
     }
 }

@@ -42,6 +42,28 @@
         }
 
         /// <summary>
+        /// Translates existing line segment by 3d matrix
+        /// </summary>
+        /// <param name="list">List of line segments to translate</param>
+        /// <param name="matrix">Matrix transformation</param>
+        /// <returns>New list of transformed line segments</returns>
+        public static List<LineSegment> Transform(this List<LineSegment> list, Matrix matrix)
+        {
+            if (list == null) throw new ArgumentNullException(nameof(list));
+            if (matrix == null) throw new ArgumentNullException(nameof(matrix));
+            var result = new List<LineSegment>();
+
+            foreach (var ls in list)
+            {
+                var p1 = matrix.Transform(new Point(ls.Point1));
+                var p2 = matrix.Transform(new Point(ls.Point2));
+                result.Add(new LineSegment(p1, p2));
+            }
+
+            return result;
+        }
+
+        /// <summary>
         /// Gets sequence of line segments from point lists
         /// </summary>
         /// <param name="ptList">Sequential point list to interpolate</param>

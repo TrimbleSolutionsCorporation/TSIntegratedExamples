@@ -14,6 +14,13 @@
             set { SetDynamicValue(value); }
         }
 
+        [StructuresDialog("CenterSpacingMax", typeof(TD.Distance))]
+        public TD.Distance CenterSpacingMax
+        {
+            get { return GetDynamicValue<TD.Distance>(); }
+            set { SetDynamicValue(value); }
+        }
+
         [StructuresDialog("JoistProfile", typeof(TD.String))]
         public string JoistProfile
         {
@@ -86,13 +93,6 @@
                 SetDynamicValue<int>(value); 
                 RaisePropertyChanged(nameof(IsSpacingListType));
             }
-        }
-
-        [StructuresDialog("CenterSpacingMax", typeof(TD.Distance))]
-        public TD.Distance CenterSpacingMax
-        {
-            get { return GetDynamicValue<TD.Distance>(); }
-            set { SetDynamicValue(value); }
         }
 
         public IEnumerable<string> AllSpacingTypes => EnumTools.EnumToTranslatedStrings<SpacingTypeEnum>();

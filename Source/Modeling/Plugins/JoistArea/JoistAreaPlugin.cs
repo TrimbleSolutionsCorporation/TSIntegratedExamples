@@ -5,7 +5,6 @@
     using System.Collections.Generic;
     using System.Diagnostics;
     using Logic;
-    using Services;
     using Tekla.Structures.Geometry3d;
     using Tekla.Structures.Model;
     using Tekla.Structures.Plugins;
@@ -41,7 +40,7 @@
 
                 //Store input to memory and return
                 result.Add(new InputDefinition(pickedPts));
-                result.Add(new InputDefinition(new ArrayList {guidelineSet.Item1, guidelineSet.Item2}));
+                result.Add(new InputDefinition(guidelineSet.Item1, guidelineSet.Item2));
                 return result;
             }
             catch (Exception ex)

@@ -81,7 +81,7 @@
         /// </summary>
         public TxDistanceList(string combinedStringList, Distance.UnitType unitType)
         {
-            if (combinedStringList == null) throw new ArgumentNullException("combinedStringList");
+            if (combinedStringList == null) throw new ArgumentNullException(nameof(combinedStringList));
             var distList = DistanceList.Parse(combinedStringList, CultureInfo.InvariantCulture, unitType);
             foreach (var dist in distList) _rawDistanceList.Add(dist.Millimeters);
             var currentUnit = TxModel.IsImperial ? LengthUnit.Foot : LengthUnit.Millimeter;
@@ -94,12 +94,18 @@
         /// </summary>
         public TxDistanceList(string combinedStringList)
         {
-            if (combinedStringList == null) throw new ArgumentNullException("combinedStringList");
+            if (combinedStringList == null) throw new ArgumentNullException(nameof(combinedStringList));
             var distList = DistanceList.Parse(combinedStringList, CultureInfo.InvariantCulture, Distance.UnitType.Millimeter);
             foreach (var dist in distList) _rawDistanceList.Add(dist.Millimeters);
             var currentUnit = TxModel.IsImperial ? LengthUnit.Foot : LengthUnit.Millimeter;
             var currentFormat = TxModel.IsImperial ? "1/16" : "0.00";
             TryParseList(_rawDistanceList, currentUnit, currentFormat);
+        }
+
+        public TxDistanceList(List<Distance> distances)
+        {
+            if (distances == null) throw new ArgumentNullException(nameof(distances));
+            _rawDistanceList = new ArrayList(distances);
         }
 
         private void TryParseList(IEnumerable stringList, LengthUnit lengthUnit, string lengthFormatString)
