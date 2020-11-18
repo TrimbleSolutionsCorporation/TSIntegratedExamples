@@ -194,14 +194,14 @@
                     Point lastPoint = null;
                     for (var i = 0; i < pts.Count; i++)
                     {
-                        var pt = pts[i];
+                        var pt = new Point(pts[i]);
                         if (i == 0)
                         {
-                            lastPoint = pt;
+                            lastPoint = new Point(pt);
                             continue;
                         }
                         edgeSegments.Add(new LineSegment(lastPoint, pt));
-                        lastPoint = pt;
+                        lastPoint = new Point(pt);
 
                         //Complete loop if last point in array
                         if (i == pts.Count - 1)
@@ -239,6 +239,19 @@
         {
             if (component == null) throw new ArgumentNullException(nameof(component));
             if (_liftingLogic == null) throw new ArgumentNullException(nameof(_liftingLogic));
+
+            if (_distanceManipulators != null)
+            {
+                //todo: how to dispose of old manipulators, qty changed, need new?
+                //todo: below code causes distance manipulators to not generate/show
+                //foreach (var dm in _distanceManipulators)
+                //{
+                //    dm.MeasureChangeOngoing -= delegate { };
+                //    dm.MeasureChanged -= delegate { };
+                //}
+                //_distanceManipulators.ForEach(f => f.Dispose());
+                _distanceManipulators.Clear();
+            }
             _distanceManipulators = new List<DistanceManipulator>();
 
             try
@@ -340,7 +353,9 @@
             return handles;
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Happens before Feature refreshes
+        /// </summary>
         public override void UpdateContext()
         {
             if(Component == null) return;
@@ -356,7 +371,6 @@
             UpdateGuideHandleManipulators(componentInput);
 
             //Re-create all Joist center to center manipulators
-            _distanceManipulators = null;
             CreateJoistDistanceManipulators(Component);
 
             //Update graphics based on plugin and manipulators
@@ -379,18 +393,18 @@
             Point lastPoint = null;
             for (var i = 0; i < _polygonHandles.Count; i++)
             {
-                var pt = _polygonHandles[i];
+                var pt = new Point(_polygonHandles[i].Point);
                 if (i==0)
                 {
-                    lastPoint = pt.Point;
+                    lastPoint = new Point(pt);
                     continue;
                 }
-                _edgeLines[i-1].Line = new LineSegment(lastPoint, pt.Point);
+                _edgeLines[i-1].Line = new LineSegment(lastPoint, pt);
 
                 //Complete loop if last point in array
                 if (i == _polygonHandles.Count - 1)
                 {
-                    _edgeLines[i].Line = new LineSegment(pt.Point, _polygonHandles[0].Point);
+                    _edgeLines[i].Line = new LineSegment(pt, _polygonHandles[0].Point);
                 }
             }
         }
@@ -437,8 +451,8 @@
             input.AddInputPolygon(polygon);
 
             //Add guideline input
-            var gp1 = _guidelineHandles[0].Point;
-            var gp2 = _guidelineHandles[1].Point;
+            var gp1 = new Point(_guidelineHandles[0].Point);
+            var gp2 = new Point(_guidelineHandles[1].Point);
             input.AddTwoInputPositions(gp1, gp2);
 
             //Call component to update
