@@ -1,5 +1,8 @@
 ﻿namespace JoistArea.Tools
 {
+    using System;
+    using Tekla.Structures.Geometry3d;
+
     public abstract class PluginDataHelper
     {
         public static int DEFAULT_VALUE = int.MinValue;
@@ -11,7 +14,7 @@
         /// </summary>
         /// <param name="value">The value to test.</param>
         /// <returns>True if the value is set to the default.</returns>
-        public static bool IsDefaultValue(int value)
+        public static bool IsBlankValue(int value)
         {
             return value == DEFAULT_VALUE;
         }
@@ -21,9 +24,9 @@
         /// </summary>
         /// <param name="value">The value to test.</param>
         /// <returns>True if the value is set to the default.</returns>
-        public static bool IsDefaultValue(double value)
+        public static bool IsBlankValue(double value)
         {
-            return value == DEFAULT_VALUE;
+            return Math.Abs(value - TxModel.NullDoubleValue) < GeometryConstants.DISTANCE_EPSILON;
         }
 
         /// <summary>
@@ -31,7 +34,7 @@
         /// </summary>
         /// <param name="value">The value to test.</param>
         /// <returns>True if the value is set to the default.</returns>
-        public static bool IsDefaultValue(string value)
+        public static bool IsBlankValue(string value)
         {
             return value == "";
         }

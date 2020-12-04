@@ -5,6 +5,20 @@
 
     public class JoistAreaData : PluginDataHelper
     {
+        public const string DefaultCenterSpacingList = "900 800 750 900";
+        public const double DefaultCenterSpacingMax = 739.0;
+        public const double DefaultDepthOffset = 0.0;
+        public const string DefaultJoistProfile = "650*25.0";
+        public const int DefaultClass = 914;
+        public const string DefaultName = "Joist";
+        public const string DefaultFinish = "";
+        public const int DefaultPartStartNo = 1;
+        public const int DefaultAssmStartNo = 1;
+        public const string DefaultPartNoPrefix = "j";
+        public const string DefaultAssmNoPrefix = "J";
+        public const int DefaultSpacingType = 0;
+        public const double DefaultFirstJoistOffset = 0.0;
+
         [StructuresField("CenterSpacingList")] public string CenterSpacingList;
         [StructuresField("CenterSpacingMax")] public double CenterSpacingMax;
         [StructuresField("JoistProfile")] public string JoistProfile;
@@ -22,19 +36,19 @@
 
         public override void CheckDefaults()
         {
-            if (IsDefaultValue(CenterSpacingList)) CenterSpacingList = "900 800 750 900";
-            if (IsDefaultValue(CenterSpacingMax)) CenterSpacingMax = 739.0;
-            if (IsDefaultValue(JoistProfile)) JoistProfile = "650*25.0";
-            if (IsDefaultValue(Class)) Class = 914;
-            if (IsDefaultValue(Name)) Name = string.Empty;
-            if (IsDefaultValue(Finish)) Finish = string.Empty;
-            if (IsDefaultValue(PartStartNo)) PartStartNo = 0;
-            if (IsDefaultValue(AssmStartNo)) AssmStartNo = 0;
-            if (IsDefaultValue(PartNoPrefix)) PartNoPrefix = string.Empty;
-            if (IsDefaultValue(AssmNoPrefix)) AssmNoPrefix = string.Empty;
-            if (IsDefaultValue(DepthOffset)) DepthOffset = 0.0;
-            if (IsDefaultValue(SpacingType)) SpacingType = 0;
-            if (IsDefaultValue(FirstJoistOffset)) FirstJoistOffset = 0.0;
+            if (IsBlankValue(CenterSpacingList)) CenterSpacingList = DefaultCenterSpacingList;
+            if (IsBlankValue(CenterSpacingMax)) CenterSpacingMax = DefaultCenterSpacingMax;
+            if (IsBlankValue(JoistProfile)) JoistProfile = DefaultJoistProfile;
+            if (IsBlankValue(Class)) Class = DefaultClass;
+            if (IsBlankValue(Name)) Name = DefaultName;
+            if (IsBlankValue(Finish)) Finish = DefaultFinish;
+            if (IsBlankValue(PartStartNo)) PartStartNo = DefaultPartStartNo;
+            if (IsBlankValue(AssmStartNo)) AssmStartNo = DefaultAssmStartNo;
+            if (IsBlankValue(PartNoPrefix)) PartNoPrefix = DefaultPartNoPrefix;
+            if (IsBlankValue(AssmNoPrefix)) AssmNoPrefix = DefaultAssmNoPrefix;
+            if (IsBlankValue(DepthOffset)) DepthOffset = DefaultDepthOffset;
+            if (IsBlankValue(SpacingType)) SpacingType = DefaultSpacingType;
+            if (IsBlankValue(FirstJoistOffset)) FirstJoistOffset = DefaultFirstJoistOffset;
         }
     }
 }

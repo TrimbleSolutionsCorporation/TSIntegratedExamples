@@ -34,6 +34,7 @@
             if (Components == null || Components.Count < 1) return;
             try
             {
+
                 //Get data from user interface
                 var uiData = PluginDataFetcher.GetDataFromComponent(Components.First());
                 var spacingTypeUsed = (MainViewModel.SpacingTypeEnum) uiData.SpacingType;
@@ -51,36 +52,6 @@
                     }
                 };
 
-                //Create control for center to center max distance spacing
-                if (spacingTypeUsed == MainViewModel.SpacingTypeEnum.albl_CenterToCenter)
-                {
-                    _centerMaxSpacing = toolbar.CreateValueTextBox(uiData.CenterSpacingMax);
-                    _centerMaxSpacing.Tooltip = "Center Max Spacing";
-                    _centerMaxSpacing.Title = "Max";
-                    _centerMaxSpacing.StateChanged += delegate
-                    {
-                        foreach (var component in Components)
-                        {
-                            DmCommon.ModifyComponent(component, "CenterSpacingMax", _centerMaxSpacing.Value);
-                        }
-                    };
-                }
-
-                //Create control for center to center max distance spacing
-                if (spacingTypeUsed == MainViewModel.SpacingTypeEnum.albl_ExactList)
-                {
-                    _centerSpacingList = toolbar.CreateTextBox(uiData.CenterSpacingList);
-                    _centerSpacingList.Tooltip = "Center Exact Spacing List";
-                    _centerSpacingList.Title = "List";
-                    _centerSpacingList.StateChanged += delegate
-                    {
-                        foreach (var component in Components)
-                        {
-                            DmCommon.ModifyComponent(component, "CenterSpacingList", _centerSpacingList.Text);
-                        }
-                    };
-                }
-
                 //First spacing offset control
                 _firstSpacing = toolbar.CreateValueTextBox(uiData.FirstJoistOffset);
                 _firstSpacing.Tooltip = "First Joist Offset Distance";
@@ -94,15 +65,35 @@
                 };
 
                 //Depth offset control
-                _depthOffset = toolbar.CreateValueTextBox(uiData.DepthOffset);
+                var pluginValue = TxModel.NullDoubleValue;
+                Components.First().GetAttribute("DepthOffset", ref pluginValue);
+                if (PluginDataHelper.IsBlankValue(pluginValue))
+                {
+                    _depthOffset = toolbar.CreateValueTextBox();
+                    _depthOffset.Title = "Depth (Calculated)";
+                }
+                else
+                {
+                    _depthOffset = toolbar.CreateValueTextBox(uiData.DepthOffset);
+                    _depthOffset.Title = "Depth";
+                }
                 _depthOffset.Tooltip = "Depth Below Joist Offset";
-                _depthOffset.Title = "Depth";
                 _depthOffset.StateChanged += (control, eventArgs) =>
                 {
                     foreach (var component in Components)
                     {
-                        DmCommon.ModifyComponent(component, "DepthOffset", _depthOffset.Value);
+                        if (PluginDataHelper.IsBlankValue(_depthOffset.Value))
+                        {
+                            DmCommon.ModifyComponent(component, "DepthOffset", TxModel.NullDoubleValue);
+                            _depthOffset.Title = "Depth (Calculated)";
+                        }
+                        else
+                        {
+                            DmCommon.ModifyComponent(component, "DepthOffset", _depthOffset.Value);
+                            _depthOffset.Title = "Depth";
+                        }
                     }
+                    Refresh();
                 };
             }
             catch (Exception ex)
