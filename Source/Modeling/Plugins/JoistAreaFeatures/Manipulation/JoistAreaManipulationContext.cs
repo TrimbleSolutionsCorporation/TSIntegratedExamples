@@ -1,4 +1,4 @@
-﻿namespace JoistAreaFeatures
+﻿namespace JoistAreaFeatures.Manipulation
 {
     using System;
     using System.Collections;
@@ -15,20 +15,20 @@
     using Tekla.Structures.Plugins.DirectManipulation.Services.Handles;
     using Tekla.Structures.Plugins.DirectManipulation.Services.Tools;
     using Distance = Tekla.Structures.Datatype.Distance;
+    using DragEventArgs = Tekla.Structures.Plugins.DirectManipulation.Services.Handles.DragEventArgs;
 
     public sealed class JoistAreaManipulationContext : ManipulationContext
     {
         private IHandleManager _handleManager;
         private List<PointHandle> _polygonHandles;
         private List<PointHandle> _guidelineHandles;
-        private List<LineHandle> _guideLine;
+        private LineHandle _guideLine;
         private readonly IGraphicsDrawer _graphics;
-        private JoistAreaManipulationFeature _feature;
-        private List<DistanceManipulator> _distanceManipulators;
+        private List<DistanceManipulator> _joistDistanceManipulators;
         private JoistAreaData _uiData;
         private readonly JoistAreaMainLogic _liftingLogic;
 
-        public JoistAreaManipulationContext(Component component, JoistAreaManipulationFeature feature)
+        public JoistAreaManipulationContext(Component component, ManipulationFeature feature)
             : base(component, feature)
         {
             if (component == null) throw new ArgumentNullException(nameof(component));
@@ -36,7 +36,6 @@
 
             try
             {
-                _feature = feature;
                 _graphics = feature.Graphics;
                 _handleManager = feature.HandleManager;
 
@@ -52,7 +51,7 @@
                 //Create point, distance, and line manipulators
                 CreatePointManipulators(component);
                 CreateJoistDistanceManipulators(component);
-                CreateLineManipulators(component);
+                CreateGuideLineManipulator(component);
 
                 //Draw custom graphics
                 ReCreateGraphics();
@@ -89,6 +88,23 @@
         {
             _graphics.Clear();
             DrawGuidelineArrow();
+            DrawPolygonMeasurements();
+        }
+
+        private void DrawPolygonMeasurements()
+        {
+            Point lastPoint = null;
+            foreach (var pg in _polygonHandles)
+            {
+                if (lastPoint != null)
+                {
+                    var currPt = new Point(pg.Point);
+                    var ls = new LineSegment(lastPoint, currPt);
+                    _graphics.DrawDimension(ls, null, DimensionEndPointSizeType.FixedSmall);
+                }
+
+                lastPoint = new Point(pg.Point);
+            }
         }
 
         private void DrawGuidelineArrow()
@@ -153,6 +169,8 @@
         private void CreatePointManipulators(Component component)
         {
             if (component == null) throw new ArgumentNullException(nameof(component));
+            _polygonHandles?.Clear();
+            _guidelineHandles?.Clear();
 
             try
             {
@@ -179,10 +197,11 @@
             }
         }
 
-        private void CreateLineManipulators(Component component)
+
+        private void CreateGuideLineManipulator(Component component)
         {
             if (component == null) throw new ArgumentNullException(nameof(component));
-            _guideLine = new List<LineHandle>();
+            _guideLine = null;
 
             try
             {
@@ -190,13 +209,12 @@
                 var pts = componentInput.Item1;
                 var ls = componentInput.Item2;
 
-                //Add line manipulator for Guidline segment
+                //Add line manipulator for GuidLine segment
                 {
-                    var guidSegment =
-                        _handleManager.CreateLineHandle(ls, HandleLocationType.First, HandleEffectType.Geometry);
+                    var guidSegment = _handleManager.CreateLineHandle(ls, HandleLocationType.First, HandleEffectType.Geometry);
                     guidSegment.DragOngoing += Guideline_DragOngoing;
                     guidSegment.DragEnded += Guideline_DragEnded;
-                    _guideLine.Add(guidSegment);
+                    _guideLine = guidSegment;
                 }
             }
             catch (Exception ex)
@@ -209,7 +227,9 @@
         {
             if (component == null) throw new ArgumentNullException(nameof(component));
             if (_liftingLogic == null) throw new ArgumentNullException(nameof(_liftingLogic));
-            _distanceManipulators = new List<DistanceManipulator>();
+
+            if(_joistDistanceManipulators == null) _joistDistanceManipulators = new List<DistanceManipulator>();
+            else _joistDistanceManipulators.Clear();
 
             try
             {
@@ -231,7 +251,7 @@
                         DmCommon.ModifyComponent(component, "FirstJoistOffset", distStartMan.Segment.Length());
                     };
                     AddManipulator(distStartMan);
-                    _distanceManipulators.Add(distStartMan);
+                    _joistDistanceManipulators.Add(distStartMan);
                 }
 
                 //Depending on spacing type add distance manipulator between each joist
@@ -245,7 +265,7 @@
                             var distMan = new DistanceManipulator(component, this, ls);
                             distMan.MeasureChanged += DistManExact_OnMeasureChanged;
                             AddManipulator(distMan);
-                            _distanceManipulators.Add(distMan);
+                            _joistDistanceManipulators.Add(distMan);
                         }
                         break;
 
@@ -260,7 +280,7 @@
                                 DmCommon.ModifyComponent(component, "CenterSpacingMax", distMan.Segment.Length());
                             };
                             AddManipulator(distMan);
-                            _distanceManipulators.Add(distMan);
+                            _joistDistanceManipulators.Add(distMan);
                         }
                         break;
                     default:
@@ -276,9 +296,9 @@
         private void DistManExact_OnMeasureChanged(object sender, EventArgs e)
         {
             var allSpacings = new List<Distance>();
-            for (var i = 1; i < _distanceManipulators.Count; i++)
+            for (var i = 1; i < _joistDistanceManipulators.Count; i++)
             {
-                var distMan = _distanceManipulators[i];
+                var distMan = _joistDistanceManipulators[i];
                 allSpacings.Add(new Distance(distMan.Segment.Length()));
             }
 
@@ -287,31 +307,17 @@
             DmCommon.ModifyComponent(Component, "CenterSpacingList", modDistList.ToString());
         }
 
-        //private static EventHandler<EventArgs> DistManExact_OnMeasureChanged(Component component, ArrayList distValues,
-        //    int i, DistanceManipulator distMan)
-        //{
-        //    return delegate
-        //    {
-        //        //Replace spacing value at position in distance value list
-        //        distValues[i] = new Distance(distMan.Segment.Length());
-        //        var modDistList = new TxDistanceList(distValues);
-
-        //        //Modify plugin spacing list string value and call to update
-        //        DmCommon.ModifyComponent(component,"CenterSpacingList", modDistList.FormattedDistanceString);
-        //    };
-        //}
-
         private void ReCreateJoistDistanceManipulators(Component component)
         {
             if (component == null) throw new ArgumentNullException(nameof(component));
             if (_liftingLogic == null) throw new ArgumentNullException(nameof(_liftingLogic));
 
-            if (_distanceManipulators != null)
+            if (_joistDistanceManipulators != null)
             {
                 //todo: how to dispose of old manipulators, qty changed, need new?
                 //todo: below code causes distance manipulators to not generate/show
                 //_distanceManipulators.ForEach(f => f.Dispose());
-                _distanceManipulators.Clear();
+                _joistDistanceManipulators.Clear();
             }
 
             CreateJoistDistanceManipulators(component);
@@ -358,12 +364,12 @@
         private void UpdateLineManipulators(Tuple<List<Point>, LineSegment> componentInput)
         {
             if (componentInput == null) throw new ArgumentNullException(nameof(componentInput));
-            if (_guideLine == null || _guideLine.Count != 2) return;
+            if (_guideLine == null || _guideLine.Line == null) return;
 
             //Update guideline manipulator
             var ls = componentInput.Item2;
-            _guideLine[0].Line.Point1 = new Point(ls.Point1);
-            _guideLine[0].Line.Point2 = new Point(ls.Point2);
+            _guideLine.Line.Point1 = new Point(ls.Point1);
+            _guideLine.Line.Point2 = new Point(ls.Point2);
         }
 
         private void UpdateGuideHandleManipulators(Tuple<List<Point>, LineSegment> componentInput)
@@ -388,7 +394,6 @@
                 index++;
             }
         }
-
 
         private void ModifyPluginInputFromManipulators()
         {
@@ -420,11 +425,11 @@
         private void Guideline_DragEnded(object sender, DragEventArgs e)
         {
             if (_guidelineHandles == null || _guideLine == null) return;
-            if (_guidelineHandles.Count != 2 || _guideLine.Count != 1) return;
+            if (_guidelineHandles.Count != 2 || _guideLine.Line == null) return;
 
             //Update main Guidline handle objects from dragged line
-            _guidelineHandles[0].Point = new Point(_guideLine[0].Line.Point1);
-            _guidelineHandles[1].Point = new Point(_guideLine[0].Line.Point2);
+            _guidelineHandles[0].Point = new Point(_guideLine.Line.Point1);
+            _guidelineHandles[1].Point = new Point(_guideLine.Line.Point2);
 
             //Update plugin input from manipulators
             ModifyPluginInputFromManipulators();
@@ -433,11 +438,11 @@
         private void Guideline_DragOngoing(object sender, DragEventArgs e)
         {
             if (_guidelineHandles == null || _guideLine == null) return;
-            if (_guidelineHandles.Count != 2 || _guideLine.Count != 1) return;
+            if (_guidelineHandles.Count != 2 || _guideLine.Line == null) return;
 
             //Update main Guidline handle objects from dragged line
-            _guidelineHandles[0].Point = new Point(_guideLine[0].Line.Point1);
-            _guidelineHandles[1].Point = new Point(_guideLine[0].Line.Point2);
+            _guidelineHandles[0].Point = new Point(_guideLine.Line.Point1);
+            _guidelineHandles[1].Point = new Point(_guideLine.Line.Point2);
 
             ReCreateGraphics();
         }
@@ -445,11 +450,11 @@
         private void GuidelineHandle_DragEnded(object sender, DragEventArgs e)
         {
             //Update guideline manipulator
-            if (_guideLine != null && _guideLine.Count == 1 && _guidelineHandles != null &&
+            if (_guideLine != null && _guideLine.Line != null && _guidelineHandles != null &&
                 _guidelineHandles.Count == 2)
             {
-                _guideLine[0].Line.Point1 = new Point(_guidelineHandles[0].Point);
-                _guideLine[0].Line.Point2 = new Point(_guidelineHandles[1].Point);
+                _guideLine.Line.Point1 = new Point(_guidelineHandles[0].Point);
+                _guideLine.Line.Point2 = new Point(_guidelineHandles[1].Point);
             }
 
             //Update plugin input from manipulators
@@ -459,13 +464,12 @@
         private void GuidelineHandle_DragOngoing(object sender, DragEventArgs e)
         {
             //Update guideline manipulator
-            if (_guideLine != null && _guideLine.Count == 1 && _guidelineHandles != null &&
+            if (_guideLine != null && _guideLine.Line != null && _guidelineHandles != null &&
                 _guidelineHandles.Count == 2)
             {
-                _guideLine[0].Line.Point1 = new Point(_guidelineHandles[0].Point);
-                _guideLine[0].Line.Point2 = new Point(_guidelineHandles[1].Point);
+                _guideLine.Line.Point1 = new Point(_guidelineHandles[0].Point);
+                _guideLine.Line.Point2 = new Point(_guidelineHandles[1].Point);
             }
-
             ReCreateGraphics();
         }
 
@@ -499,13 +503,12 @@
             });
 
             //Detach Guideline line modifier
-            _guideLine?.ForEach(handle =>
-            {
-                handle.DragOngoing -= Guideline_DragOngoing;
-                handle.DragEnded -= Guideline_DragOngoing;
-            });
+            _guideLine.DragOngoing -= Guideline_DragOngoing;
+            _guideLine.DragOngoing -= Guideline_DragOngoing;
 
-            //todo: Any need to detach handles for distance manipulators?
+            //Detach distance manipulators
+            //todo: detach here, point distance manipulators, delegate method?
+            //todo: Any need to detach events for joist distance manipulators?
         }
 
         /// <summary>
@@ -518,8 +521,8 @@
             DetachHandlers();
             _polygonHandles.ForEach(f => f.Dispose());
             _guidelineHandles.ForEach(f => f.Dispose());
-            _guideLine.ForEach(f => f.Dispose());
-            _distanceManipulators.ForEach(f => f.Dispose());
+            _guideLine.Dispose();
+            _joistDistanceManipulators.ForEach(f => f.Dispose());
         }
 
         private static Tuple<List<Point>, LineSegment> GetCurrentInput(Component component)

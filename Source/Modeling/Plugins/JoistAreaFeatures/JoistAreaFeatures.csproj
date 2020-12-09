@@ -112,8 +112,10 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="JoistAreaManipulationContext.cs" />
-    <Compile Include="JoistAreaManipulationFeature.cs" />
+    <Compile Include="CreationFeature.cs" />
+    <Compile Include="Manipulation\JoistAreaManipulationContext.cs" />
+    <Compile Include="ManipulationFeature.cs" />
+    <Compile Include="Manipulation\JoistSpacing.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\DmCommon.cs" />
     <Compile Include="Services\FeatureLogic.cs" />

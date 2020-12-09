@@ -7,6 +7,7 @@
     using JoistArea.Tools;
     using JoistArea.View;
     using JoistArea.ViewModel;
+    using Manipulation;
     using Services;
     using Tekla.Structures.Model;
     using Tekla.Structures.Plugins.DirectManipulation.Core;
@@ -14,7 +15,7 @@
     using Tekla.Structures.Plugins.DirectManipulation.Services.Controls;
 
     /// <seealso cref="PluginManipulationFeatureBase" />
-    public class JoistAreaManipulationFeature : PluginManipulationFeatureBase
+    public class ManipulationFeature : PluginManipulationFeatureBase
     {
         private ValueBoxControl _centerMaxSpacing;
         private TextBoxControl _centerSpacingList;
@@ -24,7 +25,7 @@
 
         public IEnumerable<string> AllSpacingTypes => EnumTools.EnumToTranslatedStrings<MainViewModel.SpacingTypeEnum>();
 
-        public JoistAreaManipulationFeature()
+        public ManipulationFeature()
             : base(Constants.PluginName, true)
         { }
 
