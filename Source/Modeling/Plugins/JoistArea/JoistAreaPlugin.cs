@@ -78,9 +78,8 @@
                     Trace.WriteLine("Unable to calculate joint coordinate system...");
                     return false;
                 }
-#if DEBUG
-                cs.PaintCoordinateSystem();
-#endif
+                //cs.PaintCoordinateSystem();
+
                 var transMatrix = MatrixFactory.ToCoordinateSystem(cs);
                 new Model().GetWorkPlaneHandler().SetCurrentTransformationPlane(new TransformationPlane(cs));
                 var logicService = new JoistAreaMainLogic();

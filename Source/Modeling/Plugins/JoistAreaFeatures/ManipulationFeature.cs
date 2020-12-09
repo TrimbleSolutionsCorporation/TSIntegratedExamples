@@ -131,6 +131,7 @@
         {
             yield return new PolygonShapeMc(component, this);
             yield return new JoistSpacingMc(component, this);
+            yield return new GuideLineMc(component, this);
         }
     }
 }

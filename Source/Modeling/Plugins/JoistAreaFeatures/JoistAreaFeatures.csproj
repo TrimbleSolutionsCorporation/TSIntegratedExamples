@@ -113,6 +113,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CreationFeature.cs" />
+    <Compile Include="Manipulation\GuideLineMc.cs" />
     <Compile Include="Manipulation\PolygonShapeMc.cs" />
     <Compile Include="ManipulationFeature.cs" />
     <Compile Include="Manipulation\JoistSpacingMc.cs" />

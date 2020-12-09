@@ -1,11 +1,8 @@
 ﻿namespace JoistAreaFeatures.Manipulation
 {
     using System;
-    using System.Collections;
     using System.Collections.Generic;
     using JoistArea.Logic;
-    using JoistArea.Tools;
-    using JoistArea.ViewModel;
     using Services;
     using Tekla.Structures.Geometry3d;
     using Tekla.Structures.Model;
@@ -16,13 +13,8 @@
 
     public sealed class PolygonShapeMc : ManipulationContext
     {
-        private IHandleManager _handleManager;
+        private readonly IHandleManager _handleManager;
         private List<PointHandle> _polygonHandles;
-        private List<PointHandle> _guidelineHandles;
-        private LineHandle _guideLine;
-        private readonly IGraphicsDrawer _graphics;
-        private JoistAreaData _uiData;
-        private readonly JoistAreaMainLogic _liftingLogic;
 
         public PolygonShapeMc(Component component, ManipulationFeature feature)
             : base(component, feature)
@@ -32,21 +24,10 @@
 
             try
             {
-                _graphics = feature.Graphics;
                 _handleManager = feature.HandleManager;
-
-                //Get part and plugin information
-                _uiData = component.GetDataFromComponent();
-                //var uiDataStored = _featureBase.GetUserInterfaceData(component); //all blank
-                var componentInput = GetCurrentInput(component);
-
-                //Create new instance of logic service class
-                _liftingLogic = new JoistAreaMainLogic();
-                _liftingLogic.ExternalInitialize(componentInput.Item1, componentInput.Item2, _uiData);
 
                 //Create point, distance, and line manipulators
                 CreatePointManipulators(component);
-                CreateGuideLineManipulator(component);
 
                 //Draw custom graphics
                 ReCreateGraphics();
@@ -62,29 +43,33 @@
             base.UpdateContext();
             Component.Select();
 
-            //Update internal logic to take into account changes from plugin
-            _uiData = Component.GetDataFromComponent();
-            var componentInput = GetCurrentInput(Component);
-            _liftingLogic.ExternalInitialize(componentInput.Item1, componentInput.Item2, _uiData);
+            //Get input objects from component
+            var componentInput = FeatureLogic.GetCurrentInput(Component);
 
             //Refresh existing manipulator handles from plugin input
-            UpdatePolygonHandleManipulators(componentInput);
-            UpdateLineManipulators(componentInput);
-            UpdateGuideHandleManipulators(componentInput);
+            var index = 0;
+            foreach (var pt in componentInput.Item1)
+            {
+                _polygonHandles[index].Point = new Point(pt);
+                index++;
+            }
 
             //Update graphics based on plugin and manipulators
-            ReCreateGraphics(); //todo?
+            ReCreateGraphics();
         }
 
         private void ReCreateGraphics()
         {
-            _graphics.Clear();
-            DrawGuidelineArrow();
-            DrawPolygonMeasurements();
+            Graphics?.Clear();
+            DrawPolygonEdgeDimensions();
         }
 
-        private void DrawPolygonMeasurements()
+        /// <summary>
+        /// Draw outer polygon edge segment dimension graphics
+        /// </summary>
+        private void DrawPolygonEdgeDimensions()
         {
+            //Draw edges around picked points
             Point lastPoint = null;
             foreach (var pg in _polygonHandles)
             {
@@ -92,64 +77,36 @@
                 {
                     var currPt = new Point(pg.Point);
                     var ls = new LineSegment(lastPoint, currPt);
-                    _graphics.DrawDimension(ls, null, DimensionEndPointSizeType.FixedSmall);
+                    Graphics?.DrawDimension(ls, null, DimensionEndPointSizeType.FixedMedium);
                 }
-
                 lastPoint = new Point(pg.Point);
             }
+
+            //Draw connecting edge from last point to 1st
+            var lsEnd = new LineSegment(_polygonHandles[_polygonHandles.Count - 1].Point, _polygonHandles[0].Point);
+            Graphics?.DrawDimension(lsEnd, null, DimensionEndPointSizeType.FixedMedium);
         }
 
-        private void DrawGuidelineArrow()
+        /// <summary>
+        /// Create polygon handles from plugin input points
+        /// </summary>
+        /// <param name="plugin">Joist Area plugin instance</param>
+        private void CreatePointManipulators(Component plugin)
         {
-            if (_liftingLogic == null) throw new ArgumentNullException(nameof(_liftingLogic));
-            if (_graphics == null) throw new ArgumentNullException(nameof(_graphics));
-            if (_guidelineHandles == null || _guidelineHandles.Count != 2) return;
-
-            const double TipLength = 125.0;
-            const double ShaftThickness = 25.0;
-            const double ArrowThickness = 100.0;
-            const double yAxisLength = 900.0;
+            if (plugin == null) throw new ArgumentNullException(nameof(plugin));
+            if(_polygonHandles == null) _polygonHandles = new List<PointHandle>();
+            else _polygonHandles?.Clear();
 
             try
             {
-                var guideLine = new LineSegment
+                var componentInput = FeatureLogic.GetCurrentInput(plugin);
+                foreach (var pt in componentInput.Item1)
                 {
-                    Point1 = _guidelineHandles[0].Point, Point2 = _guidelineHandles[1].Point
-                };
-                var globalCs = _liftingLogic.GlobalCoordinateSystem;
-                var p0 = new Point(guideLine.Point1);
-                var arrowHeadProfile = $"HXGON{ArrowThickness}-{ShaftThickness}";
-                var shaftProfile = $"D{ShaftThickness}";
-                var yAxisCalc = Vector.Cross(globalCs.GetAxisZ(), guideLine.GetDirectionVector()).GetNormal();
-
-                //Define x-axis arrow
-                {
-                    var pxTrans = new Point(guideLine.Point2);
-                    pxTrans.Translate(guideLine.GetDirectionVector() * -TipLength);
-
-                    var xShaft = new LineSegment(p0, pxTrans);
-                    var xHead = new LineSegment(pxTrans, guideLine.Point2);
-
-                    _graphics.DrawProfile(shaftProfile, xShaft, new Vector(0, 0, 0), 0, LineType.Error);
-                    _graphics.DrawProfile(arrowHeadProfile, xHead, new Vector(0, 0, 0), 0, LineType.Error);
-                    var textPt = new Point(guideLine.Point2).GetTranslated(globalCs.AxisX.GetNormal() * 75);
-                    _graphics.DrawText("X", textPt, TextRepresentationTypes.Label);
-                }
-
-                //Define y-axis arrow
-                {
-                    var yEnd = new Point(p0);
-                    yEnd.Translate(yAxisCalc * yAxisLength);
-                    var pyTrans = new Point(yEnd);
-                    pyTrans.Translate(yAxisCalc * -TipLength);
-
-                    var yShaft = new LineSegment(p0, pyTrans);
-                    var yHead = new LineSegment(pyTrans, yEnd);
-
-                    _graphics.DrawProfile(shaftProfile, yShaft, new Vector(0, 0, 0));
-                    _graphics.DrawProfile(arrowHeadProfile, yHead, new Vector(0, 0, 0));
-                    var textPt = new Point(yEnd).GetTranslated(yAxisCalc * 75);
-                    _graphics.DrawText("Y", textPt, TextRepresentationTypes.Label);
+                    var handle =
+                        _handleManager.CreatePointHandle(pt, HandleLocationType.InputPoint, HandleEffectType.Geometry);
+                    handle.DragOngoing += PolygonHandleDragOngoing;
+                    handle.DragEnded += PolygonHandleDragEnded;
+                    _polygonHandles.Add(handle);
                 }
             }
             catch (Exception ex)
@@ -158,243 +115,50 @@
             }
         }
 
-        private void CreatePointManipulators(Component component)
-        {
-            if (component == null) throw new ArgumentNullException(nameof(component));
-            _polygonHandles?.Clear();
-            _guidelineHandles?.Clear();
-
-            try
-            {
-                //Setup polygon handles
-                _polygonHandles = GetPolygonPointHandles(component);
-                _polygonHandles.ForEach(handle =>
-                    {
-                        handle.DragOngoing += PolygonHandleDragOngoing;
-                        handle.DragEnded += PolygonHandleDragEnded;
-                    }
-                );
-
-                //Setup guideline point handles
-                _guidelineHandles = GetGuidelineHandles(component);
-                _guidelineHandles.ForEach(handle =>
-                {
-                    handle.DragOngoing += GuidelineHandle_DragOngoing;
-                    handle.DragEnded += GuidelineHandle_DragEnded;
-                });
-            }
-            catch (Exception ex)
-            {
-                GlobalServices.LogException(ex);
-            }
-        }
-
-        private void CreateGuideLineManipulator(Component component)
-        {
-            if (component == null) throw new ArgumentNullException(nameof(component));
-            _guideLine = null;
-
-            try
-            {
-                var componentInput = GetCurrentInput(component);
-                var pts = componentInput.Item1;
-                var ls = componentInput.Item2;
-
-                //Add line manipulator for GuidLine segment
-                {
-                    var guidSegment = _handleManager.CreateLineHandle(ls, HandleLocationType.First, HandleEffectType.Geometry);
-                    guidSegment.DragOngoing += Guideline_DragOngoing;
-                    guidSegment.DragEnded += Guideline_DragEnded;
-                    _guideLine = guidSegment;
-                }
-            }
-            catch (Exception ex)
-            {
-                GlobalServices.LogException(ex);
-            }
-        }
-
-        private List<PointHandle> GetPolygonPointHandles(Component component)
-        {
-            if (component == null) throw new ArgumentNullException(nameof(component));
-            if (_handleManager == null) throw new ArgumentNullException(nameof(_handleManager));
-
-            var handles = new List<PointHandle>();
-            var componentInput = GetCurrentInput(component);
-            foreach (var pt in componentInput.Item1)
-            {
-                var handle =
-                    _handleManager.CreatePointHandle(pt, HandleLocationType.InputPoint, HandleEffectType.Geometry);
-                handles.Add(handle);
-            }
-
-            return handles;
-        }
-
-        private List<PointHandle> GetGuidelineHandles(Component component)
-        {
-            if (component == null) throw new ArgumentNullException(nameof(component));
-            if (_handleManager == null) throw new ArgumentNullException(nameof(_handleManager));
-
-            var handles = new List<PointHandle>();
-            var componentInput = GetCurrentInput(component);
-            var guideLine = componentInput.Item2;
-
-            var h1 = _handleManager.CreatePointHandle(guideLine.Point1,
-                HandleLocationType.First, HandleEffectType.Property);
-            handles.Add(h1);
-
-            var h2 = _handleManager.CreatePointHandle(guideLine.Point2,
-                HandleLocationType.Last, HandleEffectType.Property);
-            handles.Add(h2);
-
-            return handles;
-        }
-
-        private void UpdateLineManipulators(Tuple<List<Point>, LineSegment> componentInput)
-        {
-            if (componentInput == null) throw new ArgumentNullException(nameof(componentInput));
-            if (_guideLine == null || _guideLine.Line == null) return;
-
-            //Update guideline manipulator
-            var ls = componentInput.Item2;
-            _guideLine.Line.Point1 = new Point(ls.Point1);
-            _guideLine.Line.Point2 = new Point(ls.Point2);
-        }
-
-        private void UpdateGuideHandleManipulators(Tuple<List<Point>, LineSegment> componentInput)
-        {
-            if (componentInput == null) throw new ArgumentNullException(nameof(componentInput));
-            if (_guidelineHandles == null || _guidelineHandles.Count != 2) return;
-
-            var ls = componentInput.Item2;
-            _guidelineHandles[0].Point = new Point(ls.Point1);
-            _guidelineHandles[1].Point = new Point(ls.Point2);
-        }
-
-        private void UpdatePolygonHandleManipulators(Tuple<List<Point>, LineSegment> componentInput)
-        {
-            if (componentInput == null) throw new ArgumentNullException(nameof(componentInput));
-            if (_polygonHandles == null) return;
-
-            var index = 0;
-            foreach (var pt in componentInput.Item1)
-            {
-                _polygonHandles[index].Point = new Point(pt);
-                index++;
-            }
-        }
-
+        /// <summary>
+        /// Update plugin - change model for moved polygon input points (DM side changes)
+        /// </summary>
         private void ModifyPluginInputFromManipulators()
         {
             if (_polygonHandles == null) throw new ArgumentNullException(nameof(_polygonHandles));
-            if (_guidelineHandles == null) throw new ArgumentNullException(nameof(_guidelineHandles));
-
-            var originalInput = Component.GetComponentInput();
-            if (originalInput == null) return;
+            var pastInput = FeatureLogic.GetCurrentInput(Component);
             var adjustedInput = new ComponentInput();
 
-            //Add polygon input
+            //Add polygon input adjusted new points
             var polygon = new Polygon();
             foreach (var pg in _polygonHandles)
             {
                 polygon.Points.Add(new Point(pg.Point));
             }
-
             adjustedInput.AddInputPolygon(polygon);
 
-            //Add guideline input
-            var gp1 = new Point(_guidelineHandles[0].Point);
-            var gp2 = new Point(_guidelineHandles[1].Point);
+            //Add guideline input from existing input
+            var gp1 = new Point(pastInput.Item2.Point1);
+            var gp2 = new Point(pastInput.Item2.Point2);
             adjustedInput.AddTwoInputPositions(gp1, gp2);
 
             //Call component to update
             ModifyComponentInput(adjustedInput);
         }
 
-        private void Guideline_DragEnded(object sender, DragEventArgs e)
-        {
-            if (_guidelineHandles == null || _guideLine == null) return;
-            if (_guidelineHandles.Count != 2 || _guideLine.Line == null) return;
-
-            //Update main Guidline handle objects from dragged line
-            _guidelineHandles[0].Point = new Point(_guideLine.Line.Point1);
-            _guidelineHandles[1].Point = new Point(_guideLine.Line.Point2);
-
-            //Update plugin input from manipulators
-            ModifyPluginInputFromManipulators();
-        }
-
-        private void Guideline_DragOngoing(object sender, DragEventArgs e)
-        {
-            if (_guidelineHandles == null || _guideLine == null) return;
-            if (_guidelineHandles.Count != 2 || _guideLine.Line == null) return;
-
-            //Update main Guidline handle objects from dragged line
-            _guidelineHandles[0].Point = new Point(_guideLine.Line.Point1);
-            _guidelineHandles[1].Point = new Point(_guideLine.Line.Point2);
-
-            ReCreateGraphics();
-        }
-
-        private void GuidelineHandle_DragEnded(object sender, DragEventArgs e)
-        {
-            //Update guideline manipulator
-            if (_guideLine != null && _guideLine.Line != null && _guidelineHandles != null &&
-                _guidelineHandles.Count == 2)
-            {
-                _guideLine.Line.Point1 = new Point(_guidelineHandles[0].Point);
-                _guideLine.Line.Point2 = new Point(_guidelineHandles[1].Point);
-            }
-
-            //Update plugin input from manipulators
-            ModifyPluginInputFromManipulators();
-        }
-
-        private void GuidelineHandle_DragOngoing(object sender, DragEventArgs e)
-        {
-            //Update guideline manipulator
-            if (_guideLine != null && _guideLine.Line != null && _guidelineHandles != null &&
-                _guidelineHandles.Count == 2)
-            {
-                _guideLine.Line.Point1 = new Point(_guidelineHandles[0].Point);
-                _guideLine.Line.Point2 = new Point(_guidelineHandles[1].Point);
-            }
-            ReCreateGraphics();
-        }
-
+        /// <summary>
+        /// Event handler for polygon points move in progress
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="eventArgs"></param>
         private void PolygonHandleDragOngoing(object sender, DragEventArgs eventArgs)
         {
             ReCreateGraphics();
         }
 
+        /// <summary>
+        /// Event handler for polygon points move ended
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="eventArgs"></param>
         private void PolygonHandleDragEnded(object sender, DragEventArgs eventArgs)
         {
             ModifyPluginInputFromManipulators();
-        }
-
-        /// <summary>
-        /// Detaches the event handlers.
-        /// </summary>
-        private void DetachHandlers()
-        {
-            //Detach polygon shape handles
-            _polygonHandles?.ForEach(handle =>
-            {
-                handle.DragOngoing -= PolygonHandleDragOngoing;
-                handle.DragEnded -= PolygonHandleDragEnded;
-            });
-
-            //Detach guideline individual two handles
-            _guidelineHandles?.ForEach(handle =>
-            {
-                handle.DragOngoing -= GuidelineHandle_DragOngoing;
-                handle.DragEnded -= GuidelineHandle_DragEnded;
-            });
-
-            //Detach Guideline line modifier
-            _guideLine.DragOngoing -= Guideline_DragOngoing;
-            _guideLine.DragOngoing -= Guideline_DragOngoing;
         }
 
         /// <summary>
@@ -404,43 +168,11 @@
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);
-            DetachHandlers();
-            _polygonHandles.ForEach(f => f.Dispose());
-            _guidelineHandles.ForEach(f => f.Dispose());
-            _guideLine.Dispose();
-        }
-
-        private static Tuple<List<Point>, LineSegment> GetCurrentInput(Component component)
-        {
-            if (component == null) throw new ArgumentNullException(nameof(component));
-
-            List<Point> polygonPts = null;
-            LineSegment guideLine = null;
-            var ci = component.GetComponentInput();
-            if (ci == null) return null;
-
-            foreach (var inputItem in ci)
+            _polygonHandles?.ForEach(handle =>
             {
-                var item = inputItem as InputItem;
-                if (item == null) continue;
-
-                switch (item.GetInputType())
-                {
-                    case InputItem.InputTypeEnum.INPUT_2_POINTS:
-                        var guidPts = item.GetData() as ArrayList ?? new ArrayList();
-                        guideLine = new LineSegment(guidPts[0] as Point, guidPts[1] as Point);
-                        break;
-                    case InputItem.InputTypeEnum.INPUT_POLYGON:
-                        var pts = item.GetData() as ArrayList ?? new ArrayList();
-                        polygonPts = pts.ToList();
-                        break;
-                    default:
-                        throw new ApplicationException(
-                            "GetCurrentInput: failed, Unexpected plugin input encountered...");
-                }
-            }
-
-            return new Tuple<List<Point>, LineSegment>(polygonPts, guideLine);
+                handle.DragOngoing -= PolygonHandleDragOngoing;
+                handle.DragEnded -= PolygonHandleDragEnded;
+            });
         }
     }
 }
