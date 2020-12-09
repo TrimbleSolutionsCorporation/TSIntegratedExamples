@@ -7,28 +7,24 @@
     using JoistArea.Tools;
     using JoistArea.ViewModel;
     using Services;
-    using Tekla.Structures.Datatype;
     using Tekla.Structures.Geometry3d;
     using Tekla.Structures.Model;
     using Tekla.Structures.Plugins.DirectManipulation.Core;
     using Tekla.Structures.Plugins.DirectManipulation.Services;
     using Tekla.Structures.Plugins.DirectManipulation.Services.Handles;
-    using Tekla.Structures.Plugins.DirectManipulation.Services.Tools;
-    using Distance = Tekla.Structures.Datatype.Distance;
     using DragEventArgs = Tekla.Structures.Plugins.DirectManipulation.Services.Handles.DragEventArgs;
 
-    public sealed class JoistAreaManipulationContext : ManipulationContext
+    public sealed class PolygonShapeMc : ManipulationContext
     {
         private IHandleManager _handleManager;
         private List<PointHandle> _polygonHandles;
         private List<PointHandle> _guidelineHandles;
         private LineHandle _guideLine;
         private readonly IGraphicsDrawer _graphics;
-        private List<DistanceManipulator> _joistDistanceManipulators;
         private JoistAreaData _uiData;
         private readonly JoistAreaMainLogic _liftingLogic;
 
-        public JoistAreaManipulationContext(Component component, ManipulationFeature feature)
+        public PolygonShapeMc(Component component, ManipulationFeature feature)
             : base(component, feature)
         {
             if (component == null) throw new ArgumentNullException(nameof(component));
@@ -50,7 +46,6 @@
 
                 //Create point, distance, and line manipulators
                 CreatePointManipulators(component);
-                CreateJoistDistanceManipulators(component);
                 CreateGuideLineManipulator(component);
 
                 //Draw custom graphics
@@ -76,9 +71,6 @@
             UpdatePolygonHandleManipulators(componentInput);
             UpdateLineManipulators(componentInput);
             UpdateGuideHandleManipulators(componentInput);
-
-            //Re-create all Joist center to center manipulators
-            ReCreateJoistDistanceManipulators(Component);
 
             //Update graphics based on plugin and manipulators
             ReCreateGraphics(); //todo?
@@ -197,7 +189,6 @@
             }
         }
 
-
         private void CreateGuideLineManipulator(Component component)
         {
             if (component == null) throw new ArgumentNullException(nameof(component));
@@ -221,106 +212,6 @@
             {
                 GlobalServices.LogException(ex);
             }
-        }
-
-        private void CreateJoistDistanceManipulators(Component component)
-        {
-            if (component == null) throw new ArgumentNullException(nameof(component));
-            if (_liftingLogic == null) throw new ArgumentNullException(nameof(_liftingLogic));
-
-            if(_joistDistanceManipulators == null) _joistDistanceManipulators = new List<DistanceManipulator>();
-            else _joistDistanceManipulators.Clear();
-
-            try
-            {
-                //Get joist spacings and distance values from base plugin logic
-                var componentInput = GetCurrentInput(component);
-                var joistSpacingsGlobal = FeatureLogic.GetJoistSpanSegments(_liftingLogic);
-                if (joistSpacingsGlobal == null || joistSpacingsGlobal.Count < 1) return;
-                var distValues = new ArrayList(_liftingLogic.DistanceList.DistanceValues);
-
-                //Create first joist to guideline offset
-                var j1 = joistSpacingsGlobal[0];
-                var px = Projection.PointToLine(j1.Point1, new Line(componentInput.Item2));
-                if (px != null)
-                {
-                    var spacingSeg1 = new LineSegment(j1.Point1, px);
-                    var distStartMan = new DistanceManipulator(component, this, spacingSeg1);
-                    distStartMan.MeasureChanged += delegate
-                    {
-                        DmCommon.ModifyComponent(component, "FirstJoistOffset", distStartMan.Segment.Length());
-                    };
-                    AddManipulator(distStartMan);
-                    _joistDistanceManipulators.Add(distStartMan);
-                }
-
-                //Depending on spacing type add distance manipulator between each joist
-                switch (_liftingLogic.SpacingTyp)
-                {
-                    //Distance type spacing, handle segment as spacing value in larger string list
-                    case MainViewModel.SpacingTypeEnum.albl_ExactList:
-                        for (var i = 0; i < joistSpacingsGlobal.Count; i++)
-                        {
-                            var ls = joistSpacingsGlobal[i];
-                            var distMan = new DistanceManipulator(component, this, ls);
-                            distMan.MeasureChanged += DistManExact_OnMeasureChanged;
-                            AddManipulator(distMan);
-                            _joistDistanceManipulators.Add(distMan);
-                        }
-                        break;
-
-                    //Single max spacing for all joist, handle segment as same spacing max value
-                    case MainViewModel.SpacingTypeEnum.albl_CenterToCenter:
-                        foreach (var ls in joistSpacingsGlobal)
-                        {
-                            var distMan = new DistanceManipulator(component, this, ls);
-                            distMan.MeasureChanged += delegate
-                            {
-                                //Modify plugin spacing max value and call to update
-                                DmCommon.ModifyComponent(component, "CenterSpacingMax", distMan.Segment.Length());
-                            };
-                            AddManipulator(distMan);
-                            _joistDistanceManipulators.Add(distMan);
-                        }
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
-            }
-            catch (Exception ex)
-            {
-                GlobalServices.LogException(ex);
-            }
-        }
-
-        private void DistManExact_OnMeasureChanged(object sender, EventArgs e)
-        {
-            var allSpacings = new List<Distance>();
-            for (var i = 1; i < _joistDistanceManipulators.Count; i++)
-            {
-                var distMan = _joistDistanceManipulators[i];
-                allSpacings.Add(new Distance(distMan.Segment.Length()));
-            }
-
-            var modDistList = new DistanceList(allSpacings);
-            var modDistList2 = new TxDistanceList(allSpacings);
-            DmCommon.ModifyComponent(Component, "CenterSpacingList", modDistList.ToString());
-        }
-
-        private void ReCreateJoistDistanceManipulators(Component component)
-        {
-            if (component == null) throw new ArgumentNullException(nameof(component));
-            if (_liftingLogic == null) throw new ArgumentNullException(nameof(_liftingLogic));
-
-            if (_joistDistanceManipulators != null)
-            {
-                //todo: how to dispose of old manipulators, qty changed, need new?
-                //todo: below code causes distance manipulators to not generate/show
-                //_distanceManipulators.ForEach(f => f.Dispose());
-                _joistDistanceManipulators.Clear();
-            }
-
-            CreateJoistDistanceManipulators(component);
         }
 
         private List<PointHandle> GetPolygonPointHandles(Component component)
@@ -359,7 +250,6 @@
 
             return handles;
         }
-
 
         private void UpdateLineManipulators(Tuple<List<Point>, LineSegment> componentInput)
         {
@@ -505,10 +395,6 @@
             //Detach Guideline line modifier
             _guideLine.DragOngoing -= Guideline_DragOngoing;
             _guideLine.DragOngoing -= Guideline_DragOngoing;
-
-            //Detach distance manipulators
-            //todo: detach here, point distance manipulators, delegate method?
-            //todo: Any need to detach events for joist distance manipulators?
         }
 
         /// <summary>
@@ -522,7 +408,6 @@
             _polygonHandles.ForEach(f => f.Dispose());
             _guidelineHandles.ForEach(f => f.Dispose());
             _guideLine.Dispose();
-            _joistDistanceManipulators.ForEach(f => f.Dispose());
         }
 
         private static Tuple<List<Point>, LineSegment> GetCurrentInput(Component component)

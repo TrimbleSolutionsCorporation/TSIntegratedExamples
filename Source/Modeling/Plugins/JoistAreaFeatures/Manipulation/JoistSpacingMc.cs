@@ -14,7 +14,7 @@
     using Tekla.Structures.Plugins.DirectManipulation.Services.Tools;
     using Distance = Tekla.Structures.Datatype.Distance;
 
-    public sealed class JoistSpacing : ManipulationContext
+    public sealed class JoistSpacingMc : ManipulationContext
     {
         private IHandleManager _handleManager;
         private readonly IGraphicsDrawer _graphics;
@@ -22,7 +22,7 @@
         private JoistAreaData _uiData;
         private readonly JoistAreaMainLogic _liftingLogic;
 
-        public JoistSpacing(Component component, ManipulationFeature feature)
+        public JoistSpacingMc(Component component, ManipulationFeature feature)
             : base(component, feature)
         {
             if (component == null) throw new ArgumentNullException(nameof(component));

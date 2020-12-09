@@ -113,9 +113,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CreationFeature.cs" />
-    <Compile Include="Manipulation\JoistAreaManipulationContext.cs" />
+    <Compile Include="Manipulation\PolygonShapeMc.cs" />
     <Compile Include="ManipulationFeature.cs" />
-    <Compile Include="Manipulation\JoistSpacing.cs" />
+    <Compile Include="Manipulation\JoistSpacingMc.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\DmCommon.cs" />
     <Compile Include="Services\FeatureLogic.cs" />

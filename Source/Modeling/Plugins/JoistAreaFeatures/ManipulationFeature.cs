@@ -129,7 +129,8 @@
 
         protected override IEnumerable<ManipulationContext> AttachManipulationContexts(Component component)
         {
-            yield return new JoistAreaManipulationContext(component, this);
+            yield return new PolygonShapeMc(component, this);
+            yield return new JoistSpacingMc(component, this);
         }
     }
 }
