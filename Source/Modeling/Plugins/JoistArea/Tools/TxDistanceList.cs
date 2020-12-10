@@ -35,6 +35,20 @@
             }
         }
 
+        public string MetricStringList
+        {
+            get
+            {
+                var result = string.Empty;
+                foreach (var ds in DistanceValues)
+                {
+                    result += ds.Millimeters.ToString(CultureInfo.InvariantCulture) + " ";
+                }
+                return result;
+            }
+
+        }
+
         public TxDistanceList(string formattedDistListStr)
         {
             if(string.IsNullOrEmpty(formattedDistListStr)) return;

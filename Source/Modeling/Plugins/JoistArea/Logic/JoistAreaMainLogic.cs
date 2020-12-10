@@ -17,8 +17,6 @@
     {
         public double MinJoistLength = 12.0 * 25.4;
 
-        public double MinJoistSpacing = 6.0 * 25.4;
-
         /// <summary>
         /// User interface data
         /// </summary>
@@ -306,30 +304,38 @@
                 {
                     case MainViewModel.SpacingTypeEnum.albl_ExactList:
                     {
+                        //Insert 1st Joist at zero
+                        //Get beam start and end points clipped by polygon edges
+                        var startPt = GetPtIntersectPolygon(currentPosition, JoistDir * -1, false, false);
+                        var endPt = GetPtIntersectPolygon(currentPosition, JoistDir, false, false);
+
+                        //Add 1st virtual beam joist to results list
+                        if (startPt != null && endPt != null)
+                        {
+                            var vj = GetVirtualJoist(startPt, endPt);
+                            result.Add(vj);
+                        }
+
                         if (DistanceList == null) return false;
                         foreach (var dv in DistanceList.DistanceValues)
                         {
-                            //Calculate position to next spacing value and distance to edge boundary
+                            currentPosition.Translate(SpanDir * dv.Millimeters);
 
+                            //Calculate position to next spacing value and distance to edge boundary
                             var distLeft = new Vector(boundaryPt - currentPosition).Dot(SpanDir);
                             if (distLeft < 0) break; //Past boundary
-                            if (distLeft < MinJoistSpacing) break; //To small distance to place new joist
 
                             //Get beam start and end points clipped by polygon edges
-                            var startPt = GetPtIntersectPolygon(currentPosition, JoistDir * -1, false, false);
-                            var endPt = GetPtIntersectPolygon(currentPosition, JoistDir, false, false);
+                            startPt = GetPtIntersectPolygon(currentPosition, JoistDir * -1, false, false);
+                            endPt = GetPtIntersectPolygon(currentPosition, JoistDir, false, false);
 
                             //Add virtual beam joist to results list
-                            if (startPt != null && endPt != null &&
-                                Distance.PointToPoint(startPt, endPt) > MinJoistLength)
+                            if (startPt != null && endPt != null)
                             {
                                 var vj = GetVirtualJoist(startPt, endPt);
                                 result.Add(vj);
                             }
-
-                            currentPosition.Translate(SpanDir * dv.Millimeters);
                         }
-
                         break;
                     }
                     case MainViewModel.SpacingTypeEnum.albl_CenterToCenter:
