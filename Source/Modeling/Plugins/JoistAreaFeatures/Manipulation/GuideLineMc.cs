@@ -87,7 +87,6 @@
         {
             Graphics?.Clear();
             DrawGuidelineArrow();
-            //DrawPolygonEdgeDimensions();
         }
 
         /// <summary>

@@ -438,11 +438,11 @@
                     EndPoint = endPt,
                     Profile = {ProfileString = _uiData.JoistProfile},
                     Material = {MaterialString = _uiData.Material},
-                    Class = _uiData.Class.ToString(),
+                    Class = _uiData.JoistClass.ToString(),
                     Finish = _uiData.Finish,
                     AssemblyNumber = new NumberingSeries(_uiData.AssmNoPrefix, _uiData.AssmStartNo),
                     PartNumber = new NumberingSeries(_uiData.PartNoPrefix, _uiData.PartStartNo),
-                    Name = _uiData.Name,
+                    Name = _uiData.JoistName,
                     Position =
                     {
                         Depth = Position.DepthEnum.BEHIND,

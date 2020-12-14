@@ -200,11 +200,11 @@
                         </Grid.ColumnDefinitions>
 
                         <UIControls:WpfFilterCheckBox Grid.Column="0" VerticalAlignment="Center"
-                                                      AttributeName="Name" />
+                                                      AttributeName="JoistName" />
                         <Label Grid.Column="1" VerticalAlignment="Center" Content="{tsd:Loc albl_Name}"
                                RenderTransformOrigin="0.754,-0.24" />
                         <TextBox Grid.Column="2" VerticalAlignment="Center"
-                                 Text="{Binding Path=Name, Mode=TwoWay}" />
+                                 Text="{Binding Path=JoistName, Mode=TwoWay}" />
                     </Grid>
 
                     <!--Class-->
@@ -216,11 +216,11 @@
                         </Grid.ColumnDefinitions>
 
                         <UIControls:WpfFilterCheckBox Grid.Column="0" VerticalAlignment="Center"
-                                                      AttributeName="Class" />
+                                                      AttributeName="JoistClass" />
                         <Label Grid.Column="1" VerticalAlignment="Center" Content="{tsd:Loc albl_Class}"
                                RenderTransformOrigin="0.754,-0.24" />
                         <TextBox Grid.Column="2" VerticalAlignment="Center"
-                                 Text="{Binding Path=Class, Mode=TwoWay}" />
+                                 Text="{Binding Path=JoistClass, Mode=TwoWay}" />
                     </Grid>
 
                     <!--Material-->

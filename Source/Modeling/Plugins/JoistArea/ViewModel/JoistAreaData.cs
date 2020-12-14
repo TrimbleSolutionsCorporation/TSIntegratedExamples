@@ -23,8 +23,8 @@
         [StructuresField("CenterSpacingMax")] public double CenterSpacingMax;
         [StructuresField("JoistProfile")] public string JoistProfile;
         [StructuresField("Material")] public string Material;
-        [StructuresField("Class")] public int Class;
-        [StructuresField("Name")] public string Name;
+        [StructuresField("JoistClass")] public int JoistClass;
+        [StructuresField("JoistName")] public string JoistName;
         [StructuresField("Finish")] public string Finish;
         [StructuresField("PartStartNo")] public int PartStartNo;
         [StructuresField("AssmStartNo")] public int AssmStartNo;
@@ -39,8 +39,8 @@
             if (IsBlankValue(CenterSpacingList)) CenterSpacingList = DefaultCenterSpacingList;
             if (IsBlankValue(CenterSpacingMax)) CenterSpacingMax = DefaultCenterSpacingMax;
             if (IsBlankValue(JoistProfile)) JoistProfile = DefaultJoistProfile;
-            if (IsBlankValue(Class)) Class = DefaultClass;
-            if (IsBlankValue(Name)) Name = DefaultName;
+            if (IsBlankValue(JoistClass)) JoistClass = DefaultClass;
+            if (IsBlankValue(JoistName)) JoistName = DefaultName;
             if (IsBlankValue(Finish)) Finish = DefaultFinish;
             if (IsBlankValue(PartStartNo)) PartStartNo = DefaultPartStartNo;
             if (IsBlankValue(AssmStartNo)) AssmStartNo = DefaultAssmStartNo;

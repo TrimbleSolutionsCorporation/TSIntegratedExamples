@@ -92,6 +92,7 @@
         {
             if (plugin == null) throw new ArgumentNullException(nameof(plugin));
             var spacingSeg1 = GetStartOffsetManipulatorLineSegment(plugin);
+            if (spacingSeg1 == null) return null;
             return new DistanceManipulator(plugin, this, spacingSeg1);
         }
 
@@ -131,23 +132,25 @@
         {
             //Use existing method to calculate where manipulator should be
             var spacingSeg1 = GetStartOffsetManipulatorLineSegment(plugin);
-            if (spacingSeg1 == null) //todo: risky?
+            if (spacingSeg1 == null && _startSpacingManipulator!=null) //todo: verify this works?
             {
                 _startSpacingManipulator.MeasureChanged -= StartOffset_OnMeasureChangedDel;
                 _startSpacingManipulator.Dispose();
+                _startSpacingManipulator = null;
             }
 
             //If no distance manipulator exists, create new one
-            if (_startSpacingManipulator == null)
+            if (_startSpacingManipulator == null && spacingSeg1!=null) //todo: verify this works?
             {
                 var distMan = new DistanceManipulator(plugin, this, spacingSeg1);
                 distMan.MeasureChanged += StartOffset_OnMeasureChangedDel;
                 AddManipulator(distMan);
+                _startSpacingManipulator = distMan;
             }
-            else
+            else if(_startSpacingManipulator!=null && spacingSeg1!=null)
             {
                 //Update existing distance manipulator
-                _startSpacingManipulator.Segment = spacingSeg1;
+                _startSpacingManipulator.Segment = new LineSegment(spacingSeg1.Point1, spacingSeg1.Point2);
             }
         }
 
@@ -194,8 +197,8 @@
             try
             {
                 //Calculate segments that define distance lines, if null dispose existing
-                var joistManLines = GetJoistManipulatorsLineSegments(plugin);
-                if (joistManLines == null) //todo: risky?
+                var calcJoistManLines = GetJoistManipulatorsLineSegments(plugin);
+                if (calcJoistManLines == null)
                 {
                     foreach (var distMan in _joistSpacingManipulators)
                     {
@@ -203,14 +206,15 @@
                         distMan.Dispose();
                     }
 
+                    _joistSpacingManipulators = null;
                     return;
                 }
 
                 //For each calculated new distance line, update existing
                 if (_joistSpacingManipulators == null) return;
-                for (var i = 0; i < joistManLines.Count; i++)
+                for (var i = 0; i < calcJoistManLines.Count; i++)
                 {
-                    var calcLine = joistManLines[i];
+                    var calcLine = calcJoistManLines[i];
 
                     //Check if beyond original list qty
                     if (_joistSpacingManipulators.Count < i + 1)
@@ -218,24 +222,36 @@
                         var distMan = new DistanceManipulator(plugin, this, calcLine);
                         distMan.MeasureChanged += Joist_OnMeasureChangedCenterDel;
                         AddManipulator(distMan);
+                        _joistSpacingManipulators.Add(distMan);
                     }
                     else
                     {
-                        var existingManipulator = _joistSpacingManipulators[i];
-                        existingManipulator.Segment = calcLine;
+                        _joistSpacingManipulators[i].Segment = new LineSegment(calcLine.Point1, calcLine.Point2);
                     }
                 }
 
-                //Remove no-longer used distance manipulators   //todo: risky?
-                if (_joistSpacingManipulators.Count > joistManLines.Count)
+                //Remove no-longer used distance manipulators   //todo: verify this works?
+                if (_joistSpacingManipulators.Count > calcJoistManLines.Count)
                 {
-                    var counter = _joistSpacingManipulators.Count;
-                    for (var i = joistManLines.Count - 1; i < counter; i++)
+                    var intRemoveList = new List<int>();
+                    var c1 = _joistSpacingManipulators.Count;
+
+                    //First detach event handlers and dispose each extra manipulator
+                    for (var i = calcJoistManLines.Count; i < c1; i++)
                     {
                         var distMan = _joistSpacingManipulators[i];
                         distMan.MeasureChanged -= Joist_OnMeasureChangedCenterDel;
                         distMan.Dispose();
-                        _joistSpacingManipulators.RemoveAt(i);
+                        intRemoveList.Add(i);
+                    }
+
+                    //Remove from list extra manipulators
+                    var exCount = 0;
+                    foreach (var i in intRemoveList)
+                    {
+                        var ix = i + exCount;
+                        _joistSpacingManipulators.RemoveAt(ix);
+                        exCount--;
                     }
                 }
             }
@@ -272,7 +288,7 @@
             var distMan = sender as DistanceManipulator;
 
             var spacingTypIntVal = 0;
-            Component.GetAttribute("SpacingTyp", ref spacingTypIntVal);
+            Component.GetAttribute("SpacingType", ref spacingTypIntVal);
             var spacingTyp = (MainViewModel.SpacingTypeEnum) spacingTypIntVal;
             switch (spacingTyp)
             {
@@ -291,53 +307,6 @@
                     var updatedSpacings = new TxDistanceList(spacingList);
                     var spacingString = updatedSpacings.MetricStringList;
                     DmCommon.ModifyComponent(Component, "CenterSpacingList", spacingString);
-
-
-                    ////Get data from plugin
-                    //var componentInput = FeatureLogic.GetCurrentInput(Component);
-                    //var uiData = Component.GetDataFromComponent();
-
-                    ////Update internal logic to take into account latest data from plugin
-                    //_liftingLogic = new JoistAreaMainLogic();
-                    //_liftingLogic.ExternalInitialize(componentInput.Item1, componentInput.Item2, uiData);
-                    //var localYdir = _liftingLogic.GlobalCoordinateSystem.AxisY.GetNormal();
-
-                    //Point p0;
-                    //if (index == 0) //First joist spacing
-                    //{
-                    //    p0 = _startSpacingManipulator == null
-                    //        ? componentInput.Item2.GetMidPoint()
-                    //        : new Point(_startSpacingManipulator.Segment.Point2);
-                    //}
-                    //else //Intermediate joist spacing
-                    //{
-                    //    var prevDistMan = _joistSpacingManipulators[index - 1];
-                    //    p0 = new Point(prevDistMan.Segment.Point2);
-                    //}
-
-                    //var currDistMan = _joistSpacingManipulators[index];
-                    //var p1 = new Point(p0);
-                    //p1.Translate(localYdir * distMan.Segment.Length());
-                    //currDistMan.Segment = new LineSegment(new Point(p0), new Point(p1));
-
-                    ////Update all other distance manipulator points from new end
-                    //var pLast = new Point(p1);
-                    //for (var j = index + 1; j < _joistSpacingManipulators.Count; j++)
-                    //{
-                    //    //Get next distance manipulator from list
-                    //    var distMan2 = _joistSpacingManipulators[j];
-
-                    //    //Get existing length and create new calc point
-                    //    var currentLength = distMan2.Segment.Length();
-                    //    var p2 = new Point(pLast);
-
-                    //    //Move calc point past segment length along axis to find new end
-                    //    p2.Translate(localYdir * currentLength);
-                    //    distMan2.Segment = new LineSegment(pLast, p2);
-
-                    //    //Set start point for next manipulator in list
-                    //    pLast = new Point(p2);
-                    //}
 
                     break;
                 }

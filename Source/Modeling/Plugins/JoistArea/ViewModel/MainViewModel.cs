@@ -35,11 +35,18 @@
             set { SetDynamicValue(value); }
         }
 
-        [StructuresDialog("Class", typeof(TD.Integer))]
-        public int Class
+        [StructuresDialog("JoistClass", typeof(TD.Integer))]
+        public int JoistClass
         {
             get { return GetDynamicValue<int>(); }
             set { SetDynamicValue<int>(value); }
+        }
+
+        [StructuresDialog("JoistName", typeof(TD.String))]
+        public string JoistName
+        {
+            get { return GetDynamicValue<string>(); }
+            set { SetDynamicValue(value); }
         }
 
         [StructuresDialog("Material", typeof(TD.String))]
@@ -84,7 +91,7 @@
             set { SetDynamicValue(value); }
         }
 
-        [StructuresDialog("DepthOffset", typeof(TD.Double))]
+        [StructuresDialog("DepthOffset", typeof(TD.Distance))]
         public double DepthOffset
         {
             get { return GetDynamicValue<double>(); }
