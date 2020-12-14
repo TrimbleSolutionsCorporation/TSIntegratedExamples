@@ -57,7 +57,7 @@
             UpdateJoistDistanceManipulators(Component);
 
             //Re-create all distance manipulators (qty changes)
-            //ReCreateDistanceManipulators();
+            //ReCreateDistanceManipulators(Component);
 
             //Update graphics based on plugin and manipulators
             ReCreateGraphics();
@@ -76,6 +76,7 @@
         /// <param name="component"></param>
         private void ReCreateDistanceManipulators(Component component)
         {
+            //todo: Does not work, breaks all manipulators...
             //Call 1st to detach events and dispose of all existing handlers
             Dispose();
 
@@ -84,6 +85,7 @@
             _joistSpacingManipulators = CreateJoistDistanceManipulators(component);
 
             //Add manipulators to the system
+            AttachHandlers();
             if (_startSpacingManipulator != null) AddManipulator(_startSpacingManipulator);
             _joistSpacingManipulators.ForEach(AddManipulator);
         }
