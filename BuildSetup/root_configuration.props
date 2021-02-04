@@ -16,7 +16,7 @@
         <InteropSHDocVw                                            Condition="'$(InteropSHDocVw)'==''">1.1.0.0</InteropSHDocVw>
         
         <!-- TeklaVerNo is used for specifying the API version numbers. Change the numbers above when branching. -->
-        <TeklaPackageVerNo   Condition="'$(TeklaPackageVerNo)'==''">2020.0.2</TeklaPackageVerNo>
+        <TeklaPackageVerNo   Condition="'$(TeklaPackageVerNo)'==''">2020.0.3</TeklaPackageVerNo>
         <TeklaVersion           Condition="'$(TeklaVersion)'==''">2020.0.0.0</TeklaVersion>
 		<BranchVersion           Condition="'$(BranchVersion)'==''">2020.0</BranchVersion>
 
