@@ -11,11 +11,19 @@
     using Tekla.Structures.Plugins.DirectManipulation.Services.Handles;
     using DragEventArgs = Tekla.Structures.Plugins.DirectManipulation.Services.Handles.DragEventArgs;
 
+    /// <summary>
+    /// Main class to create point handle manipulators to plugin input points
+    /// </summary>
     public sealed class PolygonShapeMc : ManipulationContext
     {
         private readonly IHandleManager _handleManager;
         private List<PointHandle> _polygonHandles;
 
+        /// <summary>
+        /// Main constructor to call methods to create PointHandles
+        /// </summary>
+        /// <param name="component">Model plugin instance</param>
+        /// <param name="feature">DM parent feature</param>
         public PolygonShapeMc(Component component, ManipulationFeature feature)
             : base(component, feature)
         {
@@ -26,8 +34,9 @@
             {
                 _handleManager = feature.HandleManager;
 
-                //Create point, distance, and line manipulators
-                CreatePointManipulators(component);
+                //Create and setup PointHandle manipulators
+                _polygonHandles = CreatePointHandles(component);
+                AttachHandlers();
 
                 //Draw custom graphics
                 ReCreateGraphics();
@@ -38,26 +47,24 @@
             }
         }
 
+        /// <summary>
+        /// Updates internal logic, calls method to update PointHandles, and recreates graphics
+        /// </summary>
         public override void UpdateContext()
         {
             base.UpdateContext();
             Component.Select();
 
-            //Get input objects from component
-            var componentInput = FeatureLogic.GetCurrentInput(Component);
-
             //Refresh existing manipulator handles from plugin input
-            var index = 0;
-            foreach (var pt in componentInput.Item1)
-            {
-                _polygonHandles[index].Point = new Point(pt);
-                index++;
-            }
+            UpdatePointHandles(Component);
 
             //Update graphics based on plugin and manipulators
             ReCreateGraphics();
         }
 
+        /// <summary>
+        /// Redraws graphics for feature
+        /// </summary>
         private void ReCreateGraphics()
         {
             Graphics?.Clear();
@@ -65,49 +72,80 @@
         }
 
         /// <summary>
-        /// Draw outer polygon edge segment dimension graphics
+        /// Creates new PointHandles through HandleManager and caches both PointHandles
         /// </summary>
-        private void DrawPolygonEdgeDimensions()
-        {
-            //Draw edges around picked points
-            Point lastPoint = null;
-            foreach (var pg in _polygonHandles)
-            {
-                if (lastPoint != null)
-                {
-                    var currPt = new Point(pg.Point);
-                    var ls = new LineSegment(lastPoint, currPt);
-                    Graphics?.DrawDimension(ls, null, DimensionEndPointSizeType.FixedMedium);
-                }
-                lastPoint = new Point(pg.Point);
-            }
-
-            //Draw connecting edge from last point to 1st
-            var lsEnd = new LineSegment(_polygonHandles[_polygonHandles.Count - 1].Point, _polygonHandles[0].Point);
-            Graphics?.DrawDimension(lsEnd, null, DimensionEndPointSizeType.FixedMedium);
-        }
-
-        /// <summary>
-        /// Create polygon handles from plugin input points
-        /// </summary>
-        /// <param name="plugin">Joist Area plugin instance</param>
-        private void CreatePointManipulators(Component plugin)
+        /// <param name="plugin">Model plugin instance</param>
+        /// <returns></returns>
+        private List<PointHandle> CreatePointHandles(Component plugin)
         {
             if (plugin == null) throw new ArgumentNullException(nameof(plugin));
-            if(_polygonHandles == null) _polygonHandles = new List<PointHandle>();
-            else _polygonHandles?.Clear();
+            var handles = new List<PointHandle>();
 
             try
             {
                 var componentInput = FeatureLogic.GetCurrentInput(plugin);
                 foreach (var pt in componentInput.Item1)
                 {
-                    var handle =
-                        _handleManager.CreatePointHandle(pt, HandleLocationType.InputPoint, HandleEffectType.Geometry);
-                    handle.DragOngoing += PolygonHandleDragOngoing;
-                    handle.DragEnded += PolygonHandleDragEnded;
+                    var handle = _handleManager.CreatePointHandle(pt, HandleLocationType.InputPoint, HandleEffectType.Geometry);
                     _polygonHandles.Add(handle);
                 }
+                return handles;
+            }
+            catch (Exception ex)
+            {
+                GlobalServices.LogException(ex);
+                return new List<PointHandle>();
+            }
+        }
+
+        /// <summary>
+        /// Refresh existing manipulator handles from plugin input
+        /// </summary>
+        /// <param name="component">Model plugin instance</param>
+        private void UpdatePointHandles(Component component)
+        {
+            if (component == null) throw new ArgumentNullException(nameof(component));
+            try
+            {
+                //Get input objects from component
+                var componentInput = FeatureLogic.GetCurrentInput(component);
+                //Update each PointHandle position
+                var index = 0;
+                foreach (var pt in componentInput.Item1)
+                {
+                    _polygonHandles[index].Point = new Point(pt);
+                    index++;
+                }
+            }
+            catch (Exception ex)
+            {
+                GlobalServices.LogException(ex);
+            }
+        }
+        
+        /// <summary>
+        /// Draw outer polygon edge segment dimension graphics
+        /// </summary>
+        private void DrawPolygonEdgeDimensions()
+        {
+            try
+            {
+                //Draw edges around picked points
+                Point lastPoint = null;
+                foreach (var pg in _polygonHandles)
+                {
+                    if (lastPoint != null)
+                    {
+                        var currPt = new Point(pg.Point);
+                        var ls = new LineSegment(lastPoint, currPt);
+                        Graphics?.DrawDimension(ls, null, DimensionEndPointSizeType.FixedMedium);
+                    }
+                    lastPoint = new Point(pg.Point);
+                }
+
+                //Draw connecting edge from last point to 1st
+                var lsEnd = new LineSegment(_polygonHandles[_polygonHandles.Count - 1].Point, _polygonHandles[0].Point);
+                Graphics?.DrawDimension(lsEnd, null, DimensionEndPointSizeType.FixedMedium);
             }
             catch (Exception ex)
             {
@@ -121,24 +159,31 @@
         private void ModifyPluginInputFromManipulators()
         {
             if (_polygonHandles == null) throw new ArgumentNullException(nameof(_polygonHandles));
-            var pastInput = FeatureLogic.GetCurrentInput(Component);
-            var adjustedInput = new ComponentInput();
-
-            //Add polygon input adjusted new points
-            var polygon = new Polygon();
-            foreach (var pg in _polygonHandles)
+            try
             {
-                polygon.Points.Add(new Point(pg.Point));
+                var pastInput = FeatureLogic.GetCurrentInput(Component);
+                var adjustedInput = new ComponentInput();
+
+                //Add polygon input adjusted new points
+                var polygon = new Polygon();
+                foreach (var pg in _polygonHandles)
+                {
+                    polygon.Points.Add(new Point(pg.Point));
+                }
+                adjustedInput.AddInputPolygon(polygon);
+
+                //Add guideline input from existing input
+                var gp1 = new Point(pastInput.Item2.Point1);
+                var gp2 = new Point(pastInput.Item2.Point2);
+                adjustedInput.AddTwoInputPositions(gp1, gp2);
+
+                //Call component to update
+                ModifyComponentInput(adjustedInput);
             }
-            adjustedInput.AddInputPolygon(polygon);
-
-            //Add guideline input from existing input
-            var gp1 = new Point(pastInput.Item2.Point1);
-            var gp2 = new Point(pastInput.Item2.Point2);
-            adjustedInput.AddTwoInputPositions(gp1, gp2);
-
-            //Call component to update
-            ModifyComponentInput(adjustedInput);
+            catch (Exception ex)
+            {
+                GlobalServices.LogException(ex);
+            }
         }
 
         /// <summary>
@@ -146,9 +191,9 @@
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="eventArgs"></param>
-        private void PolygonHandleDragOngoing(object sender, DragEventArgs eventArgs)
+        private void OnPointHandleDragOngoing(object sender, DragEventArgs eventArgs)
         {
-            ReCreateGraphics();
+            DrawPolygonEdgeDimensions();
         }
 
         /// <summary>
@@ -156,22 +201,52 @@
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="eventArgs"></param>
-        private void PolygonHandleDragEnded(object sender, DragEventArgs eventArgs)
+        private void OnPointHandleDragEnded(object sender, DragEventArgs eventArgs)
         {
             ModifyPluginInputFromManipulators();
         }
 
         /// <summary>
-        /// Detach and then dispose of all manipulator objects
+        /// Call detach PointHandles then dispose of each
         /// </summary>
         /// <param name="disposing"></param>
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);
-            _polygonHandles?.ForEach(handle =>
+            DetachHandlers();
+
+            _polygonHandles.ForEach(handle => handle.Dispose());
+
+            foreach (var manipulator in this.Manipulators)
             {
-                handle.DragOngoing -= PolygonHandleDragOngoing;
-                handle.DragEnded -= PolygonHandleDragEnded;
+                manipulator.Dispose();
+            }
+
+            //Clear local caches
+            _polygonHandles?.Clear();
+        }
+
+        /// <summary>
+        /// Attach event handlers to each PointHandle in cache
+        /// </summary>
+        private void AttachHandlers()
+        {
+            _polygonHandles.ForEach(handle =>
+            {
+                handle.DragOngoing += OnPointHandleDragOngoing;
+                handle.DragEnded += OnPointHandleDragEnded;
+            });
+        }
+
+        /// <summary>
+        /// Detach event handlers for each PointHandle in cache
+        /// </summary>
+        private void DetachHandlers()
+        {
+            _polygonHandles.ForEach(handle =>
+            {
+                handle.DragOngoing -= OnPointHandleDragOngoing;
+                handle.DragEnded -= OnPointHandleDragEnded;
             });
         }
     }
