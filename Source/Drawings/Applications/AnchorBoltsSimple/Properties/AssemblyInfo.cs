@@ -11,7 +11,7 @@ using System.Resources;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Trimble Solutions USA Inc")]
 [assembly: AssemblyProduct("DimensionAnchorBolts")]
-[assembly: AssemblyCopyright("Copyright © 2020 Trimble Solutions USA Inc. All rights reserved.")]
+[assembly: AssemblyCopyright("Copyright © 2021 Trimble Solutions USA Inc. All rights reserved.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

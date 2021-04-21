@@ -8281,6 +8281,11 @@
             <param name="complexGeometry">The geometrical representation of the handle.</param>
             <param name="snappable">A value indicating whether the segment handle can be snapped to.</param>
         </member>
+        <member name="P:Tekla.BIM.DirectManipulation.Services.Interaction.ComplexHandle.EdgesVisible">
+            <summary>
+            Gets or sets a value indicating whether the edges should be visualized.
+            </summary>
+        </member>
         <member name="P:Tekla.BIM.DirectManipulation.Services.Interaction.ComplexHandle.Geometries">
             <summary>
             Gets or sets the geometries.
@@ -11252,6 +11257,11 @@
         <member name="T:Tekla.BIM.DirectManipulation.Services.Interaction.IComplexHandle">
             <summary>
             The <see cref="T:Tekla.BIM.DirectManipulation.Services.Interaction.IComplexHandle"/> interface represents any type of complex geometry handle.
+            </summary>
+        </member>
+        <member name="P:Tekla.BIM.DirectManipulation.Services.Interaction.IComplexHandle.EdgesVisible">
+            <summary>
+            Gets or sets a value indicating whether the edges should be visualized.
             </summary>
         </member>
         <member name="P:Tekla.BIM.DirectManipulation.Services.Interaction.IComplexHandle.Geometries">
@@ -15555,6 +15565,194 @@
             Gets or sets the point value.
             </summary>
         </member>
+        <member name="T:Tekla.BIM.DirectManipulation.Services.Manipulators.InteractiveTextManipulator">
+             <summary>
+             This class implements a manipulator that represents a text that can be clicked and then requests a value. The
+             request is controlled by the <see cref="P:Tekla.BIM.DirectManipulation.Services.Manipulators.InteractiveTextManipulator.Request"/> property. Once a request has
+             been done, the corresponding event is fired.
+            
+             The manipulator is meant to be contained within a parent manipulator, which then can decide what to do with
+             the request.
+             </summary>
+             <remarks>
+             Once an event fires, it is recommended that the user (i.e. the entity processing the event) changes the
+             <see cref="P:Tekla.BIM.DirectManipulation.Services.Manipulators.InteractiveTextManipulator.Request"/> property, so that the text value of the manipulator can
+             change to represent a new value, if needed.
+             </remarks>
+        </member>
+        <member name="F:Tekla.BIM.DirectManipulation.Services.Manipulators.InteractiveTextManipulator.textHandle">
+            <summary>
+            The clickable text handle.
+            </summary>
+        </member>
+        <member name="M:Tekla.BIM.DirectManipulation.Services.Manipulators.InteractiveTextManipulator.#ctor(Tekla.BIM.DirectManipulation.Services.Manipulators.InteractiveTextRequest,Tekla.Common.Geometry.Segment3)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Tekla.BIM.DirectManipulation.Services.Manipulators.InteractiveTextManipulator"/> class.
+            </summary>
+            <param name="request">The request type for the manipulation.</param>
+            <param name="location">Location of the text.</param>
+        </member>
+        <member name="E:Tekla.BIM.DirectManipulation.Services.Manipulators.InteractiveTextManipulator.TextEntered">
+            <summary>
+            Triggered when a text has been inputted.
+            </summary>
+        </member>
+        <member name="E:Tekla.BIM.DirectManipulation.Services.Manipulators.InteractiveTextManipulator.DistanceEntered">
+            <summary>
+            Triggered when a distance has been inputted.
+            </summary>
+        </member>
+        <member name="E:Tekla.BIM.DirectManipulation.Services.Manipulators.InteractiveTextManipulator.AngleEntered">
+            <summary>
+            Triggered when an angle has been inputted.
+            </summary>
+        </member>
+        <member name="E:Tekla.BIM.DirectManipulation.Services.Manipulators.InteractiveTextManipulator.DimensionEntered">
+            <summary>
+            Triggered when a dimension has been inputted.
+            </summary>
+        </member>
+        <member name="P:Tekla.BIM.DirectManipulation.Services.Manipulators.InteractiveTextManipulator.Request">
+            <summary>
+            Gets or sets the request that the text manipulator will make.
+            </summary>
+        </member>
+        <member name="P:Tekla.BIM.DirectManipulation.Services.Manipulators.InteractiveTextManipulator.Location">
+            <summary>
+            Gets or sets the location of the text.
+            </summary>
+        </member>
+        <member name="P:Tekla.BIM.DirectManipulation.Services.Manipulators.InteractiveTextManipulator.Visible">
+            <summary>
+            Gets or sets a value that indicates whether the manipulator is visible or not.
+            </summary>
+        </member>
+        <member name="M:Tekla.BIM.DirectManipulation.Services.Manipulators.InteractiveTextManipulator.OnInitialize">
+            <inheritdoc/>
+        </member>
+        <member name="M:Tekla.BIM.DirectManipulation.Services.Manipulators.InteractiveTextManipulator.OnTextHandleClicked(Tekla.BIM.DirectManipulation.Services.Interaction.IHandle,Tekla.BIM.DirectManipulation.Services.Interaction.HandleSelectionEventArgs)">
+            <summary>
+            Called when the interactive text is clicked.
+            </summary>
+            <param name="textHandle">The interactive text handle.</param>
+            <param name="eventArgs">Additional arguments</param>
+        </member>
+        <member name="M:Tekla.BIM.DirectManipulation.Services.Manipulators.InteractiveTextManipulator.CreateTextHandle">
+            <summary>
+            Creates the text handle.
+            </summary>
+        </member>
+        <member name="T:Tekla.BIM.DirectManipulation.Services.Manipulators.InteractiveTextRequest">
+            <summary>
+            Class to represent a user request for the interactive text manipulator. It is implemented as a tagged union,
+            where the tag represents the request type that will be done by the manipulator, and the text value contains
+            the text that will be displayed by the text handle.
+            </summary>
+        </member>
+        <member name="M:Tekla.BIM.DirectManipulation.Services.Manipulators.InteractiveTextRequest.#ctor">
+            <summary>
+            Constructs an instance of the <see cref="T:Tekla.BIM.DirectManipulation.Services.Manipulators.InteractiveTextRequest"/>.
+            Not meant to be called from outside.
+            </summary>
+        </member>
+        <member name="P:Tekla.BIM.DirectManipulation.Services.Manipulators.InteractiveTextRequest.RequestType">
+            <summary>
+            Gets or sets the type of request that will be made to the user when the text handle is clicked.
+            </summary>
+        </member>
+        <member name="P:Tekla.BIM.DirectManipulation.Services.Manipulators.InteractiveTextRequest.TextValue">
+            <summary>
+            Gets the string value displayed in the interactive text.
+            </summary>
+        </member>
+        <member name="P:Tekla.BIM.DirectManipulation.Services.Manipulators.InteractiveTextRequest.DefaultDistance">
+            <summary>
+            Gets the default distance that will be requested when the text is clicked.
+            Only valid if the text mode is <see cref="F:Tekla.BIM.DirectManipulation.Services.Manipulators.InteractiveTextRequestType.Distance"/>.
+            </summary>
+        </member>
+        <member name="P:Tekla.BIM.DirectManipulation.Services.Manipulators.InteractiveTextRequest.DefaultAngle">
+            <summary>
+            Gets the default angle that will be requested when the text is clicked.
+            Only valid if the text mode is <see cref="F:Tekla.BIM.DirectManipulation.Services.Manipulators.InteractiveTextRequestType.Angle"/>.
+            </summary>
+        </member>
+        <member name="P:Tekla.BIM.DirectManipulation.Services.Manipulators.InteractiveTextRequest.DefaultDimension">
+            <summary>
+            Gets the default dimension that will be requested when the text is clicked.
+            Only valid if the text mode is <see cref="F:Tekla.BIM.DirectManipulation.Services.Manipulators.InteractiveTextRequestType.Dimension"/>.
+            </summary>
+        </member>
+        <member name="P:Tekla.BIM.DirectManipulation.Services.Manipulators.InteractiveTextRequest.DefaultDimensionDirection">
+            <summary>
+            Gets the default dimension direction that will be selected when the text is clicked.
+            Only valid if the text mode is <see cref="F:Tekla.BIM.DirectManipulation.Services.Manipulators.InteractiveTextRequestType.Dimension"/>.
+            </summary>
+        </member>
+        <member name="P:Tekla.BIM.DirectManipulation.Services.Manipulators.InteractiveTextRequest.AvailableDimensionModes">
+            <summary>
+            Gets the available dimension manipulation modes that the user will see.
+            Only valid if the text mode is <see cref="F:Tekla.BIM.DirectManipulation.Services.Manipulators.InteractiveTextRequestType.Dimension"/>.
+            </summary>
+        </member>
+        <member name="M:Tekla.BIM.DirectManipulation.Services.Manipulators.InteractiveTextRequest.AsText(System.String)">
+            <summary>
+            Creates a <see cref="T:Tekla.BIM.DirectManipulation.Services.Manipulators.InteractiveTextRequest"/> configured to request texts.
+            </summary>
+            <param name="initialText">The default text.</param>
+            <returns>The request.</returns>
+        </member>
+        <member name="M:Tekla.BIM.DirectManipulation.Services.Manipulators.InteractiveTextRequest.AsDistance(System.Double,System.String)">
+            <summary>
+            Creates a <see cref="T:Tekla.BIM.DirectManipulation.Services.Manipulators.InteractiveTextRequest"/> configured to request distances.
+            </summary>
+            <param name="initialDistance">The default distance.</param>
+            <param name="displayText">The optional display text (defaults to the given value as text).</param>
+            <returns>The request.</returns>
+        </member>
+        <member name="M:Tekla.BIM.DirectManipulation.Services.Manipulators.InteractiveTextRequest.AsAngle(System.Double,System.String)">
+            <summary>
+            Creates a <see cref="T:Tekla.BIM.DirectManipulation.Services.Manipulators.InteractiveTextRequest"/> configured to request angles.
+            </summary>
+            <param name="initialAngle">The default angle.</param>
+            <param name="displayText">The optional display text (defaults to the given value as text).</param>
+            <returns>The request.</returns>
+        </member>
+        <member name="M:Tekla.BIM.DirectManipulation.Services.Manipulators.InteractiveTextRequest.AsDimension(Tekla.Common.Geometry.Segment3,Tekla.BIM.DirectManipulation.Services.Manipulators.DimensionInputDirection,Tekla.BIM.DirectManipulation.Services.Manipulators.DimensionInputDirection,System.String)">
+            <summary>
+            Creates a <see cref="T:Tekla.BIM.DirectManipulation.Services.Manipulators.InteractiveTextRequest"/> configured to request dimensions.
+            </summary>
+            <param name="initialDimension">The default dimension.</param>
+            <param name="initialInputDirection">The initial input direction to request.</param>
+            <param name="availableInputDirections">The available input directions as a bit flag.</param>
+            <param name="displayText">The optional display text (defaults to the given value as text).</param>
+            <returns>The request.</returns>
+        </member>
+        <member name="T:Tekla.BIM.DirectManipulation.Services.Manipulators.InteractiveTextRequestType">
+            <summary>
+            Represents the request mode of the interactive text manipulator.
+            </summary>
+        </member>
+        <member name="F:Tekla.BIM.DirectManipulation.Services.Manipulators.InteractiveTextRequestType.Text">
+            <summary>
+            The interactive text will request plain text upon clicking.
+            </summary>
+        </member>
+        <member name="F:Tekla.BIM.DirectManipulation.Services.Manipulators.InteractiveTextRequestType.Angle">
+            <summary>
+            The interactive text will request an angle upon clicking.
+            </summary>
+        </member>
+        <member name="F:Tekla.BIM.DirectManipulation.Services.Manipulators.InteractiveTextRequestType.Distance">
+            <summary>
+            The interactive text will request a distance upon clicking.
+            </summary>
+        </member>
+        <member name="F:Tekla.BIM.DirectManipulation.Services.Manipulators.InteractiveTextRequestType.Dimension">
+            <summary>
+            The interactive text will request a dimension upon clicking.
+            </summary>
+        </member>
         <member name="T:Tekla.BIM.DirectManipulation.Services.Manipulators.IObjectManager`1">
             <summary>
             The <see cref="T:Tekla.BIM.DirectManipulation.Services.Manipulators.IObjectManager`1"/> interface interfaces any type targeted at managing a collection of <typeparamref name="TObject"/> instances.
@@ -17487,11 +17685,38 @@
             <param name="onPickPointToleration">A delegate to the method to call when tolerating a pick point.</param>
             <returns>An <see cref="T:Tekla.BIM.DirectManipulation.Services.Picking.IPickerListener"/> instance listening to the started session.</returns>
         </member>
+        <member name="M:Tekla.BIM.DirectManipulation.Services.Picking.IPickerService.StartSinglePick(Tekla.BIM.DirectManipulation.Services.Picking.PickType,Tekla.BIM.DirectManipulation.Services.Picking.PickerModeOption,Tekla.BIM.DirectManipulation.Services.Localization.LocalizedString,Tekla.BIM.DirectManipulation.Services.Picking.PickerListenerEventHandler{Tekla.BIM.DirectManipulation.Services.Picking.SinglePickCompletedEventArgs},Tekla.BIM.DirectManipulation.Services.Picking.PickerListenerEventHandler{Tekla.BIM.DirectManipulation.Services.Picking.PickDeltaEventArgs},Tekla.BIM.DirectManipulation.Services.Picking.PickerListenerEventHandler{Tekla.BIM.DirectManipulation.Services.Picking.PickerEndingEventArgs},Tekla.BIM.DirectManipulation.Services.Picking.PickerListenerEventHandler{Tekla.BIM.DirectManipulation.Services.Picking.PickPointResolveEventArgs})">
+            <summary>
+            Starts a single pick for the specified <see cref="T:Tekla.BIM.DirectManipulation.Services.Picking.PickType"/>, displaying the given <paramref name="message"/>.
+            </summary>
+            <param name="pickType">The type of model data that is allowed to be picked.</param>
+            <param name="pickerModeOption">Specifies if the picker mode should be enabled, disabled, or set to e.g. highlight.</param>
+            <param name="message">The message to display while picking.</param>
+            <param name="onPickCompleted">The method to call when the picking session has completed.</param>
+            <param name="onObjectPicked">A delegate to the method to call when an object is picked.</param>
+            <param name="onPickEnding">A delegate to the method to call when the picking session is ending.</param>
+            <param name="onPickPointToleration">A delegate to the method to call when tolerating a pick point.</param>
+            <returns>An <see cref="T:Tekla.BIM.DirectManipulation.Services.Picking.IPickerListener"/> instance listening to the started session.</returns>
+        </member>
         <member name="M:Tekla.BIM.DirectManipulation.Services.Picking.IPickerService.StartSinglePick(Tekla.BIM.DirectManipulation.Services.Picking.PickType,System.Type,Tekla.BIM.DirectManipulation.Services.Localization.LocalizedString,Tekla.BIM.DirectManipulation.Services.Picking.PickerListenerEventHandler{Tekla.BIM.DirectManipulation.Services.Picking.SinglePickCompletedEventArgs},Tekla.BIM.DirectManipulation.Services.Picking.PickerListenerEventHandler{Tekla.BIM.DirectManipulation.Services.Picking.PickDeltaEventArgs},Tekla.BIM.DirectManipulation.Services.Picking.PickerListenerEventHandler{Tekla.BIM.DirectManipulation.Services.Picking.PickerEndingEventArgs},Tekla.BIM.DirectManipulation.Services.Picking.PickerListenerEventHandler{Tekla.BIM.DirectManipulation.Services.Picking.PickPointResolveEventArgs})">
             <summary>
             Starts a single pick for the specified <see cref="T:Tekla.BIM.DirectManipulation.Services.Picking.PickType"/>, displaying the given <paramref name="message"/>.
             </summary>
             <param name="pickType">The type of model data that is allowed to be picked.</param>
+            <param name="objectType">The type of objects that can be picked.</param>
+            <param name="message">The message to display while picking.</param>
+            <param name="onPickCompleted">A delegate to the method to call when the picking session has completed.</param>
+            <param name="onObjectPicked">A delegate to the method to call when an object is picked.</param>
+            <param name="onPickEnding">A delegate to the method to call when the picking session is ending.</param>
+            <param name="onPickPointToleration">A delegate to the method to call when tolerating a pick point.</param>
+            <returns>An <see cref="T:Tekla.BIM.DirectManipulation.Services.Picking.IPickerListener"/> instance listening to the started session.</returns>
+        </member>
+        <member name="M:Tekla.BIM.DirectManipulation.Services.Picking.IPickerService.StartSinglePick(Tekla.BIM.DirectManipulation.Services.Picking.PickType,Tekla.BIM.DirectManipulation.Services.Picking.PickerModeOption,System.Type,Tekla.BIM.DirectManipulation.Services.Localization.LocalizedString,Tekla.BIM.DirectManipulation.Services.Picking.PickerListenerEventHandler{Tekla.BIM.DirectManipulation.Services.Picking.SinglePickCompletedEventArgs},Tekla.BIM.DirectManipulation.Services.Picking.PickerListenerEventHandler{Tekla.BIM.DirectManipulation.Services.Picking.PickDeltaEventArgs},Tekla.BIM.DirectManipulation.Services.Picking.PickerListenerEventHandler{Tekla.BIM.DirectManipulation.Services.Picking.PickerEndingEventArgs},Tekla.BIM.DirectManipulation.Services.Picking.PickerListenerEventHandler{Tekla.BIM.DirectManipulation.Services.Picking.PickPointResolveEventArgs})">
+            <summary>
+            Starts a single pick for the specified <see cref="T:Tekla.BIM.DirectManipulation.Services.Picking.PickType"/>, displaying the given <paramref name="message"/>.
+            </summary>
+            <param name="pickType">The type of model data that is allowed to be picked.</param>
+            <param name="pickerModeOption">Specifies if the picker mode should be enabled, disabled, or set to e.g. highlight.</param>
             <param name="objectType">The type of objects that can be picked.</param>
             <param name="message">The message to display while picking.</param>
             <param name="onPickCompleted">A delegate to the method to call when the picking session has completed.</param>
@@ -17742,7 +17967,12 @@
             The mode of the picking session.
             </summary>
         </member>
-        <member name="M:Tekla.BIM.DirectManipulation.Services.Picking.PickerConfiguration.#ctor(Tekla.BIM.DirectManipulation.Services.Picking.PickerMode,Tekla.BIM.DirectManipulation.Services.Picking.PickType,System.Type,Tekla.BIM.DirectManipulation.Services.Localization.LocalizedString,Tekla.BIM.DirectManipulation.Services.Picking.PickerPolicy)">
+        <member name="F:Tekla.BIM.DirectManipulation.Services.Picking.PickerConfiguration.pickerModeOption">
+            <summary>
+            The picker mode option.
+            </summary>
+        </member>
+        <member name="M:Tekla.BIM.DirectManipulation.Services.Picking.PickerConfiguration.#ctor(Tekla.BIM.DirectManipulation.Services.Picking.PickerMode,Tekla.BIM.DirectManipulation.Services.Picking.PickType,System.Type,Tekla.BIM.DirectManipulation.Services.Localization.LocalizedString,Tekla.BIM.DirectManipulation.Services.Picking.PickerPolicy,Tekla.BIM.DirectManipulation.Services.Picking.PickerModeOption)">
             <summary>
             Initializes a new instance of the <see cref="T:Tekla.BIM.DirectManipulation.Services.Picking.PickerConfiguration"/> class.
             </summary>
@@ -17750,6 +17980,18 @@
             <param name="pickType">The type of model data to pick for.</param>
             <param name="objectType">The type of objects from which data can be picked.</param>
             <param name="message">The message to display while picking.</param>
+            <param name="policy">The pickingPolicy enum flag for special picker behaviour.</param>
+            <param name="pickerModeOption">The picker mode option, enabled being the default one.</param>
+        </member>
+        <member name="M:Tekla.BIM.DirectManipulation.Services.Picking.PickerConfiguration.#ctor(Tekla.BIM.DirectManipulation.Services.Picking.PickerMode,Tekla.BIM.DirectManipulation.Services.Picking.PickType,System.Type,Tekla.BIM.DirectManipulation.Services.Localization.LocalizedString,Tekla.BIM.DirectManipulation.Services.Picking.PickerModeOption,Tekla.BIM.DirectManipulation.Services.Picking.PickerPolicy)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Tekla.BIM.DirectManipulation.Services.Picking.PickerConfiguration"/> class.
+            </summary>
+            <param name="mode">The mode of the picking session.</param>
+            <param name="pickType">The type of model data to pick for.</param>
+            <param name="objectType">The type of objects from which data can be picked.</param>
+            <param name="message">The message to display while picking.</param>
+            <param name="pickerModeOption">The picker mode option, enabled being the default one.</param>
             <param name="policy">The pickingPolicy enum flag for special picker behaviour.</param>
         </member>
         <member name="M:Tekla.BIM.DirectManipulation.Services.Picking.PickerConfiguration.#ctor(Tekla.BIM.DirectManipulation.Services.Picking.PickerConfiguration)">
@@ -17786,6 +18028,11 @@
         <member name="P:Tekla.BIM.DirectManipulation.Services.Picking.PickerConfiguration.Policy">
             <summary>
             Gets or sets the picking policy
+            </summary>
+        </member>
+        <member name="P:Tekla.BIM.DirectManipulation.Services.Picking.PickerConfiguration.PickerModeOption">
+            <summary>
+            Gets the mode of the picking session.
             </summary>
         </member>
         <member name="M:Tekla.BIM.DirectManipulation.Services.Picking.PickerConfiguration.Equals(System.Object)">
@@ -18270,6 +18517,26 @@
             The picker is started by an external factor, the actual mode is unknown.
             </summary>
         </member>
+        <member name="T:Tekla.BIM.DirectManipulation.Services.Picking.PickerModeOption">
+            <summary>
+            The <see cref="T:Tekla.BIM.DirectManipulation.Services.Picking.PickerModeOption"/> enum defines the available options for modes of the picker.
+            </summary>
+        </member>
+        <member name="F:Tekla.BIM.DirectManipulation.Services.Picking.PickerModeOption.Disabled">
+            <summary>
+            Sets the picker mode to be disabled, thus stopping the picker.
+            </summary>
+        </member>
+        <member name="F:Tekla.BIM.DirectManipulation.Services.Picking.PickerModeOption.Enabled">
+            <summary>
+            Sets the picker mode to be enabled.
+            </summary>
+        </member>
+        <member name="F:Tekla.BIM.DirectManipulation.Services.Picking.PickerModeOption.Highlight">
+            <summary>
+            Sets the picker mode to be enabled and then allows highlight during picking.
+            </summary>
+        </member>
         <member name="T:Tekla.BIM.DirectManipulation.Services.Picking.PickerService">
             <summary>
             The <see cref="T:Tekla.BIM.DirectManipulation.Services.Picking.PickerService"/> class is a service implementation for all picking related functionality.
@@ -18288,6 +18555,12 @@
             <inheritdoc />
         </member>
         <member name="M:Tekla.BIM.DirectManipulation.Services.Picking.PickerService.StartSinglePick(Tekla.BIM.DirectManipulation.Services.Picking.PickType,Tekla.BIM.DirectManipulation.Services.Localization.LocalizedString,Tekla.BIM.DirectManipulation.Services.Picking.PickerListenerEventHandler{Tekla.BIM.DirectManipulation.Services.Picking.SinglePickCompletedEventArgs},Tekla.BIM.DirectManipulation.Services.Picking.PickerListenerEventHandler{Tekla.BIM.DirectManipulation.Services.Picking.PickDeltaEventArgs},Tekla.BIM.DirectManipulation.Services.Picking.PickerListenerEventHandler{Tekla.BIM.DirectManipulation.Services.Picking.PickerEndingEventArgs},Tekla.BIM.DirectManipulation.Services.Picking.PickerListenerEventHandler{Tekla.BIM.DirectManipulation.Services.Picking.PickPointResolveEventArgs})">
+            <inheritdoc />
+        </member>
+        <member name="M:Tekla.BIM.DirectManipulation.Services.Picking.PickerService.StartSinglePick(Tekla.BIM.DirectManipulation.Services.Picking.PickType,Tekla.BIM.DirectManipulation.Services.Picking.PickerModeOption,Tekla.BIM.DirectManipulation.Services.Localization.LocalizedString,Tekla.BIM.DirectManipulation.Services.Picking.PickerListenerEventHandler{Tekla.BIM.DirectManipulation.Services.Picking.SinglePickCompletedEventArgs},Tekla.BIM.DirectManipulation.Services.Picking.PickerListenerEventHandler{Tekla.BIM.DirectManipulation.Services.Picking.PickDeltaEventArgs},Tekla.BIM.DirectManipulation.Services.Picking.PickerListenerEventHandler{Tekla.BIM.DirectManipulation.Services.Picking.PickerEndingEventArgs},Tekla.BIM.DirectManipulation.Services.Picking.PickerListenerEventHandler{Tekla.BIM.DirectManipulation.Services.Picking.PickPointResolveEventArgs})">
+            <inheritdoc />
+        </member>
+        <member name="M:Tekla.BIM.DirectManipulation.Services.Picking.PickerService.StartSinglePick(Tekla.BIM.DirectManipulation.Services.Picking.PickType,Tekla.BIM.DirectManipulation.Services.Picking.PickerModeOption,System.Type,Tekla.BIM.DirectManipulation.Services.Localization.LocalizedString,Tekla.BIM.DirectManipulation.Services.Picking.PickerListenerEventHandler{Tekla.BIM.DirectManipulation.Services.Picking.SinglePickCompletedEventArgs},Tekla.BIM.DirectManipulation.Services.Picking.PickerListenerEventHandler{Tekla.BIM.DirectManipulation.Services.Picking.PickDeltaEventArgs},Tekla.BIM.DirectManipulation.Services.Picking.PickerListenerEventHandler{Tekla.BIM.DirectManipulation.Services.Picking.PickerEndingEventArgs},Tekla.BIM.DirectManipulation.Services.Picking.PickerListenerEventHandler{Tekla.BIM.DirectManipulation.Services.Picking.PickPointResolveEventArgs})">
             <inheritdoc />
         </member>
         <member name="M:Tekla.BIM.DirectManipulation.Services.Picking.PickerService.StartSinglePick(Tekla.BIM.DirectManipulation.Services.Picking.PickType,System.Type,Tekla.BIM.DirectManipulation.Services.Localization.LocalizedString,Tekla.BIM.DirectManipulation.Services.Picking.PickerListenerEventHandler{Tekla.BIM.DirectManipulation.Services.Picking.SinglePickCompletedEventArgs},Tekla.BIM.DirectManipulation.Services.Picking.PickerListenerEventHandler{Tekla.BIM.DirectManipulation.Services.Picking.PickDeltaEventArgs},Tekla.BIM.DirectManipulation.Services.Picking.PickerListenerEventHandler{Tekla.BIM.DirectManipulation.Services.Picking.PickerEndingEventArgs},Tekla.BIM.DirectManipulation.Services.Picking.PickerListenerEventHandler{Tekla.BIM.DirectManipulation.Services.Picking.PickPointResolveEventArgs})">
@@ -18917,7 +19190,7 @@
             <param name="tolerator">The toleration handler.</param>
             <param name="picker">The instance from which the picking events originate.</param>
         </member>
-        <member name="M:Tekla.BIM.DirectManipulation.Services.Picking.PickingSessionHandler.Start">
+        <member name="M:Tekla.BIM.DirectManipulation.Services.Picking.PickingSessionHandler.Start(Tekla.BIM.DirectManipulation.Services.Picking.PickerModeOption)">
             <summary>
             Starts the picking. Sets the application cursor to the picking mode and starts receiving pick events.
             </summary>
@@ -18999,11 +19272,18 @@
             <param name="eventArgs">The event arguments.</param>
             <returns>True if the arguments are handled and consumed; otherwise, false.</returns>
         </member>
-        <member name="M:Tekla.BIM.DirectManipulation.Services.Picking.PickingSessionHandler.SetPickerMode(System.Boolean)">
+        <member name="M:Tekla.BIM.DirectManipulation.Services.Picking.PickingSessionHandler.SetPickerMode(Tekla.BIM.DirectManipulation.Services.Picking.PickerModeOption)">
             <summary>
             Sets the picker mode as specified.
             </summary>
-            <param name="pickerModeEnabled">A value indicating whether the picker mode must be enabled.</param>
+            <param name="pickerModeOption">A value indicating which picker mode must be enabled.</param>
+        </member>
+        <member name="M:Tekla.BIM.DirectManipulation.Services.Picking.PickingSessionHandler.IsPickerConsideredToBeEnabled(Tekla.BIM.DirectManipulation.Services.Picking.PickerModeOption)">
+            <summary>
+            Checks whether the picker can be considered to be enabled based on the input.
+            </summary>
+            <param name="pickerModeOption">Picker mode option to be checked.</param>
+            <returns>True if the picker is considered to be enabled based on a value of pickerModeOption, false otherwise.</returns>
         </member>
         <member name="T:Tekla.BIM.DirectManipulation.Services.Picking.PickingSessionListener">
             <summary>
@@ -24449,6 +24729,11 @@
         <member name="F:Tekla.BIM.DirectManipulation.Services.Toleration.InteractorType.Selecting">
             <summary>
             The selecting interaction mode.
+            </summary>
+        </member>
+        <member name="F:Tekla.BIM.DirectManipulation.Services.Toleration.InteractorType.Highlight">
+            <summary>
+            The object toleration interactor mode with highlighting.
             </summary>
         </member>
         <member name="T:Tekla.BIM.DirectManipulation.Services.Toleration.TolerationDataChangedEventHandler">
