@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!-- Proposal: https://github.com/NuGet/Home/wiki/Centrally-managing-NuGet-packages -->
+  <!-- https://github.com/microsoft/MSBuildSdks/tree/master/src/CentralPackageVersions -->
+  <!-- https://docs.microsoft.com/en-us/nuget/reference/package-versioning#version-ranges-and-wildcards -->
+  <!-- ExcludeAssets="runtime" ensures reference dlls are not copied to bin output folders, Private=False
+       PrivateAssets=all ensures the nuget package created will not depend on these nugets
+       For now its unclear if we need to have them as dependencies since those are loads by application at runtime -->
+
+   <PropertyGroup>
+       <IsTestProject Condition="$(MSBuildProjectName.EndsWith('.Test'))">true</IsTestProject>
+   </PropertyGroup>
+   
+  <ItemGroup>
+    <!-- ########## -->
+    <!-- Tekla Structures Packages -->
+    <!-- ########## -->
+    <PackageReference Update="Tekla.Structures"                                     Version="2021.0.0" />
+	<PackageReference Update="Tekla.Structures.Catalogs"                            Version="2021.0.0" />
+	<PackageReference Update="Tekla.Structures.Datatype"                            Version="2021.0.0" />
+	<PackageReference Update="Tekla.Structures.Dialog"                            Version="2021.0.0" />
+	<PackageReference Update="Tekla.Structures.Drawing"                             Version="2021.0.0" />
+    <PackageReference Update="Tekla.Structures.Model"                               Version="2021.0.0" />
+    <PackageReference Update="Tekla.Structures.Plugins"                             Version="2021.0.0" />
+	
+	<!-- ########## -->
+    <!-- TS Basic Helper Packages -->
+    <!-- ########## -->
+    <PackageReference Update="TeklaBIMPlatform"                                     Version="2021.0.0" />
+	<PackageReference Update="Tekla.BIM.Toolkit"                                    Version="1.7.3017" />
+	<PackageReference Update="Tekla.Common.Geometry"                                Version="4.6.2" />    
+	
+	<!-- ########## -->
+    <!-- DM and Related Packages -->
+    <!-- ########## -->
+	<PackageReference Update="TeklaDirectManipulationAPI"                           Version="2021.0.0" /> 
+    <PackageReference Update="Tekla.Structures.Plugins.DirectManipulation"          Version="2021.0.0" />
+    <PackageReference Update="Tekla.BIM.DirectManipulation"                         Version="2021.0.63673" />
+  </ItemGroup>
+  
+</Project>

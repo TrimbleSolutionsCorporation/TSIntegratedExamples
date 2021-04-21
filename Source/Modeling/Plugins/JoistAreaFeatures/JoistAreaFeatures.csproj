@@ -1,95 +1,39 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <Import Project="..\..\..\..\BuildSetup\root_configuration.props" />
-  <Import Project="..\..\..\..\Packages\TeklaOpenAPI.$(TeklaPackageVerNo)\build\TeklaOpenAPI.props" Condition="Exists('..\..\..\..\Packages\TeklaOpenAPI.$(TeklaPackageVerNo)\build\TeklaOpenAPI.props')" />
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <Import Project="..\..\..\..\BuildSetup\root_buildsetup.props" />
   <PropertyGroup>
+    <TargetFramework>net5.0-windows</TargetFramework>
     <PurgeOutputPathAfterClean>True</PurgeOutputPathAfterClean>
     <CleanOutputForTeklaLibraries>True</CleanOutputForTeklaLibraries>
     <CopyOutputSubfolderName>JoistArea</CopyOutputSubfolderName>
     <OutputPath2>$(ProjectDir)..\JoistArea\Installer\ProgramFiles\Nt\bin\plugins\Tekla\Model\$(CopyOutputSubfolderName)\</OutputPath2>
     <OutputPath3>C:\ProgramData\Trimble\Tekla Structures\$(BranchVersion) Daily\Environments\common\extensions\plugins\tekla\model\$(CopyOutputSubfolderName)</OutputPath3>
     <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <UseWindowsForms>true</UseWindowsForms>
+    <UseWPF>true</UseWPF>
+    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">x64</Platform>
-    <ProjectGuid>{F22A50DD-C17E-4C77-90CC-B4926B70280A}</ProjectGuid>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>JoistAreaFeatures</RootNamespace>
-    <AssemblyName>JoistAreaFeatures</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <OutputPath>bin\Debug</OutputPath>
-    <DebugSymbols>true</DebugSymbols>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <OutputPath>bin\Release</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xaml">
-      <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
     <Reference Include="Tekla.BIM.Toolkit">
       <HintPath>..\..\..\..\Library\Tekla.BIM.Toolkit.dll</HintPath>
       <Private>True</Private>
-    </Reference>
-    <Reference Include="Tekla.Application.Library, Version=$(TeklaVersion), Culture=neutral, PublicKeyToken=2f04dbe497b71114, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\TeklaOpenAPI.$(TeklaPackageVerNo)\lib\Tekla.Application.Library.dll</HintPath>
-      <Private>False</Private>
-      <SpecificVersion>True</SpecificVersion>
     </Reference>
     <Reference Include="Tekla.Common.Geometry.Primitives, Version=4.5.0.0, Culture=neutral, PublicKeyToken=93c0f7e4f1ca9619, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Library\Tekla.Common.Geometry.Primitives.dll</HintPath>
       <Private>False</Private>
-    </Reference>
-    <Reference Include="Tekla.Structures, Version=$(TeklaVersion), Culture=neutral, PublicKeyToken=2f04dbe497b71114, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\TeklaOpenAPI.$(TeklaPackageVerNo)\lib\Tekla.Structures.dll</HintPath>
-      <Private>False</Private>
-      <SpecificVersion>True</SpecificVersion>
-    </Reference>
-    <Reference Include="Tekla.Structures.Catalogs, Version=$(TeklaVersion), Culture=neutral, PublicKeyToken=2f04dbe497b71114, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\TeklaOpenAPI.$(TeklaPackageVerNo)\lib\Tekla.Structures.Catalogs.dll</HintPath>
-      <Private>False</Private>
-      <SpecificVersion>True</SpecificVersion>
-    </Reference>
-    <Reference Include="Tekla.Structures.Datatype, Version=$(TeklaVersion), Culture=neutral, PublicKeyToken=2f04dbe497b71114, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\TeklaOpenAPI.$(TeklaPackageVerNo)\lib\Tekla.Structures.Datatype.dll</HintPath>
-      <Private>False</Private>
-      <SpecificVersion>True</SpecificVersion>
-    </Reference>
-    <Reference Include="Tekla.Structures.Dialog, Version=$(TeklaVersion), Culture=neutral, PublicKeyToken=2f04dbe497b71114, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\TeklaOpenAPI.$(TeklaPackageVerNo)\lib\Tekla.Structures.Dialog.dll</HintPath>
-      <Private>False</Private>
-      <SpecificVersion>True</SpecificVersion>
-    </Reference>
-    <Reference Include="Tekla.Structures.Model, Version=$(TeklaVersion), Culture=neutral, PublicKeyToken=2f04dbe497b71114, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\TeklaOpenAPI.$(TeklaPackageVerNo)\lib\Tekla.Structures.Model.dll</HintPath>
-      <Private>False</Private>
-      <SpecificVersion>True</SpecificVersion>
-    </Reference>
-    <Reference Include="Tekla.Structures.Plugins, Version=$(TeklaVersion), Culture=neutral, PublicKeyToken=2f04dbe497b71114, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\TeklaOpenAPI.$(TeklaPackageVerNo)\lib\Tekla.Structures.Plugins.dll</HintPath>
-      <Private>False</Private>
-      <SpecificVersion>True</SpecificVersion>
     </Reference>
     <Reference Include="Tekla.BIM.DirectManipulation">
       <HintPath>..\..\..\..\Library\Tekla.BIM.DirectManipulation.dll</HintPath>
@@ -99,37 +43,13 @@
       <HintPath>..\..\..\..\Library\Tekla.Structures.Plugins.DirectManipulation.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="WindowsBase" />
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CreationFeature.cs" />
-    <Compile Include="Manipulation\GuideLineMc.cs" />
-    <Compile Include="Manipulation\PolygonShapeMc.cs" />
-    <Compile Include="ManipulationFeature.cs" />
-    <Compile Include="Manipulation\JoistSpacingMc.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\DmCommon.cs" />
-    <Compile Include="Services\FeatureLogic.cs" />
-    <Compile Include="Services\PluginDataFetcher.cs" />
-    <Compile Include="Tools\TxComponent.cs" />
-    <Compile Include="Tools\TxPoint.cs" />
-    <Compile Include="Tools\TxPolygon.cs" />
-    <Compile Include="Tools\TxVector.cs" />
+    <ProjectReference Include="..\JoistArea\JoistArea.csproj" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <ProjectReference Include="..\JoistArea\JoistArea.csproj">
-      <Project>{02705d25-5c13-4344-ada0-089c33303749}</Project>
-      <Name>JoistArea</Name>
-    </ProjectReference>
+    <PackageReference Include="Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers" Version="0.2.220602">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\..\..\..\Packages\TeklaOpenAPI.$(TeklaPackageVerNo)\build\TeklaOpenAPI.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\Packages\TeklaOpenAPI.$(TeklaPackageVerNo)\build\TeklaOpenAPI.props'))" />
-  </Target>
 </Project>

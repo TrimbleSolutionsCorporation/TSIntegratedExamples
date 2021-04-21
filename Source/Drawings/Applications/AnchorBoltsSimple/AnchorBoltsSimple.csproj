@@ -1,10 +1,8 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <Import Project="..\..\..\..\BuildSetup\root_configuration.props" />
-  <Import Project="..\..\..\..\Packages\TeklaOpenAPI.$(TeklaPackageVerNo)\build\TeklaOpenAPI.props" Condition="Exists('..\..\..\..\Packages\TeklaOpenAPI.$(TeklaPackageVerNo)\build\TeklaOpenAPI.props')" />
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <Import Project="..\..\..\..\BuildSetup\root_buildsetup.props" />
   <PropertyGroup>
+    <TargetFramework>net5.0-windows</TargetFramework>
     <PurgeOutputPathAfterClean>True</PurgeOutputPathAfterClean>
     <CleanOutputForTeklaLibraries>True</CleanOutputForTeklaLibraries>
     <CopyOutputSubfolderName>AnchorBoltsSimple</CopyOutputSubfolderName>
@@ -12,97 +10,32 @@
     <OutputPath2>$(ProjectDir)Installer\ProgramFiles\Nt\bin\applications\Tekla\Drawings\$(CopyOutputSubfolderName)\</OutputPath2>
     <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
     <ApplicationIcon>TeklaStructuresExtension.ico</ApplicationIcon>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{631E51A9-AD61-48FD-B384-83E3EF0701F0}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>AnchorBoltsSimple</RootNamespace>
-    <AssemblyName>AnchorBoltsSimple</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <DebugSymbols>true</DebugSymbols>
-    <Optimize>false</Optimize>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <Prefer32Bit>false</Prefer32Bit>
     <LangVersion>6</LangVersion>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
-    <Reference Include="Tekla.Application.Library, Version=$(TeklaVersion), Culture=neutral, PublicKeyToken=2f04dbe497b71114, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\TeklaOpenAPI.$(TeklaPackageVerNo)\lib\Tekla.Application.Library.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Tekla.Structures, Version=$(TeklaVersion), Culture=neutral, PublicKeyToken=2f04dbe497b71114, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\TeklaOpenAPI.$(TeklaPackageVerNo)\lib\Tekla.Structures.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Tekla.Structures.Catalogs, Version=$(TeklaVersion), Culture=neutral, PublicKeyToken=2f04dbe497b71114, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\TeklaOpenAPI.$(TeklaPackageVerNo)\lib\Tekla.Structures.Catalogs.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Tekla.Structures.Datatype, Version=$(TeklaVersion), Culture=neutral, PublicKeyToken=2f04dbe497b71114, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\TeklaOpenAPI.$(TeklaPackageVerNo)\lib\Tekla.Structures.Datatype.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Tekla.Structures.Dialog, Version=$(TeklaVersion), Culture=neutral, PublicKeyToken=2f04dbe497b71114, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\TeklaOpenAPI.$(TeklaPackageVerNo)\lib\Tekla.Structures.Dialog.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Tekla.Structures.Drawing, Version=$(TeklaVersion), Culture=neutral, PublicKeyToken=2f04dbe497b71114, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\TeklaOpenAPI.$(TeklaPackageVerNo)\lib\Tekla.Structures.Drawing.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Tekla.Structures.Model, Version=$(TeklaVersion), Culture=neutral, PublicKeyToken=2f04dbe497b71114, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\TeklaOpenAPI.$(TeklaPackageVerNo)\lib\Tekla.Structures.Model.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Tekla.Structures.Plugins, Version=$(TeklaVersion), Culture=neutral, PublicKeyToken=2f04dbe497b71114, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\TeklaOpenAPI.$(TeklaPackageVerNo)\lib\Tekla.Structures.Plugins.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Tools\DrawingTools.cs" />
-    <Compile Include="ModelLogic\MainLogic.cs" />
-    <Compile Include="Program.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Tools\TxExtensions.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-    <None Include="packages.config" />
-  </ItemGroup>
   <ItemGroup>
     <Content Include="TeklaStructuresExtension.ico" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\..\..\..\Packages\TeklaOpenAPI.$(TeklaPackageVerNo)\build\TeklaOpenAPI.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\Packages\TeklaOpenAPI.$(TeklaPackageVerNo)\build\TeklaOpenAPI.props'))" />
-  </Target>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageReference Include="Tekla.Structures" />
+	<PackageReference Include="Tekla.Structures.Drawing" />
+	<PackageReference Include="Tekla.Structures.Model" />
+    <PackageReference Include="Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers" Version="0.2.220602">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Windows.Compatibility" Version="5.0.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Installer\ProgramData\Environments\common\macros\drawings\AnchorBoltsSimple.cs" />
+  </ItemGroup>
 </Project>

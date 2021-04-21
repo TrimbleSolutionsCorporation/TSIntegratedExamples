@@ -12,13 +12,13 @@
         <ObjectListViewVersion                              Condition="'$(ObjectListViewVersion)'==''">2.4.0.23538</ObjectListViewVersion>
         <WindowsAPICodePackVersion                      Condition="'$(WindowsAPICodePackVersion)'==''">1.1.0.0</WindowsAPICodePackVersion>
         <WindowsAPICodePackShellVersion            Condition="'$(WindowsAPICodePackShellVersion)'==''">1.1.0.0</WindowsAPICodePackShellVersion>
-        <SharpZipLib                                                  Condition="'$(SharpZipLib)'==''">0.85.5.452</SharpZipLib>
+        <SharpZipLib                                                  Condition="'$(SharpZipLib)'==''">1.0.6144.33521</SharpZipLib>
         <InteropSHDocVw                                            Condition="'$(InteropSHDocVw)'==''">1.1.0.0</InteropSHDocVw>
         
         <!-- TeklaVerNo is used for specifying the API version numbers. Change the numbers above when branching. -->
-        <TeklaPackageVerNo   Condition="'$(TeklaPackageVerNo)'==''">2020.0.3</TeklaPackageVerNo>
-        <TeklaVersion           Condition="'$(TeklaVersion)'==''">2020.0.0.0</TeklaVersion>
-		<BranchVersion           Condition="'$(BranchVersion)'==''">2020.0</BranchVersion>
+        <TeklaPackageVerNo   Condition="'$(TeklaPackageVerNo)'==''">2021.0.0</TeklaPackageVerNo>
+        <TeklaVersion           Condition="'$(TeklaVersion)'==''">2021.0.0.0</TeklaVersion>
+		<BranchVersion           Condition="'$(BranchVersion)'==''">2021.0</BranchVersion>
 
         <!-- US Custom build settings -->
         <PurgeOutputPathAfterClean>False</PurgeOutputPathAfterClean>
