@@ -10,7 +10,7 @@
     using Assembly = System.Reflection.Assembly;
     using Services;
 
-    public sealed partial class App
+    public sealed partial class App : Application
     {
         private const string DisplayApplicationName = "Spreadsheet Reinforcement";
 

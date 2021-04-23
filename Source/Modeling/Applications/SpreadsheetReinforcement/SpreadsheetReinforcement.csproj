@@ -48,8 +48,11 @@
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="Microsoft.Windows.Compatibility" Version="5.0.2" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.19" />
+	<PackageReference Include="Tekla.Application.Library" Version="2021.0.0" />
 	<PackageReference Include="Tekla.Structures" />
 	<PackageReference Include="Tekla.Structures.Catalogs" />
+	<PackageReference Include="Tekla.Structures.Datatype" />
+	<PackageReference Include="Tekla.Structures.Dialog" />
 	<PackageReference Include="Tekla.Structures.Drawing" />
 	<PackageReference Include="Tekla.Structures.Model" />
 	<PackageReference Include="Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers" Version="0.2.220602">
