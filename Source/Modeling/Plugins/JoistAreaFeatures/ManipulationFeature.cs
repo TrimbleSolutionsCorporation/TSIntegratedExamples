@@ -83,7 +83,7 @@
                 {
                     foreach (var component in Components)
                     {
-                        if (PluginDataHelper.IsBlankValue(_depthOffset.Value))
+                        if (PluginDataHelper.IsBlankValue((double)_depthOffset.Value))
                         {
                             DmCommon.ModifyComponent(component, "DepthOffset", TxModel.NullDoubleValue);
                             _depthOffset.Title = "Depth (Calculated)";
