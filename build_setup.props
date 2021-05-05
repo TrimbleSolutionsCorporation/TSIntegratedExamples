@@ -3,6 +3,7 @@
 
     <!-- Custom example build settings -->
     <PropertyGroup>
+	
         <!-- TeklaVerNo is used for specifying the API version numbers. Change the numbers above when branching. -->
         <TeklaVersion           Condition="'$(TeklaVersion)'==''">2021.0.0.0</TeklaVersion>
 		<BranchVersion           Condition="'$(BranchVersion)'==''">2021.0</BranchVersion>
