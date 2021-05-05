@@ -18,7 +18,7 @@
     <PackageReference Update="Tekla.Structures"                                     Version="2021.0.0" />
 	<PackageReference Update="Tekla.Structures.Catalogs"                            Version="2021.0.0" />
 	<PackageReference Update="Tekla.Structures.Datatype"                            Version="2021.0.0" />
-	<PackageReference Update="Tekla.Structures.Dialog"                            Version="2021.0.0" />
+	<PackageReference Update="Tekla.Structures.Dialog"                              Version="2021.0.0" />
 	<PackageReference Update="Tekla.Structures.Drawing"                             Version="2021.0.0" />
     <PackageReference Update="Tekla.Structures.Model"                               Version="2021.0.0" />
     <PackageReference Update="Tekla.Structures.Plugins"                             Version="2021.0.0" />
@@ -35,7 +35,13 @@
     <!-- ########## -->
 	<PackageReference Update="TeklaDirectManipulationAPI"                           Version="2021.0.0" /> 
     <PackageReference Update="Tekla.Structures.Plugins.DirectManipulation"          Version="2021.0.0" />
-    <PackageReference Update="Tekla.BIM.DirectManipulation"                         Version="2021.0.63673" />
+    <PackageReference Update="Tekla.BIM.DirectManipulation"                         Version="2021.0.0" />
+	
+	<!-- ########## -->
+    <!-- 3rd Party - Other Packages -->
+    <!-- ########## -->
+	<PackageReference Include="Microsoft.Xaml.Behaviors.Wpf"                        Version="1.1.19" />
+	<PackageReference Include="Microsoft.Windows.Compatibility"                     Version="5.0.2" />
   </ItemGroup>
   
 </Project>

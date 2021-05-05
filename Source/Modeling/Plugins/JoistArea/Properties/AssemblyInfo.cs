@@ -1,7 +1,5 @@
 ﻿using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using System.Resources;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
@@ -10,8 +8,8 @@ using System.Resources;
 [assembly: AssemblyDescription("Tekla Structures Example")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Trimble Solutions USA Inc")]
-[assembly: AssemblyProduct("LiftingInserts")]
-[assembly: AssemblyCopyright("Copyright © 2020 Trimble Solutions USA Inc. All rights reserved.")]
+[assembly: AssemblyProduct("JoistArea")]
+[assembly: AssemblyCopyright("Copyright © 2021 Trimble Solutions USA Inc. All rights reserved.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -29,7 +27,7 @@ using System.Resources;
 //
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
-[assembly: AssemblyVersion("2020.0.1.0")]
-[assembly: AssemblyFileVersion("2020.0.1.0")]
+[assembly: AssemblyVersion("2021.0.0.0")]
+[assembly: AssemblyFileVersion("2021.0.0.0")]
 [assembly: NeutralResourcesLanguageAttribute("en-US")]
 [assembly: Guid("df045b53-2415-44c9-b0be-342a583d2f47")]

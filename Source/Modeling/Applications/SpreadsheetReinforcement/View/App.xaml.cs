@@ -23,7 +23,6 @@
             }
         }
 
-        private const string UnauthorizedMessage = "This program requires Engineering configuration or above to run.";
         private static LogListener _mainLog;
         private static Mutex _mut;
 
@@ -36,7 +35,7 @@
         {
             _mut = new Mutex(true, ApplicationNameAndVersion, out var createdNew);
             if (!createdNew) WarnMoreThanOneAndTriggerShutdown();
-            else if (ConnectWithDialog() && CheckTeklaConfiguration())
+            else if (ConnectWithDialog())
             {
                 //Initialize Logging
                 _mainLog = new LogListener();
@@ -96,21 +95,6 @@
             Trace.WriteLine($"Is 64 bit OS: {Environment.Is64BitOperatingSystem}");
             Trace.WriteLine($"OS Version: {Environment.OSVersion}");
             Trace.WriteLine($"Processor Count: {Environment.ProcessorCount}\n");
-        }
-
-        /// <summary>
-        /// Checks Tekla Structures active configuration if meets minimum requirements for extension to run properly
-        /// </summary>
-        /// <returns>True if acceptable configuration to run in</returns>
-        private static bool CheckTeklaConfiguration()
-        {
-            switch (ModuleManager.Configuration)
-            {
-                case ModuleManager.ProgramConfigurationEnum.CONFIGURATION_DRAFTER:
-                    MessageBox.Show(UnauthorizedMessage);
-                    return false;
-            }
-            return true;
         }
 
         /// <summary>
