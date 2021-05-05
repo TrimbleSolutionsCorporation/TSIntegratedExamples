@@ -1,52 +1,45 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="..\..\..\..\BuildSetup\root_configuration.props" />
-  <Import Project="..\..\..\..\BuildSetup\root_buildsetup.props" />
+  <Import Project="..\..\..\..\build_setup.props" />
+
   <PropertyGroup>
-    <TargetFramework>net5.0-windows</TargetFramework>
+    <TargetFramework>net472</TargetFramework>
     <PurgeOutputPathAfterClean>True</PurgeOutputPathAfterClean>
     <CleanOutputForTeklaLibraries>True</CleanOutputForTeklaLibraries>
     <CopyOutputSubfolderName>JoistArea</CopyOutputSubfolderName>
     <OutputPath2>$(ProjectDir)Installer\ProgramFiles\Nt\bin\plugins\Tekla\Model\$(CopyOutputSubfolderName)\</OutputPath2>
     <OutputPath3>C:\ProgramData\Trimble\Tekla Structures\$(BranchVersion) Daily\Environments\common\extensions\plugins\tekla\model\$(CopyOutputSubfolderName)</OutputPath3>
-    <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
-    <ApplicationIcon>Resources\TeklaStructuresExtension.ico</ApplicationIcon>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <UseWindowsForms>true</UseWindowsForms>
     <UseWPF>true</UseWPF>
-    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
   </PropertyGroup>
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <OutputType>Library</OutputType>
-  </PropertyGroup>
+
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <OutputPath>bin\Debug</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <OutputPath>bin\Release</OutputPath>
   </PropertyGroup>
+
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
+
   <ItemGroup>
     <Reference Include="Tekla.BIM.Toolkit">
       <HintPath>..\..\..\..\Library\Tekla.BIM.Toolkit.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
+
   <ItemGroup>
     <Resource Include="Resources\TeklaStructuresExtension.ico" />
   </ItemGroup>
+
   <ItemGroup>
-	<PackageReference Include="Tekla.Structures" />
-	<PackageReference Include="Tekla.Structures.Datatype" />
-	<PackageReference Include="Tekla.Structures.Dialog" />
-	<PackageReference Include="Tekla.Structures.Model" />
-	<PackageReference Include="Tekla.Structures.Plugins" />
-    <PackageReference Include="Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers" Version="0.2.220602">
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.Windows.Compatibility" Version="5.0.2" />
+    <PackageReference Include="Tekla.Structures" />
+    <PackageReference Include="Tekla.Structures.Datatype" />
+    <PackageReference Include="Tekla.Structures.Dialog" />
+    <PackageReference Include="Tekla.Structures.Model" />
+    <PackageReference Include="Tekla.Structures.Plugins" />
+    <PackageReference Include="Microsoft.Windows.Compatibility" />
   </ItemGroup>
 </Project>

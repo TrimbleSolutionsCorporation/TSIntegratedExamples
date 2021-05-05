@@ -1,45 +1,48 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="..\..\..\..\BuildSetup\root_configuration.props" />
-  <Import Project="..\..\..\..\BuildSetup\root_buildsetup.props" />
+  <Import Project="..\..\..\..\build_setup.props" />
+
   <PropertyGroup>
-    <TargetFramework>net5.0-windows</TargetFramework>
+    <TargetFramework>net472</TargetFramework>
+    <OutputType>WinExe</OutputType>
     <PurgeOutputPathAfterClean>True</PurgeOutputPathAfterClean>
     <CleanOutputForTeklaLibraries>True</CleanOutputForTeklaLibraries>
     <CopyOutputSubfolderName>AnchorBoltsWinform</CopyOutputSubfolderName>
     <OutputPath>$(BINDir)\applications\Tekla\Drawings\$(CopyOutputSubfolderName)\</OutputPath>
     <OutputPath2>$(ProjectDir)Installer\ProgramFiles\Nt\bin\applications\Tekla\Drawings\$(CopyOutputSubfolderName)\</OutputPath2>
-    <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
-    <ApplicationIcon>Resources\TeklaStructuresExtension.ico</ApplicationIcon>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <UseWindowsForms>true</UseWindowsForms>
-    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
   </PropertyGroup>
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <OutputType>WinExe</OutputType>
-  </PropertyGroup>
+
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <LangVersion>6</LangVersion>
+    <OutputPath>bin\Debug</OutputPath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\Release</OutputPath>
+  </PropertyGroup>
+
   <ItemGroup>
     <Resource Include="Resources\TeklaStructuresExtension.ico" />
   </ItemGroup>
+
   <ItemGroup>
-    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-    <PackageReference Include="Tekla.Application.Library" Version="2021.0.0" />
-	<PackageReference Include="Tekla.Structures" />
-	<PackageReference Update="Tekla.Structures.Catalogs" />
-	<PackageReference Include="Tekla.Structures.Datatype" />
-	<PackageReference Include="Tekla.Structures.Dialog" />
-	<PackageReference Include="Tekla.Structures.Drawing" />
-	<PackageReference Include="Tekla.Structures.Model" />
-	<PackageReference Include="Tekla.Structures.Plugins" />
-    <PackageReference Include="Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers" Version="0.2.220602">
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.Windows.Compatibility" Version="5.0.2" />
+    <PackageReference Include="Microsoft.CSharp" />
+    <PackageReference Include="Tekla.Structures" />
+    <PackageReference Update="Tekla.Structures.Catalogs" />
+    <PackageReference Include="Tekla.Structures.Datatype" />
+    <PackageReference Include="Tekla.Structures.Dialog" />
+    <PackageReference Include="Tekla.Structures.Drawing" />
+    <PackageReference Include="Tekla.Structures.Model" />
+    <PackageReference Include="Tekla.Structures.Plugins" />
+    <PackageReference Include="Microsoft.Windows.Compatibility" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Tekla.Application.Library">
+      <HintPath>..\..\..\..\Library\Tekla.Application.Library.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+
   <ItemGroup>
     <Compile Remove="Installer\ProgramData\Environments\common\macros\drawings\AnchorBoltsWinform.cs" />
   </ItemGroup>

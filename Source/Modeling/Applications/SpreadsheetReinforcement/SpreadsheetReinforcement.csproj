@@ -1,37 +1,29 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="..\..\..\..\BuildSetup\root_configuration.props" />
-  <Import Project="..\..\..\..\BuildSetup\root_buildsetup.props" />
+  <Import Project="..\..\..\..\build_setup.props" />
+
   <PropertyGroup>
-    <TargetFramework>net5.0-windows</TargetFramework>
+    <TargetFramework>net472</TargetFramework>
+    <OutputType>WinExe</OutputType>
     <PurgeOutputPathAfterClean>True</PurgeOutputPathAfterClean>
     <CleanOutputForTeklaLibraries>False</CleanOutputForTeklaLibraries>
     <CopyOutputSubfolderName>SpreadsheetReinforcement</CopyOutputSubfolderName>
     <OutputPath>$(BINDir)\applications\Tekla\Model\$(CopyOutputSubfolderName)\</OutputPath>
     <OutputPath2>$(ProjectDir)Installer\ProgramFiles\Nt\bin\applications\Tekla\Model\$(CopyOutputSubfolderName)\</OutputPath2>
-    <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
-    <ApplicationIcon>Resources\TeklaStructuresExtension.ico</ApplicationIcon>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <UseWPF>true</UseWPF>
-    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
   </PropertyGroup>
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <OutputType>WinExe</OutputType>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <OutputPath>bin\Debug</OutputPath>
   </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="Interop.Excel">
-      <HintPath>Resources\Interop.Excel.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="Tekla.BIM.Toolkit">
-      <HintPath>..\..\..\..\Library\Tekla.BIM.Toolkit.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-  </ItemGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\Release</OutputPath>
+  </PropertyGroup>
+
   <ItemGroup>
     <AppDesigner Include="Properties\" />
   </ItemGroup>
+
   <ItemGroup>
     <Resource Include="Resources\Options.ico" />
     <Resource Include="Resources\help.ico" />
@@ -44,23 +36,40 @@
     <Resource Include="Resources\clear.png" />
     <Resource Include="Resources\TeklaStructuresExtension.ico" />
   </ItemGroup>
+
   <ItemGroup>
-    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-    <PackageReference Include="Microsoft.Windows.Compatibility" Version="5.0.2" />
-    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.19" />
-	<PackageReference Include="Tekla.Application.Library" Version="2021.0.0" />
-	<PackageReference Include="Tekla.Structures" />
-	<PackageReference Include="Tekla.Structures.Catalogs" />
-	<PackageReference Include="Tekla.Structures.Datatype" />
-	<PackageReference Include="Tekla.Structures.Dialog" />
-	<PackageReference Include="Tekla.Structures.Drawing" />
-	<PackageReference Include="Tekla.Structures.Model" />
-	<PackageReference Include="Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers" Version="0.2.220602">
-		<PrivateAssets>all</PrivateAssets>
-	</PackageReference>
+    <PackageReference Include="Microsoft.CSharp" />
+    <PackageReference Include="Microsoft.Office.Interop.Excel" />
+    <PackageReference Include="Microsoft.Windows.Compatibility" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" />
+    <PackageReference Include="Tekla.Structures" />
+    <PackageReference Include="Tekla.Structures.Catalogs" />
+    <PackageReference Include="Tekla.Structures.Datatype" />
+    <PackageReference Include="Tekla.Structures.Dialog" />
+    <PackageReference Include="Tekla.Structures.Drawing" />
+    <PackageReference Include="Tekla.Structures.Model" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Tekla.Application.Library">
+      <HintPath>..\..\..\..\Library\Tekla.Application.Library.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Tekla.BIM.Toolkit">
+      <HintPath>..\..\..\..\Library\Tekla.BIM.Toolkit.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+
   <ItemGroup>
     <Compile Remove="Installer\ProgramData\Environments\common\macros\modeling\Spreadsheet Reinforcement.cs" />
     <Page Remove="View\App.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ApplicationDefinition Include="View\App.xaml">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <Generator>XamlIntelliSenseFileGenerator</Generator>
+    </ApplicationDefinition>
   </ItemGroup>
 </Project>

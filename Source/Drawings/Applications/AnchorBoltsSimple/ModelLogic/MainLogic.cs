@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Windows.Forms;
 using AnchorBoltsSimple.Tools;
 using Tekla.Structures.Drawing;
 using Tekla.Structures.Geometry3d;
@@ -10,6 +9,10 @@ using Tekla.Structures.Model;
 
 namespace AnchorBoltsSimple.ModelLogic
 {
+    using System.Windows;
+    using Point = Tekla.Structures.Geometry3d.Point;
+    using Vector = Tekla.Structures.Geometry3d.Vector;
+
     /// <summary>
     /// Main logic service class for dimensioning
     /// </summary>

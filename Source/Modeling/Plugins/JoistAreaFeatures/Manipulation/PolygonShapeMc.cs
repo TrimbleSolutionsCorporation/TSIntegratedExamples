@@ -87,7 +87,7 @@
                 foreach (var pt in componentInput.Item1)
                 {
                     var handle = _handleManager.CreatePointHandle(pt, HandleLocationType.InputPoint, HandleEffectType.Geometry);
-                    _polygonHandles.Add(handle);
+                    handles.Add(handle);
                 }
                 return handles;
             }
@@ -105,6 +105,7 @@
         private void UpdatePointHandles(Component component)
         {
             if (component == null) throw new ArgumentNullException(nameof(component));
+            if(_polygonHandles.Count < 1) return;
             try
             {
                 //Get input objects from component

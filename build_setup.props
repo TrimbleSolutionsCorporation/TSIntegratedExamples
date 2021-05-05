@@ -1,10 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
-    <!-- Make sure before this to Import project root_configuration.props-->
-    <!-- Platform/Configuration setup -->
-    <PropertyGroup Condition="'$(SetSrcForTesting)'=='True'">
+    <!-- Custom example build settings -->
+    <PropertyGroup>
+        <!-- TeklaVerNo is used for specifying the API version numbers. Change the numbers above when branching. -->
+        <TeklaVersion           Condition="'$(TeklaVersion)'==''">2021.0.0.0</TeklaVersion>
+		<BranchVersion           Condition="'$(BranchVersion)'==''">2021.0</BranchVersion>
 
+        <!-- US Custom build settings -->
+        <PurgeOutputPathAfterClean>False</PurgeOutputPathAfterClean>
+        <CleanOutputForTeklaLibraries>False</CleanOutputForTeklaLibraries>
+        <OutputPath2></OutputPath2>
+		
+		<!-- Platform/Configuration setup -->
         <Platform               Condition="'$(Platform)'==''">x64</Platform>
         <TSPlatform             Condition="'$(TSPlatform)'==''">$(Platform)</TSPlatform>
         <Configuration          Condition="'$(Configuration)'==''">Debug</Configuration>
@@ -17,15 +25,15 @@
         <OBJDir>$(SRCDir)\Output\Intermediate\$(Configuration)\$(TSPlatform)</OBJDir>
         <IntermediateOutputPath>$(OBJDir)\$(MSBuildProjectName)\</IntermediateOutputPath>
     </PropertyGroup>
-
-    <!-- Custom routine to clean build output folder(s) -->
-    <Target Name="PurgeOutputPathAfterCleanAction" AfterTargets="Clean" Condition="'$(PurgeOutputPathAfterClean)'=='True' AND '$(OutputPath2)'!='' AND '$(SetSrcForTesting)'=='True'">
+	
+	<!-- Custom routine to clean build output folder(s) -->
+    <Target Name="PurgeOutputPathAfterCleanAction" AfterTargets="Clean" Condition="'$(PurgeOutputPathAfterClean)'=='True' AND '$(OutputPath2)'!=''">
         <Exec Command="Del $(OutputPath2)\*.* /s /q /f" IgnoreExitCode="true" />
         <Message Text="Cleared output folder: $(OutputPath2)" Importance="High" /> 
     </Target>
 
     <!-- Custom routine to clean Tekla provided assemblies from build output folder(s) -->
-    <Target Name="CleanOutputForTeklaLibrariesAction" AfterTargets="CopyOutputPath2Action" Condition="'$(CleanOutputForTeklaLibraries)'=='True' AND $(OutputPath2)!='' AND '$(SetSrcForTesting)'=='True'">
+    <Target Name="CleanOutputForTeklaLibrariesAction" AfterTargets="CopyOutputPath2Action" Condition="'$(CleanOutputForTeklaLibraries)'=='True' AND $(OutputPath2)!=''">
         <Exec Command="Del $(OutputPath2)\Ionic.Zip.dll /s /q /f" IgnoreExitCode="true" />
         <Exec Command="Del $(OutputPath2)\Mono.Cecil.dll /s /q /f" IgnoreExitCode="true" />
         <Exec Command="Del $(OutputPath2)\*.xml /s /q /f" IgnoreExitCode="true" />
@@ -39,28 +47,19 @@
     </Target>
 
     <!-- Custom routines to copy build output (after cleaned up) to different additional locations -->
-    <Target Name="CopyOutputPath2Action" AfterTargets="Build" Condition="'$(OutputPath2)'!='' AND '$(SetSrcForTesting)'=='True'">
+    <Target Name="CopyOutputPath2Action" AfterTargets="Build" Condition="'$(OutputPath2)'!=''">
         <ItemGroup>
           <MySourceFiles  Include="$(OutputPath)\*.*" />
         </ItemGroup>
         <Copy SourceFiles="@(MySourceFiles)" DestinationFolder="$(OutputPath2)\" />
         <Message Text="Copied output path to: $(OutputPath2)" Importance="High" />
     </Target>
-    <Target Name="CopyOutputPath3Action" AfterTargets="Build" Condition="'$(OutputPath3)'!='' AND '$(SetSrcForTesting)'=='True'">
+    <Target Name="CopyOutputPath3Action" AfterTargets="Build" Condition="'$(OutputPath3)'!=''">
         <ItemGroup>
           <MySourceFiles  Include="$(OutputPath)\*.*" />
         </ItemGroup>
         <Copy SourceFiles="@(MySourceFiles)" DestinationFolder="$(OutputPath3)\" />
         <Message Text="Copied output path to: $(OutputPath3)" Importance="High" />
     </Target>
-
-    <Target Name="PrintPaths">
-        <Message Text="TeklaPackageVerNo:                       $(TeklaPackageVerNo)" />
-        <Message Text="TSVersion:                               $(TSVersion)" />
-        <Message Text="SRCDir:                                  $(SRCDir)" />
-        <Message Text="BINDir:                                  $(BINDir)" />
-        <Message Text="IntermediateOutputPath:                  $(IntermediateOutputPath)" />
-    </Target>
-  
 </Project>
 

@@ -303,8 +303,8 @@
             base.Dispose(disposing);
             DetachHandlers();
 
-            _joistSpacingManipulators.ForEach(handle => handle.Dispose());
-            _startSpacingManipulator.Dispose();
+            _joistSpacingManipulators?.ForEach(handle => handle.Dispose());
+            _startSpacingManipulator?.Dispose();
 
             foreach (var manipulator in Manipulators)
             {
@@ -312,7 +312,7 @@
             }
 
             //Clear local caches
-            _joistSpacingManipulators.Clear();
+            _joistSpacingManipulators?.Clear();
         }
 
         /// <summary>

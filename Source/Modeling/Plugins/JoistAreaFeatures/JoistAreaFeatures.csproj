@@ -1,55 +1,41 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="..\..\..\..\BuildSetup\root_configuration.props" />
-  <Import Project="..\..\..\..\BuildSetup\root_buildsetup.props" />
+  <Import Project="..\..\..\..\build_setup.props" />
+
   <PropertyGroup>
-    <TargetFramework>net5.0-windows</TargetFramework>
+    <TargetFramework>net472</TargetFramework>
     <PurgeOutputPathAfterClean>True</PurgeOutputPathAfterClean>
     <CleanOutputForTeklaLibraries>True</CleanOutputForTeklaLibraries>
     <CopyOutputSubfolderName>JoistArea</CopyOutputSubfolderName>
     <OutputPath2>$(ProjectDir)..\JoistArea\Installer\ProgramFiles\Nt\bin\plugins\Tekla\Model\$(CopyOutputSubfolderName)\</OutputPath2>
     <OutputPath3>C:\ProgramData\Trimble\Tekla Structures\$(BranchVersion) Daily\Environments\common\extensions\plugins\tekla\model\$(CopyOutputSubfolderName)</OutputPath3>
-    <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <UseWindowsForms>true</UseWindowsForms>
     <UseWPF>true</UseWPF>
-    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
   </PropertyGroup>
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <OutputType>Library</OutputType>
-  </PropertyGroup>
+
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <OutputPath>bin\Debug</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <OutputPath>bin\Release</OutputPath>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Tekla.BIM.DirectManipulation" />
+    <PackageReference Include="Tekla.Structures.Plugins.DirectManipulation" />
+  </ItemGroup>
+
   <ItemGroup>
     <Reference Include="Tekla.BIM.Toolkit">
       <HintPath>..\..\..\..\Library\Tekla.BIM.Toolkit.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Tekla.Common.Geometry.Primitives, Version=4.5.0.0, Culture=neutral, PublicKeyToken=93c0f7e4f1ca9619, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Tekla.Common.Geometry.Primitives">
       <HintPath>..\..\..\..\Library\Tekla.Common.Geometry.Primitives.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Tekla.BIM.DirectManipulation">
-      <HintPath>..\..\..\..\Library\Tekla.BIM.DirectManipulation.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Tekla.Structures.Plugins.DirectManipulation">
-      <HintPath>..\..\..\..\Library\Tekla.Structures.Plugins.DirectManipulation.dll</HintPath>
-      <Private>False</Private>
+      <Private>True</Private>
     </Reference>
   </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\JoistArea\JoistArea.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers" Version="0.2.220602">
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
   </ItemGroup>
 </Project>

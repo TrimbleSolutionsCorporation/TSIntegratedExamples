@@ -5,10 +5,9 @@
     using System.Collections.ObjectModel;
     using System.Diagnostics;
     using System.IO;
-    using System.Runtime.CompilerServices;
     using System.Runtime.InteropServices;
     using Data;
-    using Excel;
+    using Microsoft.Office.Interop.Excel;
 
     /// <summary>
     /// Service class to read spreadsheet and parse values
@@ -50,7 +49,7 @@
                     var cellList = new List<string>();
                     for (var j = 1; j <= colCount; j++)
                     {
-                        var cellRange = range.Cells[i, j] as Excel.Range;
+                        var cellRange = range.Cells[i, j] as Range;
                         if (cellRange == null) continue;
                         if (cellRange.Value2 == null) continue;
                         var cellValue = cellRange.Value2.ToString();

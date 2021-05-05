@@ -4,88 +4,84 @@
     using System.Diagnostics;
     using System.Threading;
     using System.Windows;
+    using System.Windows.Threading;
+    using Services;
     using Tools;
     using Tekla.Structures;
-    using Tekla.Structures.Model;
     using Assembly = System.Reflection.Assembly;
-    using Services;
 
-    public sealed partial class App : Application
+    public sealed partial class App
     {
+        private static LogListener _mainLog;
         private const string DisplayApplicationName = "Spreadsheet Reinforcement";
 
-        private static string ApplicationNameAndVersion
+        private static string ApplicationName
         {
             get
             {
                 var assm = Assembly.GetExecutingAssembly();
-                return $"{DisplayApplicationName}_{assm.GetName().Version.Major}.{assm.GetName().Version.Minor}";
+                return $"{assm.GetName().Name}_{assm.GetName().Version.Major}.{assm.GetName().Version.Minor}";
             }
         }
 
-        private static LogListener _mainLog;
-        private static Mutex _mut;
-
-        /// <summary>
-        /// On application startup initialize LogListener and register events
-        /// Checks if Tekla Structures is running and configuration meets minimum requirements
-        /// </summary>
-        /// <param name="e">Startup event args</param>
-        protected override void OnStartup(StartupEventArgs e)
-        {
-            _mut = new Mutex(true, ApplicationNameAndVersion, out var createdNew);
-            if (!createdNew) WarnMoreThanOneAndTriggerShutdown();
-            else if (ConnectWithDialog())
-            {
-                //Initialize Logging
-                _mainLog = new LogListener();
-                _mainLog.WriteLineOccured += ListerWriteLineOccured;
-                Trace.Listeners.Add(_mainLog);
-                PrintSystemInformation();
-
-                //Initialize Events
-                TeklaStructures.Connect();
-                TeklaStructures.Closed += TeklaStructuresExited;
-            }
-            base.OnStartup(e);
-        }
-
-        /// <summary>
-        /// On application exit dispose of local variables and un-register events
-        /// </summary>
-        /// <param name="e">Event args</param>
-        protected override void OnExit(ExitEventArgs e)
+        public void ApplicationStartup(object sender, StartupEventArgs e)
         {
             try
             {
-                //Un-register Events, close log, release mutex
-                TeklaStructures.Closed -= TeklaStructuresExited;
-                TeklaStructures.Disconnect();
-                _mut?.ReleaseMutex();
-                _mainLog?.CloseLog();
+                using(new Mutex(true, ApplicationName, out var createdNew))
+                {
+                    if(createdNew)
+                    {
+                        if(TxModel.ConnectWithDialog())
+                        {
+                            //Initialize Logging
+                            _mainLog = new LogListener();
+                            _mainLog.WriteLineOccured += ListerWriteLineOccured;
+                            Trace.Listeners.Add(_mainLog);
+                            PrintSystemInformation();
+
+                            //Initialize Events
+                            TeklaStructures.Connect();
+                            TeklaStructures.Closed += TeklaStructuresExited;
+
+                            //Start main dialog for this application
+                            var mainWindow = new MainWindow();
+                            mainWindow.Closed += MainWindowClosed;
+                            mainWindow.ShowDialog();
+                        }
+                    }
+                    //Application already open, exit
+                    Trace.WriteLine($"No more than one instance of {ApplicationName} can run simultaneously, closing down new instance.");
+                }
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
-                Trace.WriteLine(ex.InnerException + ex.Message + ex.StackTrace);
+                var msg = ex.Message + Environment.NewLine + ex.InnerException + Environment.NewLine + ex.StackTrace;
+                Trace.WriteLine(msg);
+                MessageBox.Show(msg);
             }
-            base.OnExit(e);
         }
 
-        /// <summary>
-        /// Logs message to trace logger and messageBox to user, then triggers ShutDown procedure
-        /// Used for: Application already open, exit
-        /// </summary>
-        private void WarnMoreThanOneAndTriggerShutdown()
+        private void TeklaStructuresExited(object sender, EventArgs e)
         {
-            var msg = $"No more than one instance of {ApplicationNameAndVersion} can run simultaneously, closing down new instance.";
-            Trace.WriteLine(msg);
-            MessageBox.Show(msg, "Launch Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            TriggerAppShutDown();
+            //Forced shutdown, TS already closed now
+            CustomShutDown();
         }
 
-        /// <summary>
-        /// Prints basic system information to Trace logger
-        /// </summary>
+        private void MainWindowClosed(object sender, EventArgs eventArgs)
+        {
+            TeklaStructures.Disconnect();
+            CustomShutDown();
+        }
+        private void CustomShutDown()
+        {
+            //Shut down logging, then app
+            _mainLog?.CloseLog();
+
+            //Force end application
+            Environment.Exit(0);
+        }
+
         private static void PrintSystemInformation()
         {
             Trace.WriteLine("System Info:");
@@ -97,70 +93,15 @@
             Trace.WriteLine($"Processor Count: {Environment.ProcessorCount}\n");
         }
 
-        /// <summary>
-        /// Check connection to Tekla and sees if a model is open
-        /// Shows message box when no connection or model open
-        /// </summary>
-        /// <returns>Is TS running, model is open, and connection successful?</returns>
-        private static bool ConnectWithDialog()
-        {
-            //Create new model connection without creating channel.
-            var tModel = new Model();
-
-            if (tModel.GetConnectionStatus())
-            {
-                //check that model is opened
-                if (string.IsNullOrEmpty(tModel.GetInfo().ModelPath))
-                {
-                    MessageBox.Show("Model is not loaded in TeklaStructures, you must load a model first.");
-                    return false;
-                }
-                Debug.WriteLine("Connected to TeklaStructures: " + TeklaStructuresInfo.GetCurrentProgramVersion());
-                return true;
-            }
-            MessageBox.Show("Cannot connect to TeklaStructures process, Tekla Structures must first be running.");
-            return false;
-        }
-
-        /// <summary>
-        /// Tekla Structures event exit delegate
-        /// </summary>
-        /// <param name="sender">Sender</param>
-        /// <param name="eventArgs">Event args</param>
-        private static void TeklaStructuresExited(object sender, EventArgs eventArgs)
-        {
-            //Forced shutdown, TS already closed now
-            Trace.WriteLine($"Tekla Structures exited, closing {ApplicationNameAndVersion}.", "TeklaStructuresExited");
-            TriggerAppShutDown();
-        }
-
-        /// <summary>
-        /// Method to trigger current application shutdown procedures
-        /// </summary>
-        private static void TriggerAppShutDown()
-        {
-            Application.Current?.Shutdown();
-        }
-
-        /// <summary>
-        /// Unhandled exception event delegate to log exception information
-        /// </summary>
-        /// <param name="sender">Object Sender</param>
-        /// <param name="e">Unhandled event arg</param>
-        private void UnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+        private void UnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
             var ex = e.Exception;
             var nl = Environment.NewLine;
             var msg = $"Unhandled exception: Message {ex.Message + nl}, InnerMessage{ex.InnerException + nl}, StackTrace{ex.StackTrace}";
             Trace.WriteLine(msg);
-            MessageBox.Show(msg, $"{ApplicationNameAndVersion} Exception encountered.");
+            MessageBox.Show(msg);
         }
 
-        /// <summary>
-        /// Log event delegate to send message for message handler
-        /// </summary>
-        /// <param name="sender">Object sender</param>
-        /// <param name="e">String event arg</param>
         private static void ListerWriteLineOccured(object sender, StringArg e)
         {
             GeneralEvents.SendNewStatusMessage(e);

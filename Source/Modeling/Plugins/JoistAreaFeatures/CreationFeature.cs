@@ -5,6 +5,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using JoistArea.View;
+    using Services;
     using Tekla.Structures.Geometry3d;
     using Tekla.Structures.Model;
     using Tekla.Structures.Plugins.DirectManipulation.Core.Features;
@@ -103,7 +104,7 @@
         private void Polygon_OnPreviewRequested(object sender, ToleratedObjectEventArgs eventArgs)
         {
             Graphics.Clear();
-            var currentAppliedValues = GetAppliedAttributes(Component);
+            var currentAppliedValues = Component.GetDataFromComponent();
 
             if (pickedPolygonPoints.Count < 1) return;
             if (pickedPolygonPoints.Count == 1)
@@ -201,7 +202,7 @@
         private void Guideline_OnPreviewRequested(object sender, ToleratedObjectEventArgs eventArgs)
         {
             Graphics.Clear();
-            var currentAppliedValues = GetAppliedAttributes(Component);
+            var currentAppliedValues = Component.GetDataFromComponent();
 
             if (!guidlinePoints.Any() || eventArgs.HitPoint == null) return;
             var p1 = new Point(guidlinePoints[0]);
