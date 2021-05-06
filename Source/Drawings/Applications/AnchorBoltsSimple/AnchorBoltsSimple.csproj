@@ -7,16 +7,8 @@
     <PurgeOutputPathAfterClean>True</PurgeOutputPathAfterClean>
     <CleanOutputForTeklaLibraries>True</CleanOutputForTeklaLibraries>
     <CopyOutputSubfolderName>AnchorBoltsSimple</CopyOutputSubfolderName>
-    <OutputPath>$(BINDir)\applications\Tekla\Drawings\$(CopyOutputSubfolderName)\</OutputPath>
+    <OutDir>$(EnvExtensionsDir)\applications\Tekla\Drawings\$(CopyOutputSubfolderName)\</OutDir>
     <OutputPath2>$(ProjectDir)Installer\ProgramFiles\Nt\bin\applications\Tekla\Drawings\$(CopyOutputSubfolderName)\</OutputPath2>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <OutputPath>bin\Debug</OutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <OutputPath>bin\Release</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>

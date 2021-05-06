@@ -4,7 +4,7 @@
     <!-- Custom example build settings -->
     <PropertyGroup>
 	
-        <!-- TeklaVerNo is used for specifying the API version numbers. Change the numbers above when branching. -->
+        <!-- TeklaVersion is used for specifying the API version numbers. Change the numbers above when branching. -->
         <TeklaVersion           Condition="'$(TeklaVersion)'==''">2021.0.0.0</TeklaVersion>
 		<BranchVersion           Condition="'$(BranchVersion)'==''">2021.0</BranchVersion>
 
@@ -12,11 +12,15 @@
         <PurgeOutputPathAfterClean>False</PurgeOutputPathAfterClean>
         <CleanOutputForTeklaLibraries>False</CleanOutputForTeklaLibraries>
         <OutputPath2></OutputPath2>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
+		<EnvExtensionsDir>C:\ProgramData\Trimble\Tekla Structures\$(BranchVersion) Daily\Environments\common\extensions</EnvExtensionsDir>
 		
 		<!-- Platform/Configuration setup -->
         <Platform               Condition="'$(Platform)'==''">x64</Platform>
         <TSPlatform             Condition="'$(TSPlatform)'==''">$(Platform)</TSPlatform>
         <Configuration          Condition="'$(Configuration)'==''">Debug</Configuration>
+		<PlatformTarget>x64</PlatformTarget>
 
         <SRCDir>$(MSBuildThisFileDirectory)..\</SRCDir>
         <BINDir>$(SRCDir)\Output\bin</BINDir>

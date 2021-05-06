@@ -132,6 +132,7 @@
             try
             {
                 //Draw edges around picked points
+                Graphics?.Clear();
                 Point lastPoint = null;
                 foreach (var pg in _polygonHandles)
                 {

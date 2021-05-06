@@ -6,17 +6,9 @@
     <PurgeOutputPathAfterClean>True</PurgeOutputPathAfterClean>
     <CleanOutputForTeklaLibraries>True</CleanOutputForTeklaLibraries>
     <CopyOutputSubfolderName>JoistArea</CopyOutputSubfolderName>
+    <OutDir>$(EnvExtensionsDir)\plugins\tekla\model\$(CopyOutputSubfolderName)</OutDir>
     <OutputPath2>$(ProjectDir)..\JoistArea\Installer\ProgramFiles\Nt\bin\plugins\Tekla\Model\$(CopyOutputSubfolderName)\</OutputPath2>
-    <OutputPath3>C:\ProgramData\Trimble\Tekla Structures\$(BranchVersion) Daily\Environments\common\extensions\plugins\tekla\model\$(CopyOutputSubfolderName)</OutputPath3>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <UseWPF>true</UseWPF>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <OutputPath>bin\Debug</OutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <OutputPath>bin\Release</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>

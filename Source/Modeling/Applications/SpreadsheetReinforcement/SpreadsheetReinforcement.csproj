@@ -7,17 +7,9 @@
     <PurgeOutputPathAfterClean>True</PurgeOutputPathAfterClean>
     <CleanOutputForTeklaLibraries>False</CleanOutputForTeklaLibraries>
     <CopyOutputSubfolderName>SpreadsheetReinforcement</CopyOutputSubfolderName>
-    <OutputPath>$(BINDir)\applications\Tekla\Model\$(CopyOutputSubfolderName)\</OutputPath>
+    <OutDir>$(EnvExtensionsDir)\applications\Tekla\Model\$(CopyOutputSubfolderName)\</OutDir>
     <OutputPath2>$(ProjectDir)Installer\ProgramFiles\Nt\bin\applications\Tekla\Model\$(CopyOutputSubfolderName)\</OutputPath2>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <UseWPF>true</UseWPF>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <OutputPath>bin\Debug</OutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <OutputPath>bin\Release</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>
