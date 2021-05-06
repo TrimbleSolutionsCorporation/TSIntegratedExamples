@@ -36,6 +36,7 @@
 	<PackageReference Update="Microsoft.Xaml.Behaviors.Wpf"                        Version="1.1.19" />
 	<PackageReference Update="Microsoft.Windows.Compatibility"                     Version="5.0.2" />
 	<PackageReference Update="Microsoft.Office.Interop.Excel"                      Version="15.0.4795.1000" />
+	<PackageReference Update="Microsoft.CSharp"                                    Version="4.7.0" />
   </ItemGroup>
   
 </Project>
