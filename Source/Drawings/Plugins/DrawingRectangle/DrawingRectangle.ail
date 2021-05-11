@@ -1,0 +1,83 @@
+string_utf8 albl_Rectangle_Height
+{
+    entry = ("enu", "Rectangle Height");
+    entry = ("chs", "Rectangle Height***");
+    entry = ("cht", "Rectangle Height***");
+    entry = ("csy", "Rectangle Height***");
+    entry = ("deu", "Rectangle Height***");
+    entry = ("esp", "Rectangle Height***");
+    entry = ("fra", "Rectangle Height***");
+    entry = ("hun", "Rectangle Height***");
+    entry = ("ita", "Rectangle Height***");
+    entry = ("jpn", "Rectangle Height***");
+    entry = ("kor", "Rectangle Height***");
+    entry = ("nld", "Rectangle Height***");
+    entry = ("plk", "Rectangle Height***");
+    entry = ("ptb", "Rectangle Height***");
+    entry = ("ptg", "Rectangle Height***");
+    entry = ("rus", "Rectangle Height***");
+    note = "";
+};
+
+string_utf8 albl_Rectangle_Width
+{
+    entry = ("enu", "Rectangle Width");
+    entry = ("chs", "Rectangle Width***");
+    entry = ("cht", "Rectangle Width***");
+    entry = ("csy", "Rectangle Width***");
+    entry = ("deu", "Rectangle Width***");
+    entry = ("esp", "Rectangle Width***");
+    entry = ("fra", "Rectangle Width***");
+    entry = ("hun", "Rectangle Width***");
+    entry = ("ita", "Rectangle Width***");
+    entry = ("jpn", "Rectangle Width***");
+    entry = ("kor", "Rectangle Width***");
+    entry = ("nld", "Rectangle Width***");
+    entry = ("plk", "Rectangle Width***");
+    entry = ("ptb", "Rectangle Width***");
+    entry = ("ptg", "Rectangle Width***");
+    entry = ("rus", "Rectangle Width***");
+    note = "";
+};
+
+string_utf8 albl_Horizontal_Offset
+{
+    entry = ("enu", "Horizontal Offset");
+    entry = ("chs", "Horizontal Offset***");
+    entry = ("cht", "Horizontal Offset***");
+    entry = ("csy", "Horizontal Offset***");
+    entry = ("deu", "Horizontal Offset***");
+    entry = ("esp", "Horizontal Offset***");
+    entry = ("fra", "Horizontal Offset***");
+    entry = ("hun", "Horizontal Offset***");
+    entry = ("ita", "Horizontal Offset***");
+    entry = ("jpn", "Horizontal Offset***");
+    entry = ("kor", "Horizontal Offset***");
+    entry = ("nld", "Horizontal Offset***");
+    entry = ("plk", "Horizontal Offset***");
+    entry = ("ptb", "Horizontal Offset***");
+    entry = ("ptg", "Horizontal Offset***");
+    entry = ("rus", "Horizontal Offset***");
+    note = "";
+};
+
+string_utf8 albl_Temp_Name
+{
+    entry = ("enu", "Temp Name");
+    entry = ("chs", "Temp Name***");
+    entry = ("cht", "Temp Name***");
+    entry = ("csy", "Temp Name***");
+    entry = ("deu", "Temp Name***");
+    entry = ("esp", "Temp Name***");
+    entry = ("fra", "Temp Name***");
+    entry = ("hun", "Temp Name***");
+    entry = ("ita", "Temp Name***");
+    entry = ("jpn", "Temp Name***");
+    entry = ("kor", "Temp Name***");
+    entry = ("nld", "Temp Name***");
+    entry = ("plk", "Temp Name***");
+    entry = ("ptb", "Temp Name***");
+    entry = ("ptg", "Temp Name***");
+    entry = ("rus", "Temp Name***");
+    note = "";
+};

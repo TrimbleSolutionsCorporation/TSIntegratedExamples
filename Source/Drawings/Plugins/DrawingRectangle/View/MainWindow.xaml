@@ -1,0 +1,126 @@
+﻿<tsd:PluginWindowBase x:Class="DrawingRectangle.View.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:UIControls="clr-namespace:Tekla.Structures.Dialog.UIControls;assembly=Tekla.Structures.Dialog"
+        xmlns:tsd="clr-namespace:Tekla.Structures.Dialog;assembly=Tekla.Structures.Dialog"
+        xmlns:view="clr-namespace:DrawingRectangle.View"
+        mc:Ignorable="d" Title="MainWindow" Height="450" Width="800">
+
+    <d:UserControl.DataContext>
+        <view:MainWindowViewModel />
+    </d:UserControl.DataContext>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" MinHeight="48" />
+            <RowDefinition />
+            <RowDefinition Height="Auto" MinHeight="48" />
+        </Grid.RowDefinitions>
+
+        <UIControls:WpfSaveLoad Grid.Row="0" Margin="0" HorizontalAlignment="Stretch" VerticalAlignment="Top" />
+
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Row="0" Orientation="Horizontal">
+                <Label
+                    Width="100"
+                    Height="30"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    Content="{tsd:Loc albl_Rectangle_Height}"
+                    RenderTransformOrigin="0.754,-0.24" />
+                <UIControls:WpfFilterCheckBox
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    AttributeName="RectHeight" />
+                <TextBox
+                    Width="120"
+                    Height="30"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    Text="{Binding RectHeight, Mode=TwoWay}"
+                    TextWrapping="Wrap" />
+            </StackPanel>
+
+            <StackPanel Grid.Row="1" Orientation="Horizontal">
+                <Label
+                    Width="100"
+                    Height="30"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    Content="{tsd:Loc albl_Rectangle_Width}"
+                    RenderTransformOrigin="0.754,-0.24" />
+                <UIControls:WpfFilterCheckBox
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    AttributeName="RectWidth" />
+                <TextBox
+                    Width="120"
+                    Height="30"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    Text="{Binding RectWidth, Mode=TwoWay}"
+                    TextWrapping="Wrap" />
+            </StackPanel>
+
+            <StackPanel Grid.Row="2" Orientation="Horizontal">
+                <Label
+                    Width="100"
+                    Height="30"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    Content="{tsd:Loc albl_Horizontal_Offset}"
+                    RenderTransformOrigin="0.754,-0.24" />
+                <UIControls:WpfFilterCheckBox
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    AttributeName="HorizOffset" />
+                <TextBox
+                    Width="120"
+                    Height="30"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    Text="{Binding HorizOffset, Mode=TwoWay}"
+                    TextWrapping="Wrap" />
+            </StackPanel>
+
+            <StackPanel Grid.Row="3" Orientation="Horizontal">
+                <Label
+                    Width="100"
+                    Height="30"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    Content="{tsd:Loc albl_Temp_Name}" />
+                <UIControls:WpfFilterCheckBox
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    AttributeName="TempName" />
+                <TextBox
+                    x:Name="TempNameBox"
+                    Width="120"
+                    Height="30"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    Text="{Binding TempName, Mode=TwoWay}"
+                    TextWrapping="Wrap" />
+            </StackPanel>
+        </Grid>
+
+        <UIControls:WpfOkApplyModifyGetOnOffCancel Grid.Row="2"
+            ApplyClicked="ApplyClicked"
+            CancelClicked="CancelClicked"
+            GetClicked="GetClicked"
+            ModifyClicked="ModifyClicked"
+            OkClicked="OkClicked"
+            OnOffClicked="OnOffClicked" />
+    </Grid>
+</tsd:PluginWindowBase>

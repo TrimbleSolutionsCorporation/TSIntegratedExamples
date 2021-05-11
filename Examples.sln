@@ -25,6 +25,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JoistArea", "Source\Modelin
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JoistAreaFeatures", "Source\Modeling\Plugins\JoistAreaFeatures\JoistAreaFeatures.csproj", "{F22A50DD-C17E-4C77-90CC-B4926B70280A}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DrawingRectangle", "Source\Drawings\Plugins\DrawingRectangle\DrawingRectangle.csproj", "{0BA0F8DA-2CDA-4F66-AD80-EC90DF411319}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{F22A50DD-C17E-4C77-90CC-B4926B70280A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F22A50DD-C17E-4C77-90CC-B4926B70280A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F22A50DD-C17E-4C77-90CC-B4926B70280A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0BA0F8DA-2CDA-4F66-AD80-EC90DF411319}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0BA0F8DA-2CDA-4F66-AD80-EC90DF411319}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0BA0F8DA-2CDA-4F66-AD80-EC90DF411319}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0BA0F8DA-2CDA-4F66-AD80-EC90DF411319}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -65,6 +71,7 @@ Global
 		{9708004D-52AF-4ACE-B2F1-79BC2C5B8996} = {4DFD7348-0650-4D26-9449-7C63A0C0787D}
 		{02705D25-5C13-4344-ADA0-089C33303749} = {69D4C219-4DE6-4229-BEE6-5996D718AE4A}
 		{F22A50DD-C17E-4C77-90CC-B4926B70280A} = {69D4C219-4DE6-4229-BEE6-5996D718AE4A}
+		{0BA0F8DA-2CDA-4F66-AD80-EC90DF411319} = {158BEC71-91B8-4509-979C-DB79A2FD167C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0F3C73B6-0090-4C33-ACD6-0524B977AA67}
