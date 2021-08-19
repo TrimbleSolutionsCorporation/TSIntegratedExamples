@@ -1,11 +1,11 @@
 ﻿namespace JoistAreaFeatures
 {
+    using JoistArea.View;
+    using Services;
     using System;
     using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
-    using JoistArea.View;
-    using Services;
     using Tekla.Structures.Geometry3d;
     using Tekla.Structures.Model;
     using Tekla.Structures.Plugins.DirectManipulation.Core.Features;
@@ -28,7 +28,7 @@
         public CreationFeature()
             : base(Constants.PluginName)
         {
-            inputRange = InputRange.AtLeast(3);
+            this.inputRange = InputRange.AtLeast(3);
         }
 
         /// <summary>
@@ -36,16 +36,16 @@
         /// </summary>
         protected override void Initialize()
         {
-            DetachHandlers();
-            polygonPickingTool?.Dispose();
+            this.DetachHandlers();
+            this.polygonPickingTool?.Dispose();
 
             //Start picking routine to define polygon shape and attach event handlers
-            polygonPickingTool = this.CreatePickingTool(inputRange, InputTypes.Point);
-            polygonPickingTool.PreviewRequested += Polygon_OnPreviewRequested;
-            polygonPickingTool.ObjectPicked += Polygon_OnObjectPicked;
-            polygonPickingTool.PickUndone += Polygon_OnPickingUndone;
-            polygonPickingTool.PickSessionEnded += Polygon_OnPickEnded;
-            polygonPickingTool.StartPickingSession("Pick points to define polygonal area.");
+            this.polygonPickingTool = this.CreatePickingTool(this.inputRange, InputTypes.Point);
+            this.polygonPickingTool.PreviewRequested += this.Polygon_OnPreviewRequested;
+            this.polygonPickingTool.ObjectPicked += this.Polygon_OnObjectPicked;
+            this.polygonPickingTool.PickUndone += this.Polygon_OnPickingUndone;
+            this.polygonPickingTool.PickSessionEnded += this.Polygon_OnPickEnded;
+            this.polygonPickingTool.StartPickingSession("Pick points to define polygonal area.");
         }
 
         /// <summary>
@@ -55,15 +55,15 @@
         /// <param name="e"></param>
         private void Polygon_OnPickEnded(object sender, EventArgs e)
         {
-            guidelinePickingTool?.Dispose();
+            this.guidelinePickingTool?.Dispose();
 
             //Get user to pick two points to define guid-line
-            guidelinePickingTool = this.CreatePickingTool(InputRange.Exactly(2), InputTypes.Point);
-            guidelinePickingTool.PreviewRequested += Guideline_OnPreviewRequested;
-            guidelinePickingTool.ObjectPicked += Guideline_OnObjectPicked;
-            guidelinePickingTool.PickUndone += Guideline_OnPickingUndone;
-            guidelinePickingTool.PickSessionEnded += Guideline_OnPickEnded;
-            guidelinePickingTool.StartPickingSession("Pick two point to establish a guide line.");
+            this.guidelinePickingTool = this.CreatePickingTool(InputRange.Exactly(2), InputTypes.Point);
+            this.guidelinePickingTool.PreviewRequested += this.Guideline_OnPreviewRequested;
+            this.guidelinePickingTool.ObjectPicked += this.Guideline_OnObjectPicked;
+            this.guidelinePickingTool.PickUndone += this.Guideline_OnPickingUndone;
+            this.guidelinePickingTool.PickSessionEnded += this.Guideline_OnPickEnded;
+            this.guidelinePickingTool.StartPickingSession("Pick two point to establish a guide line.");
         }
 
         /// <summary>
@@ -71,28 +71,28 @@
         /// </summary>
         protected override void Refresh()
         {
-            pickedPolygonPoints?.Clear();
-            guidlinePoints?.Clear();
+            this.pickedPolygonPoints?.Clear();
+            this.guidlinePoints?.Clear();
         }
-        
+
         /// <summary>
         /// Detaches handlers from the picking tools
         /// </summary>
         private void DetachHandlers()
         {
-            if (polygonPickingTool != null)
+            if (this.polygonPickingTool != null)
             {
-                polygonPickingTool.PreviewRequested -= Polygon_OnPreviewRequested;
-                polygonPickingTool.ObjectPicked -= Polygon_OnObjectPicked;
-                polygonPickingTool.PickUndone -= Polygon_OnPickingUndone;
+                this.polygonPickingTool.PreviewRequested -= this.Polygon_OnPreviewRequested;
+                this.polygonPickingTool.ObjectPicked -= this.Polygon_OnObjectPicked;
+                this.polygonPickingTool.PickUndone -= this.Polygon_OnPickingUndone;
             }
 
-            if (guidelinePickingTool != null)
+            if (this.guidelinePickingTool != null)
             {
-                guidelinePickingTool.PreviewRequested -= Guideline_OnPreviewRequested;
-                guidelinePickingTool.ObjectPicked -= Guideline_OnObjectPicked;
-                guidelinePickingTool.PickUndone -= Guideline_OnPickingUndone;
-                guidelinePickingTool.PickSessionEnded -= Guideline_OnPickEnded;
+                this.guidelinePickingTool.PreviewRequested -= this.Guideline_OnPreviewRequested;
+                this.guidelinePickingTool.ObjectPicked -= this.Guideline_OnObjectPicked;
+                this.guidelinePickingTool.PickUndone -= this.Guideline_OnPickingUndone;
+                this.guidelinePickingTool.PickSessionEnded -= this.Guideline_OnPickEnded;
             }
         }
 
@@ -103,38 +103,38 @@
         /// <param name="eventArgs">DM handle event args.</param>
         private void Polygon_OnPreviewRequested(object sender, ToleratedObjectEventArgs eventArgs)
         {
-            Graphics.Clear();
-            var currentAppliedValues = Component.GetDataFromComponent();
+            this.Graphics.Clear();
+            var currentAppliedValues = this.Component.GetDataFromComponent();
 
-            if (pickedPolygonPoints.Count < 1) return;
-            if (pickedPolygonPoints.Count == 1)
+            if (this.pickedPolygonPoints.Count < 1) return;
+            if (this.pickedPolygonPoints.Count == 1)
             {
                 //Only one point so far, draw dimension graphic from 1st point to hit point
-                var ls = new LineSegment(pickedPolygonPoints[0], eventArgs.HitPoint);
+                var ls = new LineSegment(this.pickedPolygonPoints[0], eventArgs.HitPoint);
                 var yDir = Vector.Cross(new Vector(0, 0, 1), ls.GetDirectionVector());
                 var zDir = Vector.Cross(ls.GetDirectionVector(), yDir).GetNormal();
-                Graphics.DrawDimension(ls, zDir, DimensionEndPointSizeType.Dynamic);
+                this.Graphics.DrawDimension(ls, zDir, DimensionEndPointSizeType.Dynamic);
             }
             else
             {
                 //Create dimension graphic for each point in existing loop and current hit point
-                for (var i = 0; i < pickedPolygonPoints.Count; i++)
+                for (var i = 0; i < this.pickedPolygonPoints.Count; i++)
                 {
-                    var curPt = new Point(pickedPolygonPoints[i]);
-                    var nextPt = i == pickedPolygonPoints.Count - 1 ? 
-                        eventArgs.HitPoint : pickedPolygonPoints[i + 1];
-                    
+                    var curPt = new Point(this.pickedPolygonPoints[i]);
+                    var nextPt = i == this.pickedPolygonPoints.Count - 1 ?
+                        eventArgs.HitPoint : this.pickedPolygonPoints[i + 1];
+
                     var ls = new LineSegment(curPt, nextPt);
                     var yDir = Vector.Cross(new Vector(0, 0, 1), ls.GetDirectionVector());
                     var zDir = Vector.Cross(ls.GetDirectionVector(), yDir).GetNormal();
-                    Graphics.DrawDimension(ls, zDir, DimensionEndPointSizeType.Dynamic);
+                    this.Graphics.DrawDimension(ls, zDir, DimensionEndPointSizeType.Dynamic);
                 }
 
                 //Close polygon loop to 1st point with dimension graphic
-                var lsEnd = new LineSegment(eventArgs.HitPoint, pickedPolygonPoints[0]);
+                var lsEnd = new LineSegment(eventArgs.HitPoint, this.pickedPolygonPoints[0]);
                 var yDirEnd = Vector.Cross(new Vector(0, 0, 1), lsEnd.GetDirectionVector());
                 var zDirEnd = Vector.Cross(lsEnd.GetDirectionVector(), yDirEnd).GetNormal();
-                Graphics.DrawDimension(lsEnd, zDirEnd, DimensionEndPointSizeType.Dynamic);
+                this.Graphics.DrawDimension(lsEnd, zDirEnd, DimensionEndPointSizeType.Dynamic);
             }
         }
 
@@ -146,7 +146,7 @@
         private void Polygon_OnObjectPicked(object sender, ToleratedObjectEventArgs eventArgs)
         {
             if (!eventArgs.IsValid) return;
-            pickedPolygonPoints.Add(eventArgs.HitPoint);
+            this.pickedPolygonPoints.Add(eventArgs.HitPoint);
         }
 
         /// <summary>
@@ -157,9 +157,9 @@
         private void Guideline_OnPickEnded(object sender, EventArgs eventArgs)
         {
             var input = new ComponentInput();
-            input.AddInputPolygon(new Polygon { Points = new ArrayList(pickedPolygonPoints) });
-            input.AddTwoInputPositions(guidlinePoints[0], guidlinePoints[1]);
-            CommitComponentInput(input);
+            input.AddInputPolygon(new Polygon { Points = new ArrayList(this.pickedPolygonPoints) });
+            input.AddTwoInputPositions(this.guidlinePoints[0], this.guidlinePoints[1]);
+            this.CommitComponentInput(input);
         }
 
         /// <summary>
@@ -169,9 +169,9 @@
         /// <param name="eventArgs">The event argument for the handler.</param>
         private void Polygon_OnPickingUndone(object sender, EventArgs eventArgs)
         {
-            if (pickedPolygonPoints.Count > 0)
+            if (this.pickedPolygonPoints.Count > 0)
             {
-                pickedPolygonPoints.RemoveAt(pickedPolygonPoints.Count - 1);
+                this.pickedPolygonPoints.RemoveAt(this.pickedPolygonPoints.Count - 1);
             }
         }
 
@@ -183,7 +183,7 @@
         private void Guideline_OnObjectPicked(object sender, ToleratedObjectEventArgs eventArgs)
         {
             if (!eventArgs.IsValid) return;
-            guidlinePoints.Add(eventArgs.HitPoint);
+            this.guidlinePoints.Add(eventArgs.HitPoint);
         }
 
         /// <summary>
@@ -193,21 +193,21 @@
         /// <param name="eventArgs">The event argument for the handler.</param>
         private void Guideline_OnPickingUndone(object sender, EventArgs eventArgs)
         {
-            if (guidlinePoints.Count > 0)
+            if (this.guidlinePoints.Count > 0)
             {
-                guidlinePoints.RemoveAt(guidlinePoints.Count - 1);
+                this.guidlinePoints.RemoveAt(this.guidlinePoints.Count - 1);
             }
         }
 
         private void Guideline_OnPreviewRequested(object sender, ToleratedObjectEventArgs eventArgs)
         {
-            Graphics.Clear();
-            var currentAppliedValues = Component.GetDataFromComponent();
+            this.Graphics.Clear();
+            var currentAppliedValues = this.Component.GetDataFromComponent();
 
-            if (!guidlinePoints.Any() || eventArgs.HitPoint == null) return;
-            var p1 = new Point(guidlinePoints[0]);
+            if (!this.guidlinePoints.Any() || eventArgs.HitPoint == null) return;
+            var p1 = new Point(this.guidlinePoints[0]);
             var p2 = new Point(eventArgs.HitPoint);
-            Graphics.DrawLine(p1, p2);
+            this.Graphics.DrawLine(p1, p2);
         }
     }
 }

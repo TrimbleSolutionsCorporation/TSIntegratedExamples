@@ -1,14 +1,14 @@
 ﻿namespace JoistAreaFeatures
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
     using JoistArea.Logic;
     using JoistArea.Tools;
     using JoistArea.View;
     using JoistArea.ViewModel;
     using Manipulation;
     using Services;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using Tekla.Structures.Model;
     using Tekla.Structures.Plugins.DirectManipulation.Core;
     using Tekla.Structures.Plugins.DirectManipulation.Core.Features;
@@ -32,69 +32,69 @@
         protected override void DefineFeatureContextualToolbar(IToolbar toolbar)
         {
             base.DefineFeatureContextualToolbar(toolbar);
-            if (Components == null || Components.Count < 1) return;
+            if (this.Components == null || this.Components.Count < 1) return;
             try
             {
 
                 //Get data from user interface
-                var uiData = PluginDataFetcher.GetDataFromComponent(Components.First());
-                var spacingTypeUsed = (MainViewModel.SpacingTypeEnum) uiData.SpacingType;
+                var uiData = PluginDataFetcher.GetDataFromComponent(this.Components.First());
+                var spacingTypeUsed = (MainViewModel.SpacingTypeEnum)uiData.SpacingType;
 
                 //Create control for spacing type
-                _spacingType = toolbar.CreateDropDown(AllSpacingTypes, spacingTypeUsed.ToString());
-                _spacingType.Tooltip = "Spacing Type";
-                _spacingType.StateChanged += delegate
+                this._spacingType = toolbar.CreateDropDown(this.AllSpacingTypes, spacingTypeUsed.ToString());
+                this._spacingType.Tooltip = "Spacing Type";
+                this._spacingType.StateChanged += delegate
                 {
-                    foreach (var component in Components)
+                    foreach (var component in this.Components)
                     {
-                        var strVal = _spacingType.SelectedItem.ToString();
+                        var strVal = this._spacingType.SelectedItem.ToString();
                         var value = (MainViewModel.SpacingTypeEnum)Enum.Parse(typeof(MainViewModel.SpacingTypeEnum), strVal);
                         DmCommon.ModifyComponent(component, "SpacingType", (int)value);
                     }
                 };
 
                 //First spacing offset control
-                _firstSpacing = toolbar.CreateValueTextBox(uiData.FirstJoistOffset);
-                _firstSpacing.Tooltip = "First Joist Offset Distance";
-                _firstSpacing.Title = "First";
-                _firstSpacing.StateChanged += (control, eventArgs) =>
+                this._firstSpacing = toolbar.CreateValueTextBox(uiData.FirstJoistOffset);
+                this._firstSpacing.Tooltip = "First Joist Offset Distance";
+                this._firstSpacing.Title = "First";
+                this._firstSpacing.StateChanged += (control, eventArgs) =>
                 {
-                    foreach (var component in Components)
+                    foreach (var component in this.Components)
                     {
-                        DmCommon.ModifyComponent(component, "FirstJoistOffset", _firstSpacing.Value);
+                        DmCommon.ModifyComponent(component, "FirstJoistOffset", this._firstSpacing.Value);
                     }
                 };
 
                 //Depth offset control
                 var pluginValue = TxModel.NullDoubleValue;
-                Components.First().GetAttribute("DepthOffset", ref pluginValue);
+                this.Components.First().GetAttribute("DepthOffset", ref pluginValue);
                 if (PluginDataHelper.IsBlankValue(pluginValue))
                 {
-                    _depthOffset = toolbar.CreateValueTextBox();
-                    _depthOffset.Title = "Depth (Calculated)";
+                    this._depthOffset = toolbar.CreateValueTextBox();
+                    this._depthOffset.Title = "Depth (Calculated)";
                 }
                 else
                 {
-                    _depthOffset = toolbar.CreateValueTextBox(uiData.DepthOffset);
-                    _depthOffset.Title = "Depth";
+                    this._depthOffset = toolbar.CreateValueTextBox(uiData.DepthOffset);
+                    this._depthOffset.Title = "Depth";
                 }
-                _depthOffset.Tooltip = "Depth Below Joist Offset";
-                _depthOffset.StateChanged += (control, eventArgs) =>
+
+                this._depthOffset.Tooltip = "Depth Below Joist Offset";
+                this._depthOffset.StateChanged += (control, eventArgs) =>
                 {
-                    foreach (var component in Components)
+                    foreach (var component in this.Components)
                     {
-                        if (PluginDataHelper.IsBlankValue((double)_depthOffset.Value))
+                        if (PluginDataHelper.IsBlankValue((double)this._depthOffset.Value))
                         {
                             DmCommon.ModifyComponent(component, "DepthOffset", TxModel.NullDoubleValue);
-                            _depthOffset.Title = "Depth (Calculated)";
+                            this._depthOffset.Title = "Depth (Calculated)";
                         }
                         else
                         {
-                            DmCommon.ModifyComponent(component, "DepthOffset", _depthOffset.Value);
-                            _depthOffset.Title = "Depth";
+                            DmCommon.ModifyComponent(component, "DepthOffset", this._depthOffset.Value);
+                            this._depthOffset.Title = "Depth";
                         }
                     }
-                    Refresh();
                 };
             }
             catch (Exception ex)
@@ -106,20 +106,20 @@
         protected override void Refresh()
         {
             base.Refresh();
-            if (Components == null || Components.Count < 1 || _centerMaxSpacing == null) return;
+            if (this.Components == null || this.Components.Count < 1 || this._centerMaxSpacing == null) return;
             try
             {
                 //Get data from plugin
-                var uiData = PluginDataFetcher.GetDataFromComponent(Components.First());
+                var uiData = PluginDataFetcher.GetDataFromComponent(this.Components.First());
                 if (uiData == null) return;
                 var spacingTypeUsed = (MainViewModel.SpacingTypeEnum)uiData.SpacingType;
 
                 //Update control values from PluginData
-                _spacingType.SelectedItem = spacingTypeUsed.ToString();
-                if(_centerMaxSpacing!=null) _centerMaxSpacing.Value = uiData.CenterSpacingMax;
-                if(_centerSpacingList!=null) _centerSpacingList.Text = uiData.CenterSpacingList;
-                _firstSpacing.Value = uiData.FirstJoistOffset;
-                _depthOffset.Value = uiData.DepthOffset;
+                this._spacingType.SelectedItem = spacingTypeUsed.ToString();
+                if (this._centerMaxSpacing != null) this._centerMaxSpacing.Value = uiData.CenterSpacingMax;
+                if (this._centerSpacingList != null) this._centerSpacingList.Text = uiData.CenterSpacingList;
+                this._firstSpacing.Value = uiData.FirstJoistOffset;
+                this._depthOffset.Value = uiData.DepthOffset;
             }
             catch (Exception ex)
             {

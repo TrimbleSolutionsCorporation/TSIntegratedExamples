@@ -1,11 +1,11 @@
 ﻿namespace JoistAreaFeatures.Manipulation
 {
-    using System;
-    using System.Collections.Generic;
     using JoistArea.Logic;
     using JoistArea.Tools;
     using JoistArea.ViewModel;
     using Services;
+    using System;
+    using System.Collections.Generic;
     using Tekla.Structures.Geometry3d;
     using Tekla.Structures.Model;
     using Tekla.Structures.Plugins.DirectManipulation.Core;
@@ -35,16 +35,16 @@
             try
             {
                 //Create start and joist manipulators
-                _startSpacingManipulator = CreateStartOffsetManipulator(component);
-                _joistSpacingManipulators = CreateJoistDistanceManipulators(component);
-                AttachHandlers();
+                this._startSpacingManipulator = this.CreateStartOffsetManipulator(component);
+                this._joistSpacingManipulators = this.CreateJoistDistanceManipulators(component);
+                this.AttachHandlers();
 
                 //Add manipulators to the system
-                if (_startSpacingManipulator != null) AddManipulator(_startSpacingManipulator);
-                _joistSpacingManipulators.ForEach(AddManipulator);
+                if (this._startSpacingManipulator != null) this.AddManipulator(this._startSpacingManipulator);
+                this._joistSpacingManipulators.ForEach(this.AddManipulator);
 
                 //Draw custom graphics
-                ReCreateGraphics();
+                this.ReCreateGraphics();
             }
             catch (Exception ex)
             {
@@ -58,14 +58,14 @@
         public override void UpdateContext()
         {
             base.UpdateContext();
-            Component.Select();
+            this.Component.Select();
 
             //Update existing manipulators
-            UpdateStartOffsetManipulator(Component);
-            UpdateJoistDistanceManipulators(Component);
+            this.UpdateStartOffsetManipulator(this.Component);
+            this.UpdateJoistDistanceManipulators(this.Component);
 
             //Update graphics based on plugin and manipulators
-            ReCreateGraphics();
+            this.ReCreateGraphics();
         }
 
         /// <summary>
@@ -73,7 +73,7 @@
         /// </summary>
         private void ReCreateGraphics()
         {
-            Graphics?.Clear();
+            this.Graphics?.Clear();
             //Any additional graphics here
         }
 
@@ -86,7 +86,7 @@
         {
             if (plugin == null) throw new ArgumentNullException(nameof(plugin));
 
-            var spacingSeg1 = GetStartOffsetManipulatorLineSegment(plugin);
+            var spacingSeg1 = this.GetStartOffsetManipulatorLineSegment(plugin);
             if (spacingSeg1 == null) return null;
             return new DistanceManipulator(plugin, this, spacingSeg1);
         }
@@ -102,7 +102,7 @@
 
             try
             {
-                var joistManLines = GetJoistManipulatorsLineSegments(plugin);
+                var joistManLines = this.GetJoistManipulatorsLineSegments(plugin);
                 if (joistManLines == null) return new List<DistanceManipulator>();
                 foreach (var ls in joistManLines)
                 {
@@ -128,25 +128,25 @@
             try
             {
                 //Use existing method to calculate where manipulator should be
-                var spacingSeg1 = GetStartOffsetManipulatorLineSegment(plugin);
-                if (spacingSeg1 == null && _startSpacingManipulator != null)
+                var spacingSeg1 = this.GetStartOffsetManipulatorLineSegment(plugin);
+                if (spacingSeg1 == null && this._startSpacingManipulator != null)
                 {
-                    _startSpacingManipulator.MeasureChanged -= StartOffset_OnMeasureChangedDel;
-                    _startSpacingManipulator.Dispose();
+                    this._startSpacingManipulator.MeasureChanged -= this.StartOffset_OnMeasureChangedDel;
+                    this._startSpacingManipulator.Dispose();
                 }
 
                 //If no distance manipulator exists, create new one
-                if (_startSpacingManipulator == null && spacingSeg1 != null)
+                if (this._startSpacingManipulator == null && spacingSeg1 != null)
                 {
                     var distMan = new DistanceManipulator(plugin, this, spacingSeg1);
-                    distMan.MeasureChanged += StartOffset_OnMeasureChangedDel;
-                    AddManipulator(distMan);
-                    _startSpacingManipulator = distMan;
+                    distMan.MeasureChanged += this.StartOffset_OnMeasureChangedDel;
+                    this.AddManipulator(distMan);
+                    this._startSpacingManipulator = distMan;
                 }
-                else if (_startSpacingManipulator != null && spacingSeg1 != null)
+                else if (this._startSpacingManipulator != null && spacingSeg1 != null)
                 {
                     //Update existing distance manipulator
-                    _startSpacingManipulator.Segment = new LineSegment(spacingSeg1.Point1, spacingSeg1.Point2);
+                    this._startSpacingManipulator.Segment = new LineSegment(spacingSeg1.Point1, spacingSeg1.Point2);
                 }
             }
             catch (Exception ex)
@@ -165,50 +165,50 @@
             try
             {
                 //Calculate segments that define distance lines, if null dispose existing
-                var calcJoistManLines = GetJoistManipulatorsLineSegments(plugin);
+                var calcJoistManLines = this.GetJoistManipulatorsLineSegments(plugin);
 
                 //No spacings found, remove existing distance manipulators
                 if (calcJoistManLines == null)
                 {
-                    foreach (var distMan in _joistSpacingManipulators)
+                    foreach (var distMan in this._joistSpacingManipulators)
                     {
-                        distMan.MeasureChanged -= Joist_OnMeasureChangedCenterDel;
+                        distMan.MeasureChanged -= this.Joist_OnMeasureChangedCenterDel;
                         distMan.Dispose();
                     }
                     return;
                 }
 
                 //For each calculated new distance line, update existing
-                if (_joistSpacingManipulators == null) return;
+                if (this._joistSpacingManipulators == null) return;
                 for (var i = 0; i < calcJoistManLines.Count; i++)
                 {
                     var calcLine = calcJoistManLines[i];
 
                     //Check if beyond original list qty
-                    if (_joistSpacingManipulators.Count < i + 1)
+                    if (this._joistSpacingManipulators.Count < i + 1)
                     {
                         var distMan = new DistanceManipulator(plugin, this, calcLine);
-                        distMan.MeasureChanged += Joist_OnMeasureChangedCenterDel;
-                        _joistSpacingManipulators.Add(distMan);
-                        AddManipulator(distMan);
+                        distMan.MeasureChanged += this.Joist_OnMeasureChangedCenterDel;
+                        this._joistSpacingManipulators.Add(distMan);
+                        this.AddManipulator(distMan);
                     }
                     else
                     {
-                        _joistSpacingManipulators[i].Segment = new LineSegment(calcLine.Point1, calcLine.Point2);
+                        this._joistSpacingManipulators[i].Segment = new LineSegment(calcLine.Point1, calcLine.Point2);
                     }
                 }
 
                 //Remove no-longer used distance manipulators   //todo: verify this works?
-                if (_joistSpacingManipulators.Count > calcJoistManLines.Count)
+                if (this._joistSpacingManipulators.Count > calcJoistManLines.Count)
                 {
                     var intRemoveList = new List<int>();
-                    var c1 = _joistSpacingManipulators.Count;
+                    var c1 = this._joistSpacingManipulators.Count;
 
                     //First detach event handlers and dispose each extra manipulator
                     for (var i = calcJoistManLines.Count; i < c1; i++)
                     {
-                        var distMan = _joistSpacingManipulators[i];
-                        distMan.MeasureChanged -= Joist_OnMeasureChangedCenterDel;
+                        var distMan = this._joistSpacingManipulators[i];
+                        distMan.MeasureChanged -= this.Joist_OnMeasureChangedCenterDel;
                         distMan.Dispose();
                         intRemoveList.Add(i);
                     }
@@ -218,7 +218,7 @@
                     foreach (var i in intRemoveList)
                     {
                         var ix = i + exCount;
-                        _joistSpacingManipulators.RemoveAt(ix);
+                        this._joistSpacingManipulators.RemoveAt(ix);
                         exCount--;
                     }
                 }
@@ -237,10 +237,10 @@
         private void StartOffset_OnMeasureChangedDel(object sender, EventArgs e)
         {
             if (!(sender is DistanceManipulator)) return;
-            var distMan = (DistanceManipulator) sender;
+            var distMan = (DistanceManipulator)sender;
 
             //Modify plugin spacing max value and call to update
-            DmCommon.ModifyComponent(Component, "FirstJoistOffset", distMan.Segment.Length());
+            DmCommon.ModifyComponent(this.Component, "FirstJoistOffset", distMan.Segment.Length());
         }
 
         /// <summary>
@@ -251,39 +251,39 @@
         private void Joist_OnMeasureChangedCenterDel(object sender, EventArgs e)
         {
             if (!(sender is DistanceManipulator)) return;
-            var distMan = (DistanceManipulator) sender;
+            var distMan = (DistanceManipulator)sender;
 
             try
             {
                 var spacingTypIntVal = 0;
-                Component.GetAttribute("SpacingType", ref spacingTypIntVal);
+                this.Component.GetAttribute("SpacingType", ref spacingTypIntVal);
                 var spacingTyp = (MainViewModel.SpacingTypeEnum)spacingTypIntVal;
                 switch (spacingTyp)
                 {
                     case MainViewModel.SpacingTypeEnum.albl_ExactList:
-                    {
-                        var index = _joistSpacingManipulators.IndexOf(distMan);
-                        var spacingList = new List<Distance>();
-                        for (var i = 0; i < _joistSpacingManipulators.Count; i++)
                         {
-                            var dManExisting = _joistSpacingManipulators[i];
-                            var length = i == index ? distMan.Segment.Length() : dManExisting.Segment.Length();
-                            spacingList.Add(new Distance(length));
+                            var index = this._joistSpacingManipulators.IndexOf(distMan);
+                            var spacingList = new List<Distance>();
+                            for (var i = 0; i < this._joistSpacingManipulators.Count; i++)
+                            {
+                                var dManExisting = this._joistSpacingManipulators[i];
+                                var length = i == index ? distMan.Segment.Length() : dManExisting.Segment.Length();
+                                spacingList.Add(new Distance(length));
+                            }
+
+                            //Modify plugin exact spacing values and call to update
+                            var updatedSpacings = new TxDistanceList(spacingList);
+                            var spacingString = updatedSpacings.MetricStringList;
+
+                            DmCommon.ModifyComponent(this.Component, "CenterSpacingList", spacingString);
+                            break;
                         }
-
-                        //Modify plugin exact spacing values and call to update
-                        var updatedSpacings = new TxDistanceList(spacingList);
-                        var spacingString = updatedSpacings.MetricStringList;
-
-                        DmCommon.ModifyComponent(Component, "CenterSpacingList", spacingString);
-                        break;
-                    }
                     case MainViewModel.SpacingTypeEnum.albl_CenterToCenter:
-                    {
-                        //Modify plugin spacing max value and call to update
-                        DmCommon.ModifyComponent(Component, "CenterSpacingMax", distMan.Segment.Length());
-                        break;
-                    }
+                        {
+                            //Modify plugin spacing max value and call to update
+                            DmCommon.ModifyComponent(this.Component, "CenterSpacingMax", distMan.Segment.Length());
+                            break;
+                        }
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
@@ -301,18 +301,18 @@
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);
-            DetachHandlers();
+            this.DetachHandlers();
 
-            _joistSpacingManipulators?.ForEach(handle => handle.Dispose());
-            _startSpacingManipulator?.Dispose();
+            this._joistSpacingManipulators?.ForEach(handle => handle.Dispose());
+            this._startSpacingManipulator?.Dispose();
 
-            foreach (var manipulator in Manipulators)
+            foreach (var manipulator in this.Manipulators)
             {
                 manipulator.Dispose();
             }
 
             //Clear local caches
-            _joistSpacingManipulators?.Clear();
+            this._joistSpacingManipulators?.Clear();
         }
 
         /// <summary>
@@ -321,16 +321,16 @@
         private void AttachHandlers()
         {
             //Attach events from start offset spacing
-            if (_startSpacingManipulator != null)
+            if (this._startSpacingManipulator != null)
             {
-                _startSpacingManipulator.MeasureChanged += StartOffset_OnMeasureChangedDel;
+                this._startSpacingManipulator.MeasureChanged += this.StartOffset_OnMeasureChangedDel;
             }
 
             //Attach events from joist spacing list
-            if (_joistSpacingManipulators == null) return;
-            foreach (var distMan in _joistSpacingManipulators)
+            if (this._joistSpacingManipulators == null) return;
+            foreach (var distMan in this._joistSpacingManipulators)
             {
-                distMan.MeasureChanged += Joist_OnMeasureChangedCenterDel;
+                distMan.MeasureChanged += this.Joist_OnMeasureChangedCenterDel;
             }
         }
 
@@ -340,16 +340,16 @@
         private void DetachHandlers()
         {
             //Detach events from start offset spacing
-            if (_startSpacingManipulator != null)
+            if (this._startSpacingManipulator != null)
             {
-                _startSpacingManipulator.MeasureChanged -= StartOffset_OnMeasureChangedDel;
+                this._startSpacingManipulator.MeasureChanged -= this.StartOffset_OnMeasureChangedDel;
             }
 
             //Detach events from joist spacing list
-            if (_joistSpacingManipulators == null) return;
-            foreach (var distMan in _joistSpacingManipulators)
+            if (this._joistSpacingManipulators == null) return;
+            foreach (var distMan in this._joistSpacingManipulators)
             {
-                distMan.MeasureChanged -= Joist_OnMeasureChangedCenterDel;
+                distMan.MeasureChanged -= this.Joist_OnMeasureChangedCenterDel;
             }
         }
 
@@ -370,13 +370,13 @@
                 var uiData = plugin.GetDataFromComponent();
 
                 //Update internal logic to take into account latest data from plugin
-                _liftingLogic = new JoistAreaMainLogic();
-                _liftingLogic.ExternalInitialize(componentInput.Item1, componentInput.Item2, uiData);
+                this._liftingLogic = new JoistAreaMainLogic();
+                this._liftingLogic.ExternalInitialize(componentInput.Item1, componentInput.Item2, uiData);
 
                 //get points for 1st distance segment
                 var startPt = componentInput.Item2.GetMidPoint();
                 var endPt = new Point(startPt);
-                endPt.Translate(_liftingLogic.GlobalCoordinateSystem.AxisY.GetNormal() * uiData.FirstJoistOffset);
+                endPt.Translate(this._liftingLogic.GlobalCoordinateSystem.AxisY.GetNormal() * uiData.FirstJoistOffset);
 
                 //If offset is zero - do not return usable line segment
                 if (Tekla.Structures.Geometry3d.Distance.PointToPoint(endPt, startPt) <
@@ -405,11 +405,11 @@
                 //Update internal logic to take into account latest data from plugin
                 var uiData = plugin.GetDataFromComponent();
                 var componentInput = FeatureLogic.GetCurrentInput(plugin);
-                _liftingLogic = new JoistAreaMainLogic();
-                _liftingLogic.ExternalInitialize(componentInput.Item1, componentInput.Item2, uiData);
+                this._liftingLogic = new JoistAreaMainLogic();
+                this._liftingLogic.ExternalInitialize(componentInput.Item1, componentInput.Item2, uiData);
 
                 //Get joist spacings and distance values from base plugin logic
-                return FeatureLogic.GetJoistSpanSegments(_liftingLogic);
+                return FeatureLogic.GetJoistSpanSegments(this._liftingLogic);
             }
             catch (Exception ex)
             {

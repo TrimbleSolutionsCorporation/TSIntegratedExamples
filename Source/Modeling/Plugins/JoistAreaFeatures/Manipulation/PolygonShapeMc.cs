@@ -1,9 +1,9 @@
 ﻿namespace JoistAreaFeatures.Manipulation
 {
-    using System;
-    using System.Collections.Generic;
     using JoistArea.Logic;
     using Services;
+    using System;
+    using System.Collections.Generic;
     using Tekla.Structures.Geometry3d;
     using Tekla.Structures.Model;
     using Tekla.Structures.Plugins.DirectManipulation.Core;
@@ -32,14 +32,14 @@
 
             try
             {
-                _handleManager = feature.HandleManager;
+                this._handleManager = feature.HandleManager;
 
                 //Create and setup PointHandle manipulators
-                _polygonHandles = CreatePointHandles(component);
-                AttachHandlers();
+                this._polygonHandles = this.CreatePointHandles(component);
+                this.AttachHandlers();
 
                 //Draw custom graphics
-                ReCreateGraphics();
+                this.ReCreateGraphics();
             }
             catch (Exception ex)
             {
@@ -53,13 +53,13 @@
         public override void UpdateContext()
         {
             base.UpdateContext();
-            Component.Select();
+            this.Component.Select();
 
             //Refresh existing manipulator handles from plugin input
-            UpdatePointHandles(Component);
+            this.UpdatePointHandles(this.Component);
 
             //Update graphics based on plugin and manipulators
-            ReCreateGraphics();
+            this.ReCreateGraphics();
         }
 
         /// <summary>
@@ -67,8 +67,8 @@
         /// </summary>
         private void ReCreateGraphics()
         {
-            Graphics?.Clear();
-            DrawPolygonEdgeDimensions();
+            this.Graphics?.Clear();
+            this.DrawPolygonEdgeDimensions();
         }
 
         /// <summary>
@@ -86,7 +86,7 @@
                 var componentInput = FeatureLogic.GetCurrentInput(plugin);
                 foreach (var pt in componentInput.Item1)
                 {
-                    var handle = _handleManager.CreatePointHandle(pt, HandleLocationType.InputPoint, HandleEffectType.Geometry);
+                    var handle = this._handleManager.CreatePointHandle(pt, HandleLocationType.InputPoint, HandleEffectType.Geometry);
                     handles.Add(handle);
                 }
                 return handles;
@@ -105,7 +105,7 @@
         private void UpdatePointHandles(Component component)
         {
             if (component == null) throw new ArgumentNullException(nameof(component));
-            if(_polygonHandles.Count < 1) return;
+            if (this._polygonHandles.Count < 1) return;
             try
             {
                 //Get input objects from component
@@ -114,7 +114,7 @@
                 var index = 0;
                 foreach (var pt in componentInput.Item1)
                 {
-                    _polygonHandles[index].Point = new Point(pt);
+                    this._polygonHandles[index].Point = new Point(pt);
                     index++;
                 }
             }
@@ -123,7 +123,7 @@
                 GlobalServices.LogException(ex);
             }
         }
-        
+
         /// <summary>
         /// Draw outer polygon edge segment dimension graphics
         /// </summary>
@@ -132,22 +132,22 @@
             try
             {
                 //Draw edges around picked points
-                Graphics?.Clear();
+                this.Graphics?.Clear();
                 Point lastPoint = null;
-                foreach (var pg in _polygonHandles)
+                foreach (var pg in this._polygonHandles)
                 {
                     if (lastPoint != null)
                     {
                         var currPt = new Point(pg.Point);
                         var ls = new LineSegment(lastPoint, currPt);
-                        Graphics?.DrawDimension(ls, null, DimensionEndPointSizeType.FixedMedium);
+                        this.Graphics?.DrawDimension(ls, null, DimensionEndPointSizeType.FixedMedium);
                     }
                     lastPoint = new Point(pg.Point);
                 }
 
                 //Draw connecting edge from last point to 1st
-                var lsEnd = new LineSegment(_polygonHandles[_polygonHandles.Count - 1].Point, _polygonHandles[0].Point);
-                Graphics?.DrawDimension(lsEnd, null, DimensionEndPointSizeType.FixedMedium);
+                var lsEnd = new LineSegment(this._polygonHandles[this._polygonHandles.Count - 1].Point, this._polygonHandles[0].Point);
+                this.Graphics?.DrawDimension(lsEnd, null, DimensionEndPointSizeType.FixedMedium);
             }
             catch (Exception ex)
             {
@@ -160,15 +160,15 @@
         /// </summary>
         private void ModifyPluginInputFromManipulators()
         {
-            if (_polygonHandles == null) throw new ArgumentNullException(nameof(_polygonHandles));
+            if (this._polygonHandles == null) throw new ArgumentNullException(nameof(this._polygonHandles));
             try
             {
-                var pastInput = FeatureLogic.GetCurrentInput(Component);
+                var pastInput = FeatureLogic.GetCurrentInput(this.Component);
                 var adjustedInput = new ComponentInput();
 
                 //Add polygon input adjusted new points
                 var polygon = new Polygon();
-                foreach (var pg in _polygonHandles)
+                foreach (var pg in this._polygonHandles)
                 {
                     polygon.Points.Add(new Point(pg.Point));
                 }
@@ -180,7 +180,7 @@
                 adjustedInput.AddTwoInputPositions(gp1, gp2);
 
                 //Call component to update
-                ModifyComponentInput(adjustedInput);
+                this.ModifyComponentInput(adjustedInput);
             }
             catch (Exception ex)
             {
@@ -195,7 +195,7 @@
         /// <param name="eventArgs"></param>
         private void OnPointHandleDragOngoing(object sender, DragEventArgs eventArgs)
         {
-            DrawPolygonEdgeDimensions();
+            this.DrawPolygonEdgeDimensions();
         }
 
         /// <summary>
@@ -205,7 +205,7 @@
         /// <param name="eventArgs"></param>
         private void OnPointHandleDragEnded(object sender, DragEventArgs eventArgs)
         {
-            ModifyPluginInputFromManipulators();
+            this.ModifyPluginInputFromManipulators();
         }
 
         /// <summary>
@@ -215,9 +215,9 @@
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);
-            DetachHandlers();
+            this.DetachHandlers();
 
-            _polygonHandles.ForEach(handle => handle.Dispose());
+            this._polygonHandles.ForEach(handle => handle.Dispose());
 
             foreach (var manipulator in this.Manipulators)
             {
@@ -225,7 +225,7 @@
             }
 
             //Clear local caches
-            _polygonHandles?.Clear();
+            this._polygonHandles?.Clear();
         }
 
         /// <summary>
@@ -233,10 +233,10 @@
         /// </summary>
         private void AttachHandlers()
         {
-            _polygonHandles.ForEach(handle =>
+            this._polygonHandles.ForEach(handle =>
             {
-                handle.DragOngoing += OnPointHandleDragOngoing;
-                handle.DragEnded += OnPointHandleDragEnded;
+                handle.DragOngoing += this.OnPointHandleDragOngoing;
+                handle.DragEnded += this.OnPointHandleDragEnded;
             });
         }
 
@@ -245,10 +245,10 @@
         /// </summary>
         private void DetachHandlers()
         {
-            _polygonHandles.ForEach(handle =>
+            this._polygonHandles.ForEach(handle =>
             {
-                handle.DragOngoing -= OnPointHandleDragOngoing;
-                handle.DragEnded -= OnPointHandleDragEnded;
+                handle.DragOngoing -= this.OnPointHandleDragOngoing;
+                handle.DragEnded -= this.OnPointHandleDragEnded;
             });
         }
     }

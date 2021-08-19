@@ -1,13 +1,12 @@
 ﻿namespace JoistAreaFeatures.Services
 {
+    using JoistArea.Logic;
+    using JoistArea.Tools;
     using System;
     using System.Collections;
     using System.Collections.Generic;
-    using JoistArea.Logic;
-    using JoistArea.Tools;
     using Tekla.Structures.Geometry3d;
     using Tekla.Structures.Model;
-    using Tekla.Structures.Model.UI;
 
     public static class FeatureLogic
     {
