@@ -16,8 +16,8 @@
     /// </summary>
     public sealed class PolygonShapeMc : ManipulationContext
     {
-        private readonly IHandleManager _handleManager;
-        private List<PointHandle> _polygonHandles;
+        private readonly IHandleManager handleManager;
+        private List<PointHandle> polygonHandles;
 
         /// <summary>
         /// Main constructor to call methods to create PointHandles
@@ -29,14 +29,17 @@
         {
             if (component == null) throw new ArgumentNullException(nameof(component));
             if (feature == null) throw new ArgumentNullException(nameof(feature));
-
             try
             {
-                this._handleManager = feature.HandleManager;
+                //Cache local services
+                this.handleManager = feature.HandleManager;
+                if (this.handleManager == null) return;
 
-                //Create and setup PointHandle manipulators
-                this._polygonHandles = this.CreatePointHandles(component);
-                this.AttachHandlers();
+                //Get part and plugin information
+                var componentInput = FeatureLogic.GetCurrentInput(component);
+
+                //Create and attach events for polygon handle manipulators
+                this.polygonHandles = this.CreatePointHandles(componentInput.Item1);
 
                 //Draw custom graphics
                 this.ReCreateGraphics();
@@ -52,11 +55,14 @@
         /// </summary>
         public override void UpdateContext()
         {
-            base.UpdateContext();
+            //Sync component data with model
             this.Component.Select();
 
+            //Get data from plugin
+            var componentInput = FeatureLogic.GetCurrentInput(this.Component);
+
             //Refresh existing manipulator handles from plugin input
-            this.UpdatePointHandles(this.Component);
+            this.UpdatePointHandles(componentInput.Item1);
 
             //Update graphics based on plugin and manipulators
             this.ReCreateGraphics();
@@ -74,47 +80,45 @@
         /// <summary>
         /// Creates new PointHandles through HandleManager and caches both PointHandles
         /// </summary>
-        /// <param name="plugin">Model plugin instance</param>
-        /// <returns></returns>
-        private List<PointHandle> CreatePointHandles(Component plugin)
+        /// <param name="pluginPoints">Plugin component input current points</param>
+        /// <returns>New list of created and active point handles</returns>
+        private List<PointHandle> CreatePointHandles(List<Point> pluginPoints)
         {
-            if (plugin == null) throw new ArgumentNullException(nameof(plugin));
-            var handles = new List<PointHandle>();
-
+            if (pluginPoints == null) throw new ArgumentNullException(nameof(pluginPoints));
+            if (pluginPoints.Count < 3) throw new ArgumentException("Error: pluginPoints must contain at least 3 points...");
+            var result = new List<PointHandle>();
             try
             {
-                var componentInput = FeatureLogic.GetCurrentInput(plugin);
-                foreach (var pt in componentInput.Item1)
+                foreach (var pt in pluginPoints)
                 {
-                    var handle = this._handleManager.CreatePointHandle(pt, HandleLocationType.InputPoint, HandleEffectType.Geometry);
-                    handles.Add(handle);
+                    var handle = this.handleManager.CreatePointHandle(pt, HandleLocationType.InputPoint, HandleEffectType.Geometry);
+                    handle.DragOngoing += this.OnPointHandleDragOngoing;
+                    handle.DragEnded += this.OnPointHandleDragEnded;
+                    result.Add(handle);
                 }
-                return handles;
+                return result;
             }
             catch (Exception ex)
             {
                 GlobalServices.LogException(ex);
-                return new List<PointHandle>();
+                return null;
             }
         }
 
         /// <summary>
         /// Refresh existing manipulator handles from plugin input
         /// </summary>
-        /// <param name="component">Model plugin instance</param>
-        private void UpdatePointHandles(Component component)
+        /// <param name="pluginPoints">Plugin component input current points</param>
+        private void UpdatePointHandles(List<Point> pluginPoints)
         {
-            if (component == null) throw new ArgumentNullException(nameof(component));
-            if (this._polygonHandles.Count < 1) return;
+            if (pluginPoints == null) throw new ArgumentNullException(nameof(pluginPoints));
+            if (pluginPoints.Count < 3) throw new ArgumentException("Error: pluginPoints must contain at least 3 points...");
             try
             {
-                //Get input objects from component
-                var componentInput = FeatureLogic.GetCurrentInput(component);
-                //Update each PointHandle position
                 var index = 0;
-                foreach (var pt in componentInput.Item1)
+                foreach (var pt in pluginPoints)
                 {
-                    this._polygonHandles[index].Point = new Point(pt);
+                    this.polygonHandles[index].Point = new Point(pt);
                     index++;
                 }
             }
@@ -129,12 +133,12 @@
         /// </summary>
         private void DrawPolygonEdgeDimensions()
         {
+            if (this.polygonHandles == null || this.polygonHandles.Count < 3) return;
             try
             {
                 //Draw edges around picked points
-                this.Graphics?.Clear();
                 Point lastPoint = null;
-                foreach (var pg in this._polygonHandles)
+                foreach (var pg in this.polygonHandles)
                 {
                     if (lastPoint != null)
                     {
@@ -146,7 +150,7 @@
                 }
 
                 //Draw connecting edge from last point to 1st
-                var lsEnd = new LineSegment(this._polygonHandles[this._polygonHandles.Count - 1].Point, this._polygonHandles[0].Point);
+                var lsEnd = new LineSegment(this.polygonHandles[this.polygonHandles.Count - 1].Point, this.polygonHandles[0].Point);
                 this.Graphics?.DrawDimension(lsEnd, null, DimensionEndPointSizeType.FixedMedium);
             }
             catch (Exception ex)
@@ -160,7 +164,7 @@
         /// </summary>
         private void ModifyPluginInputFromManipulators()
         {
-            if (this._polygonHandles == null) throw new ArgumentNullException(nameof(this._polygonHandles));
+            if (this.polygonHandles == null || this.polygonHandles.Count < 3) return;
             try
             {
                 var pastInput = FeatureLogic.GetCurrentInput(this.Component);
@@ -168,7 +172,7 @@
 
                 //Add polygon input adjusted new points
                 var polygon = new Polygon();
-                foreach (var pg in this._polygonHandles)
+                foreach (var pg in this.polygonHandles)
                 {
                     polygon.Points.Add(new Point(pg.Point));
                 }
@@ -195,7 +199,7 @@
         /// <param name="eventArgs"></param>
         private void OnPointHandleDragOngoing(object sender, DragEventArgs eventArgs)
         {
-            this.DrawPolygonEdgeDimensions();
+            this.ReCreateGraphics();
         }
 
         /// <summary>
@@ -217,27 +221,14 @@
             base.Dispose(disposing);
             this.DetachHandlers();
 
-            this._polygonHandles.ForEach(handle => handle.Dispose());
+            this.polygonHandles?.ForEach(handle => handle.Dispose());
+            this.polygonHandles?.Clear();
 
+            //Dispose distance/measure type manipulators
             foreach (var manipulator in this.Manipulators)
             {
                 manipulator.Dispose();
             }
-
-            //Clear local caches
-            this._polygonHandles?.Clear();
-        }
-
-        /// <summary>
-        /// Attach event handlers to each PointHandle in cache
-        /// </summary>
-        private void AttachHandlers()
-        {
-            this._polygonHandles.ForEach(handle =>
-            {
-                handle.DragOngoing += this.OnPointHandleDragOngoing;
-                handle.DragEnded += this.OnPointHandleDragEnded;
-            });
         }
 
         /// <summary>
@@ -245,7 +236,7 @@
         /// </summary>
         private void DetachHandlers()
         {
-            this._polygonHandles.ForEach(handle =>
+            this.polygonHandles.ForEach(handle =>
             {
                 handle.DragOngoing -= this.OnPointHandleDragOngoing;
                 handle.DragEnded -= this.OnPointHandleDragEnded;

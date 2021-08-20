@@ -2,7 +2,6 @@
 {
     using JoistArea.Logic;
     using JoistArea.Tools;
-    using JoistArea.ViewModel;
     using Services;
     using System;
     using System.Collections.Generic;
@@ -18,11 +17,10 @@
     /// </summary>
     public sealed class GuideLineMc : ManipulationContext
     {
-        private readonly IHandleManager _handleManager;
-        private List<PointHandle> _guidelineHandles;
-        private LineHandle _guideLine;
-        private JoistAreaData _uiData;
-        private readonly JoistAreaMainLogic _liftingLogic;
+        private readonly IHandleManager handleManager;
+        private List<PointHandle> guidelineHandles;
+        private readonly LineHandle guideLine;
+        private CoordinateSystem faceCoordinateSystem;
 
         /// <summary>
         /// Main constructor to call methods to create GuideLine and handle manipulators
@@ -36,20 +34,25 @@
             if (feature == null) throw new ArgumentNullException(nameof(feature));
             try
             {
-                this._handleManager = feature.HandleManager;
+                //Cache local services
+                this.handleManager = feature.HandleManager;
+                if (this.handleManager == null) return;
 
-                //Get part and plugin information
-                this._uiData = component.GetDataFromComponent();
-                var componentInput = FeatureLogic.GetCurrentInput(component);
+                //Get data from plugin
+                var componentInput = FeatureLogic.GetCurrentInput(this.Component);
+                var uiData = this.Component.GetDataFromComponent();
 
-                //Create new instance of logic service class
-                this._liftingLogic = new JoistAreaMainLogic();
-                this._liftingLogic.ExternalInitialize(componentInput.Item1, componentInput.Item2, this._uiData);
+                //Update internal logic to take into account latest data from plugin
+                var liftingLogic = new JoistAreaMainLogic();
+                liftingLogic.ExternalInitialize(componentInput.Item1, componentInput.Item2, uiData);
+                this.faceCoordinateSystem = new CoordinateSystem(liftingLogic.GlobalCoordinateSystem.Origin,
+                    liftingLogic.GlobalCoordinateSystem.AxisX, liftingLogic.GlobalCoordinateSystem.AxisY);
 
-                //Line and point manipulators
-                this._guideLine = this.CreateGuideLine(this.Component, componentInput.Item2);
-                this._guidelineHandles = this.CreateGuideLineHandles(this.Component, componentInput.Item2);
-                this.AttachHandlers();
+                //Create and attach events for single line handle manipulator
+                this.guideLine = this.CreateGuideLine(componentInput.Item2);
+
+                //Create and attach events for two point handles
+                this.guidelineHandles = this.CreateGuideLineHandles(componentInput.Item2);
 
                 //Draw custom graphics
                 this.ReCreateGraphics();
@@ -65,17 +68,22 @@
         /// </summary>
         public override void UpdateContext()
         {
-            base.UpdateContext();
+            //Sync component data with model
             this.Component.Select();
 
-            //Update internal logic to take into account changes from plugin
-            this._uiData = this.Component.GetDataFromComponent();
+            //Get data from plugin
             var componentInput = FeatureLogic.GetCurrentInput(this.Component);
-            this._liftingLogic.ExternalInitialize(componentInput.Item1, componentInput.Item2, this._uiData);
+            var uiData = this.Component.GetDataFromComponent();
+
+            //Update internal logic to take into account latest data from plugin
+            var liftingLogic = new JoistAreaMainLogic();
+            liftingLogic.ExternalInitialize(componentInput.Item1, componentInput.Item2, uiData);
+            this.faceCoordinateSystem = new CoordinateSystem(liftingLogic.GlobalCoordinateSystem.Origin,
+                liftingLogic.GlobalCoordinateSystem.AxisX, liftingLogic.GlobalCoordinateSystem.AxisY);
 
             //Refresh existing manipulators
-            this.UpdateGuideLine(this.Component, componentInput.Item2);
-            this.UpdateGuideLinePoints(this.Component, componentInput.Item2);
+            this.UpdateGuideLine(componentInput.Item2);
+            this.UpdateGuideLinePoints(componentInput.Item2);
 
             //Update graphics based on plugin and manipulators
             this.ReCreateGraphics();
@@ -87,22 +95,23 @@
         private void ReCreateGraphics()
         {
             this.Graphics?.Clear();
-            this.DrawGuidelineArrow();
+            this.DrawGuidelineArrow(this.faceCoordinateSystem);
         }
 
         /// <summary>
-        /// Creates new LineHandle for GuideLine manipulation
+        /// Creates guide line handle manipulator and attaches events
         /// </summary>
-        /// <param name="component">Model plugin instance</param>
-        /// <param name="inputLine">LineSegment from component input</param>
-        /// <returns>New list of PointHandles</returns>
-        private LineHandle CreateGuideLine(Component component, LineSegment inputLine)
+        /// <param name="ls">Line segment representing line</param>
+        /// <returns>New LineHandle manipulator</returns>
+        private LineHandle CreateGuideLine(LineSegment ls)
         {
-            if (component == null) throw new ArgumentNullException(nameof(component));
-            if (inputLine == null) throw new ArgumentNullException(nameof(inputLine));
+            if (ls == null) throw new ArgumentNullException(nameof(ls));
             try
             {
-                return this._handleManager.CreateLineHandle(inputLine, HandleLocationType.First, HandleEffectType.Geometry);
+                var lineHandle = this.handleManager.CreateLineHandle(ls, HandleLocationType.Other, HandleEffectType.Geometry);
+                lineHandle.DragOngoing += this.Guideline_DragOngoing;
+                lineHandle.DragEnded += this.Guideline_DragEnded;
+                return lineHandle;
             }
             catch (Exception ex)
             {
@@ -114,21 +123,23 @@
         /// <summary>
         /// Creates new PointHandles for GuideLine
         /// </summary>
-        /// <param name="component">Model plugin instance</param>
         /// <param name="inputLine">LineSegment from component input</param>
         /// <returns>New list of PointHandles</returns>
-        private List<PointHandle> CreateGuideLineHandles(Component component, LineSegment inputLine)
+        private List<PointHandle> CreateGuideLineHandles(LineSegment inputLine)
         {
-            if (component == null) throw new ArgumentNullException(nameof(component));
             if (inputLine == null) throw new ArgumentNullException(nameof(inputLine));
             try
             {
                 var handles = new List<PointHandle>();
 
-                var h1 = this._handleManager.CreatePointHandle(inputLine.Point1, HandleLocationType.First, HandleEffectType.Property);
+                var h1 = this.handleManager.CreatePointHandle(inputLine.Point1, HandleLocationType.First, HandleEffectType.Property);
+                h1.DragOngoing += this.GuidelineHandle_DragOngoing;
+                h1.DragEnded += this.GuidelineHandle_DragEnded;
                 handles.Add(h1);
 
-                var h2 = this._handleManager.CreatePointHandle(inputLine.Point2, HandleLocationType.Last, HandleEffectType.Property);
+                var h2 = this.handleManager.CreatePointHandle(inputLine.Point2, HandleLocationType.Last, HandleEffectType.Property);
+                h2.DragOngoing += this.GuidelineHandle_DragOngoing;
+                h2.DragEnded += this.GuidelineHandle_DragEnded;
                 handles.Add(h2);
 
                 return handles;
@@ -136,39 +147,35 @@
             catch (Exception ex)
             {
                 GlobalServices.LogException(ex);
-                return new List<PointHandle>();
+                return null;
             }
         }
 
         /// <summary>
         /// Updates existing GuideLine LineHandle
         /// </summary>
-        /// <param name="component">Model plugin instance</param>
         /// <param name="inputLine">LineSegment from component input</param>
-        private void UpdateGuideLine(Component component, LineSegment inputLine)
+        private void UpdateGuideLine(LineSegment inputLine)
         {
-            if (component == null) throw new ArgumentNullException(nameof(component));
             if (inputLine == null) throw new ArgumentNullException(nameof(inputLine));
-            if (this._guideLine == null || this._guideLine.Line == null) return;
-            if (this._guideLine.Line.Point1 == null || this._guideLine.Line.Point2 == null) return;
+            if (this.guideLine == null || this.guideLine.Line == null) return;
+            if (this.guideLine.Line.Point1 == null || this.guideLine.Line.Point2 == null) return;
 
-            this._guideLine.Line.Point1 = new Point(inputLine.Point1);
-            this._guideLine.Line.Point2 = new Point(inputLine.Point2);
+            this.guideLine.Line.Point1 = new Point(inputLine.Point1);
+            this.guideLine.Line.Point2 = new Point(inputLine.Point2);
         }
 
         /// <summary>
         /// Updates existing GuideLine PointHandles
         /// </summary>
-        /// <param name="component">Model plugin instance</param>
         /// <param name="inputLine">LineSegment from component input</param>
-        private void UpdateGuideLinePoints(Component component, LineSegment inputLine)
+        private void UpdateGuideLinePoints(LineSegment inputLine)
         {
-            if (component == null) throw new ArgumentNullException(nameof(component));
             if (inputLine == null) throw new ArgumentNullException(nameof(inputLine));
-            if (this._guidelineHandles == null || this._guidelineHandles.Count != 2) return;
+            if (this.guidelineHandles == null || this.guidelineHandles.Count != 2) return;
 
-            this._guidelineHandles[0].Point = new Point(inputLine.Point1);
-            this._guidelineHandles[1].Point = new Point(inputLine.Point2);
+            this.guidelineHandles[0].Point = new Point(inputLine.Point1);
+            this.guidelineHandles[1].Point = new Point(inputLine.Point2);
         }
 
         /// <summary>
@@ -178,14 +185,14 @@
         /// <param name="e">DragEventArgs</param>
         private void Guideline_DragEnded(object sender, DragEventArgs e)
         {
-            if (this._guidelineHandles == null || this._guideLine == null) return;
-            if (this._guidelineHandles.Count != 2 || this._guideLine.Line == null) return;
+            if (this.guidelineHandles == null || this.guideLine == null) return;
+            if (this.guidelineHandles.Count != 2 || this.guideLine.Line == null) return;
 
             //Update main GuidLine handle objects from dragged line
-            this._guidelineHandles[0].Point = new Point(this._guideLine.Line.Point1);
-            this._guidelineHandles[1].Point = new Point(this._guideLine.Line.Point2);
+            this.guidelineHandles[0].Point = new Point(this.guideLine.Line.Point1);
+            this.guidelineHandles[1].Point = new Point(this.guideLine.Line.Point2);
 
-            //Update plugin input from manipulators
+            //DM plugin input update (also calls plugin.Modify() and new Model.CommitChanges() for you)
             this.ModifyPluginInputFromManipulators();
         }
 
@@ -196,15 +203,15 @@
         /// <param name="e">DragEventArgs</param>
         private void Guideline_DragOngoing(object sender, DragEventArgs e)
         {
-            if (this._guidelineHandles?.Count != 2) return;
-            if (this._guideLine?.Line == null) return;
+            if (this.guidelineHandles?.Count != 2) return;
+            if (this.guideLine?.Line == null) return;
 
             //Update main GuidLine handle objects from dragged line
-            this._guidelineHandles[0].Point = new Point(this._guideLine.Line.Point1);
-            this._guidelineHandles[1].Point = new Point(this._guideLine.Line.Point2);
+            this.guidelineHandles[0].Point = new Point(this.guideLine.Line.Point1);
+            this.guidelineHandles[1].Point = new Point(this.guideLine.Line.Point2);
 
             //Update graphics for GuideLine as handles move
-            this.DrawGuidelineArrow();
+            this.ReCreateGraphics();
         }
 
         /// <summary>
@@ -214,13 +221,13 @@
         /// <param name="e"></param>
         private void GuidelineHandle_DragEnded(object sender, DragEventArgs e)
         {
-            if (this._guidelineHandles?.Count != 2) return;
-            if (this._guideLine?.Line == null) return;
+            if (this.guidelineHandles?.Count != 2) return;
+            if (this.guideLine?.Line == null) return;
 
-            this._guideLine.Line.Point1 = new Point(this._guidelineHandles[0].Point);
-            this._guideLine.Line.Point2 = new Point(this._guidelineHandles[1].Point);
+            this.guideLine.Line.Point1 = new Point(this.guidelineHandles[0].Point);
+            this.guideLine.Line.Point2 = new Point(this.guidelineHandles[1].Point);
 
-            //Update plugin input from manipulators
+            //DM plugin input update (also calls plugin.Modify() and new Model.CommitChanges() for you)
             this.ModifyPluginInputFromManipulators();
         }
 
@@ -231,14 +238,14 @@
         /// <param name="e">DragEventArgs</param>
         private void GuidelineHandle_DragOngoing(object sender, DragEventArgs e)
         {
-            if (this._guidelineHandles?.Count != 2) return;
-            if (this._guideLine?.Line == null) return;
+            if (this.guidelineHandles?.Count != 2) return;
+            if (this.guideLine?.Line == null) return;
 
-            this._guideLine.Line.Point1 = new Point(this._guidelineHandles[0].Point);
-            this._guideLine.Line.Point2 = new Point(this._guidelineHandles[1].Point);
+            this.guideLine.Line.Point1 = new Point(this.guidelineHandles[0].Point);
+            this.guideLine.Line.Point2 = new Point(this.guidelineHandles[1].Point);
 
             //Update graphics for GuideLine as handles move
-            this.DrawGuidelineArrow();
+            this.ReCreateGraphics();
         }
 
         /// <summary>
@@ -250,33 +257,15 @@
             base.Dispose(disposing);
             this.DetachHandlers();
 
-            this._guideLine?.Dispose();
-            this._guidelineHandles.ForEach(handle => handle.Dispose());
+            //Dispose point/handle type objects
+            this.guidelineHandles?.ForEach(handle => handle.Dispose());
+            this.guidelineHandles?.Clear();
+            this.guideLine?.Dispose();
 
+            //Dispose distance/measure type manipulators
             foreach (var manipulator in this.Manipulators)
             {
                 manipulator.Dispose();
-            }
-
-            //Clear local caches
-            this._guidelineHandles.Clear();
-        }
-
-        /// <summary>
-        /// Attach event handlers to each manipulator in cache
-        /// </summary>
-        private void AttachHandlers()
-        {
-            this._guidelineHandles.ForEach(handle =>
-            {
-                handle.DragOngoing += this.GuidelineHandle_DragOngoing;
-                handle.DragEnded += this.GuidelineHandle_DragEnded;
-            });
-
-            if (this._guideLine != null)
-            {
-                this._guideLine.DragOngoing += this.Guideline_DragOngoing;
-                this._guideLine.DragEnded += this.Guideline_DragEnded;
             }
         }
 
@@ -285,27 +274,25 @@
         /// </summary>
         private void DetachHandlers()
         {
-            this._guidelineHandles.ForEach(handle =>
+            this.guidelineHandles?.ForEach(handle =>
             {
                 handle.DragOngoing -= this.GuidelineHandle_DragOngoing;
                 handle.DragEnded -= this.GuidelineHandle_DragEnded;
             });
 
-            if (this._guideLine != null)
+            if (this.guideLine != null)
             {
-                this._guideLine.DragOngoing -= this.Guideline_DragOngoing;
-                this._guideLine.DragEnded -= this.Guideline_DragEnded;
+                this.guideLine.DragOngoing -= this.Guideline_DragOngoing;
+                this.guideLine.DragEnded -= this.Guideline_DragEnded;
             }
         }
 
-
-
         /// <summary>
-        /// Updates model plugin for DM handle changes
+        /// Updates model plugin for DM handle changes and commits changes
         /// </summary>
         private void ModifyPluginInputFromManipulators()
         {
-            if (this._guidelineHandles == null) throw new ArgumentNullException(nameof(this._guidelineHandles));
+            if (this.guidelineHandles == null) throw new ArgumentNullException(nameof(this.guidelineHandles));
             try
             {
                 var pastInput = FeatureLogic.GetCurrentInput(this.Component);
@@ -320,11 +307,11 @@
                 adjustedInput.AddInputPolygon(polygon);
 
                 //Add new adjusted guideline input
-                var gp1 = new Point(this._guidelineHandles[0].Point);
-                var gp2 = new Point(this._guidelineHandles[1].Point);
+                var gp1 = new Point(this.guidelineHandles[0].Point);
+                var gp2 = new Point(this.guidelineHandles[1].Point);
                 adjustedInput.AddTwoInputPositions(gp1, gp2);
 
-                //Call component to update
+                //DM plugin input update (also calls plugin.Modify() and new Model.CommitChanges() for you)
                 this.ModifyComponentInput(adjustedInput);
             }
             catch (Exception ex)
@@ -336,41 +323,40 @@
         /// <summary>
         /// Draws local x-y axis in model with part profile graphics
         /// </summary>
-        private void DrawGuidelineArrow()
+        private void DrawGuidelineArrow(CoordinateSystem faceCs)
         {
-            if (this._liftingLogic == null) throw new ArgumentNullException(nameof(this._liftingLogic));
-            if (this._guidelineHandles == null || this._guidelineHandles.Count != 2) return;
+            if (faceCs == null) throw new ArgumentNullException(nameof(faceCs));
+            if (this.guidelineHandles == null || this.guidelineHandles.Count != 2) return;
             if (this.Graphics == null) return;
 
-            const double TipLength = 125.0;
-            const double ShaftThickness = 25.0;
-            const double ArrowThickness = 100.0;
+            const double tipLength = 125.0;
+            const double shaftThickness = 25.0;
+            const double arrowThickness = 100.0;
             const double yAxisLength = 900.0;
 
             try
             {
-                var guideLine = new LineSegment
+                var ls = new LineSegment
                 {
-                    Point1 = this._guidelineHandles[0].Point,
-                    Point2 = this._guidelineHandles[1].Point
+                    Point1 = this.guidelineHandles[0].Point,
+                    Point2 = this.guidelineHandles[1].Point
                 };
-                var globalCs = this._liftingLogic.GlobalCoordinateSystem;
-                var p0 = new Point(guideLine.Point1);
-                var arrowHeadProfile = $"HXGON{ArrowThickness}-{ShaftThickness}";
-                var shaftProfile = $"D{ShaftThickness}";
-                var yAxisCalc = Vector.Cross(globalCs.GetAxisZ(), guideLine.GetDirectionVector()).GetNormal();
+                var p0 = new Point(ls.Point1);
+                var arrowHeadProfile = $"HXGON{arrowThickness}-{shaftThickness}";
+                var shaftProfile = $"D{shaftThickness}";
+                var yAxisCalc = Vector.Cross(faceCs.GetAxisZ(), ls.GetDirectionVector()).GetNormal();
 
                 //Define x-axis arrow
                 {
-                    var pxTrans = new Point(guideLine.Point2);
-                    pxTrans.Translate(guideLine.GetDirectionVector() * -TipLength);
+                    var pxTrans = new Point(ls.Point2);
+                    pxTrans.Translate(ls.GetDirectionVector() * -tipLength);
 
                     var xShaft = new LineSegment(p0, pxTrans);
-                    var xHead = new LineSegment(pxTrans, guideLine.Point2);
+                    var xHead = new LineSegment(pxTrans, ls.Point2);
 
                     this.Graphics?.DrawProfile(shaftProfile, xShaft, new Vector(0, 0, 0), 0, LineType.Error);
                     this.Graphics?.DrawProfile(arrowHeadProfile, xHead, new Vector(0, 0, 0), 0, LineType.Error);
-                    var textPt = new Point(guideLine.Point2).GetTranslated(globalCs.AxisX.GetNormal() * 75);
+                    var textPt = new Point(ls.Point2).GetTranslated(faceCs.AxisX.GetNormal() * 75);
                     this.Graphics?.DrawText("X", textPt, TextRepresentationTypes.Label);
                 }
 
@@ -379,7 +365,7 @@
                     var yEnd = new Point(p0);
                     yEnd.Translate(yAxisCalc * yAxisLength);
                     var pyTrans = new Point(yEnd);
-                    pyTrans.Translate(yAxisCalc * -TipLength);
+                    pyTrans.Translate(yAxisCalc * -tipLength);
 
                     var yShaft = new LineSegment(p0, pyTrans);
                     var yHead = new LineSegment(pyTrans, yEnd);

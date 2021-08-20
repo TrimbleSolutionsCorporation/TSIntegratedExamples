@@ -1,6 +1,7 @@
 ﻿namespace JoistAreaFeatures.Services
 {
     using System;
+    using System.Collections.Generic;
     using Tekla.Structures.Model;
     using Tekla.Structures.Plugins.DirectManipulation.Services.Tools.Picking;
 
@@ -105,6 +106,26 @@
                 if (pickedFace != null) break;
             }
             return pickedFace;
+        }
+
+        /// <summary>
+        /// Create new list without objects from list to prune
+        /// </summary>
+        /// <typeparam name="T">Type in list</typeparam>
+        /// <param name="list">Original source list</param>
+        /// <param name="toRemoveIndexList">Lis of index positions to exclude</param>
+        /// <returns>New list excluding index position objects</returns>
+        public static List<T> GetPrunedList<T>(this List<T> list, ICollection<int> toRemoveIndexList)
+        {
+            if (toRemoveIndexList == null || toRemoveIndexList.Count < 1) return list;
+            var result = new List<T>();
+            for (var i = 0; i < list.Count; i++)
+            {
+                if (toRemoveIndexList.Contains(i)) continue;
+                var distMan = list[i];
+                result.Add(distMan);
+            }
+            return result;
         }
     }
 }
