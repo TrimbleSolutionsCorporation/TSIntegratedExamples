@@ -1,0 +1,347 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Tekla.Structures.Service</name>
+    </assembly>
+    <members>
+        <member name="T:Tekla.Structures.Service.FunctionBind">
+            <summary>
+            Copy-paste from teklastructureswfpfeatures.sln
+            
+            Tool class to dynamically "dllimport" functions from teklastructures_application.dll.
+            Akit build tools export functions referenced in .ail definitions like this. Which is clever as dakit.dll 
+            cannot directly dllimport these functions, as it's independent of the application.
+            </summary>
+        </member>
+        <member name="M:Tekla.Structures.Service.FunctionBind.#cctor">
+            <summary>
+            Initializes static members of the <see cref="T:Tekla.Structures.Service.FunctionBind"/> class.
+            </summary>
+        </member>
+        <member name="T:Tekla.Structures.Service.FunctionBind.CallbackDelegate">
+            <summary>
+            Calls the callback.
+            </summary>
+            <param name="param">The parameter.</param>
+            <returns>int</returns>
+        </member>
+        <member name="T:Tekla.Structures.Service.FunctionBind.ButtonClickDelegate">
+            <summary>
+            Calls the callback.
+            </summary>
+            <param name="dialog">The dialog.</param>
+            <param name="field">The field.</param>
+            <param name="buttontype">The buttontype.</param>
+            <param name="param">The parameter.</param>
+            <returns>IntPtr</returns>
+        </member>
+        <member name="T:Tekla.Structures.Service.FunctionBind.FormatFormatDelegate">
+            <summary>
+            Calls the callback.
+            </summary>
+            <param name="dialog">The dialog.</param>
+            <param name="field">The field.</param>
+            <param name="type">The type.</param>
+            <param name="pValue">The p value.</param>
+            <param name="Parameter">The parameter.</param>
+            <returns>IntPtr</returns>
+        </member>
+        <member name="T:Tekla.Structures.Service.FunctionBind.FormatParseDelegate">
+            <summary>
+            Calls the callback.
+            </summary>
+            <param name="dialog">The dialog.</param>
+            <param name="field">The field.</param>
+            <param name="type">The type.</param>
+            <param name="pValue">The p value.</param>
+            <param name="Parameter">The parameter.</param>
+            <returns>IntPtr</returns>
+        </member>
+        <member name="T:Tekla.Structures.Service.FunctionBind.ValueChangeDelegate">
+            <summary>
+            The ValueChangeDelegate.
+            </summary>
+            <param name="dialog">The dialog.</param>
+            <param name="field">The field.</param>
+            <param name="param">The parameter.</param>
+            <returns>Change delegate</returns>
+        </member>
+        <member name="P:Tekla.Structures.Service.FunctionBind.Callbacks">
+            <summary>
+            Gets or sets list of callbacks. 
+            </summary>
+            <remarks>
+            A correct delegate must be used when calling the callback, otherwise system will crash.
+            </remarks>
+        </member>
+        <member name="M:Tekla.Structures.Service.FunctionBind.CallButtonClickCallback(System.String,System.String,System.String,System.Int32,System.String)">
+            <summary>
+            Calls the button click callback.
+            </summary>
+            <param name="name">The name.</param>
+            <param name="dialog">The dialog.</param>
+            <param name="field">The field.</param>
+            <param name="buttonType">Type of the button.</param>
+            <param name="param">The parameter.</param>
+            <returns>-1 if failure</returns>
+        </member>
+        <member name="M:Tekla.Structures.Service.FunctionBind.CallFormatCallbackFormat(System.String,System.String,System.String,System.Double,System.String)">
+            <summary>
+            Calls the format callback format.
+            </summary>
+            <param name="callbackName">Name of the callback.</param>
+            <param name="dialog">The dialog.</param>
+            <param name="field">The field.</param>
+            <param name="value">The value.</param>
+            <param name="param">The parameter.</param>
+            <returns>callback format</returns>
+        </member>
+        <member name="M:Tekla.Structures.Service.FunctionBind.CallFormatCallbackParse(System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            Calls the format callback parse.
+            </summary>
+            <param name="callbackName">Name of the callback.</param>
+            <param name="dialog">The dialog.</param>
+            <param name="field">The field.</param>
+            <param name="text">The text.</param>
+            <param name="param">The parameter.</param>
+            <returns>calback value</returns>
+        </member>
+        <member name="M:Tekla.Structures.Service.FunctionBind.CallValueChangeCallback(System.String,System.String,System.String,System.String)">
+            <summary>
+            Calls the value change callback.
+            </summary>
+            <param name="name">The name.</param>
+            <param name="dialog">The dialog.</param>
+            <param name="field">The field.</param>
+            <param name="param">The parameter.</param>
+            <returns>callback value</returns>
+        </member>
+        <member name="M:Tekla.Structures.Service.FunctionBind.CallCallback(System.String,System.String)">
+            <summary>
+            Calls the callback.
+            </summary>
+            <param name="name">The name.</param>
+            <param name="param">The parameter.</param>
+            <returns>callback value</returns>
+        </member>
+        <member name="M:Tekla.Structures.Service.FunctionBind.LoadLibrary(System.String)">
+            <summary>
+            Loads the library.
+            </summary>
+            <param name="fileName">Name of the file.</param>
+            <returns>IntPtr</returns>
+        </member>
+        <member name="M:Tekla.Structures.Service.FunctionBind.GetProcAddress(System.IntPtr,System.String)">
+            <summary>
+            Gets the proc address.
+            </summary>
+            <param name="moduleHandle">The module handle.</param>
+            <param name="procName">Name of the proc.</param>
+            <returns>IntPtr</returns>
+        </member>
+        <member name="T:Tekla.Structures.Service.ITeklaStructuresService">
+            <summary>
+            Tekla Structures Service Interface
+            </summary>
+        </member>
+        <member name="M:Tekla.Structures.Service.ITeklaStructuresService.Ping">
+            <summary>
+            Pings this instance.
+            </summary>
+            <returns>Pong.</returns>
+        </member>
+        <member name="M:Tekla.Structures.Service.ITeklaStructuresService.DoReadIn(System.String)">
+            <summary>
+            Does the read in.
+            </summary>
+            <param name="folder">The folder.</param>
+        </member>
+        <member name="M:Tekla.Structures.Service.ITeklaStructuresService.DoWriteOut(System.String)">
+            <summary>
+            Does the write out.
+            </summary>
+            <param name="folder">The folder.</param>
+        </member>
+        <member name="M:Tekla.Structures.Service.ITeklaStructuresService.ExecuteCallback(System.String,System.String)">
+            <summary>
+            Executes the callback.
+            </summary>
+            <param name="name">The name.</param>
+            <param name="parameter">The parameter.</param>
+        </member>
+        <member name="M:Tekla.Structures.Service.ITeklaStructuresService.ExecuteButtonClickCallback(System.String,System.String,System.String,System.Int32,System.String)">
+            <summary>
+            Executes the button click callback.
+            </summary>
+            <param name="name">The name.</param>
+            <param name="dialog">The dialog.</param>
+            <param name="field">The field.</param>
+            <param name="buttonType">Type of the button.</param>
+            <param name="parameter">The parameter.</param>
+        </member>
+        <member name="T:Tekla.Structures.Service.TeklaStructuresService">
+            <summary>
+            
+            
+            <code>
+            static void Main(string[] args)
+            {
+               using (var service = new TeklaStructuresService())
+               {
+                   service.Initialize(@"C:\TeklaStructuresModels\New model 8\New model 8.db1");
+                   Console.WriteLine("Done");
+               }
+            }
+            </code>
+            </summary>
+            <seealso cref="T:Tekla.Structures.Service.ITeklaStructuresService" />
+            <seealso cref="T:System.IDisposable" />
+        </member>
+        <member name="F:Tekla.Structures.Service.TeklaStructuresService.InteropDll">
+            <summary>
+            dll name for path probing
+            </summary>
+        </member>
+        <member name="F:Tekla.Structures.Service.TeklaStructuresService.InteropAssembly">
+            <summary>
+            Assembly name
+            </summary>
+        </member>
+        <member name="F:Tekla.Structures.Service.TeklaStructuresService.isInitialized">
+            <summary>
+            Whether this class has been initialized in this process or not.
+            </summary>
+        </member>
+        <member name="F:Tekla.Structures.Service.TeklaStructuresService.serviceInterop">
+            <summary>
+            The service interop
+            </summary>
+        </member>
+        <member name="F:Tekla.Structures.Service.TeklaStructuresService.disposedValue">
+            <summary>
+            Flag to detect redundant calls
+            </summary>
+        </member>
+        <member name="M:Tekla.Structures.Service.TeklaStructuresService.#ctor(System.IO.DirectoryInfo,System.String,System.IO.FileInfo,System.IO.FileInfo)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Tekla.Structures.Service.TeklaStructuresService" /> class.
+            </summary>
+            <param name="binaryDirectory">The binary directory.</param>
+            <param name="language">The language.</param>
+            <param name="environment">Path to environment file or null for default.</param>
+            <param name="role">Path to role file or null for default.</param>
+            <exception cref="T:System.InvalidOperationException">Service can be initialized only once during the process lifetime.</exception>
+            <exception cref="T:System.IO.DirectoryNotFoundException">If assembly was not found in binDirectory.</exception>
+            <exception cref="T:System.IO.FileNotFoundException">If role or environment file was not found.</exception>
+        </member>
+        <member name="M:Tekla.Structures.Service.TeklaStructuresService.Finalize">
+            <summary>
+            Finalizes an instance of the <see cref="T:Tekla.Structures.Service.TeklaStructuresService"/> class.
+            </summary>
+        </member>
+        <member name="M:Tekla.Structures.Service.TeklaStructuresService.Dispose">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources. 
+            This code added to correctly implement the disposable pattern.
+            </summary>
+        </member>
+        <member name="M:Tekla.Structures.Service.TeklaStructuresService.Initialize(System.IO.DirectoryInfo,System.String,System.String,System.String,System.Boolean,System.String)">
+            <summary>
+            Initializes Tekla Structures.
+            </summary>
+            <param name="modelName">Name of the model to load.</param>
+            <param name="license">License</param>
+            <param name="trimbleIdentityIdToken">The Trimble Identity token</param>
+            <param name="trimbleAccessToken">The Trimble access token</param>
+            <param name="useExistingLogin">Flag whether to use existing Online login from UI TS</param>
+            <param name="organizationId">The Organization Id in ATC from which the online license will be consumed</param>
+        </member>
+        <member name="M:Tekla.Structures.Service.TeklaStructuresService.Ping">
+            <summary>
+            Pings this instance.
+            </summary>
+            <returns>return pong, really</returns>
+        </member>
+        <member name="M:Tekla.Structures.Service.TeklaStructuresService.DoReadIn(System.String)">
+            <summary>
+            Does the read in.
+            </summary>
+            <param name="folder">The folder.</param>
+        </member>
+        <member name="M:Tekla.Structures.Service.TeklaStructuresService.DoWriteOut(System.String)">
+            <summary>
+            Does the write out.
+            </summary>
+            <param name="folder">The folder.</param>
+        </member>
+        <member name="M:Tekla.Structures.Service.TeklaStructuresService.ExecuteCallback(System.String,System.String)">
+            <summary>
+            Executes the callback.
+            </summary>
+            <param name="name">The name.</param>
+            <param name="parameter">The parameter.</param>
+        </member>
+        <member name="M:Tekla.Structures.Service.TeklaStructuresService.ExecuteButtonClickCallback(System.String,System.String,System.String,System.Int32,System.String)">
+            <summary>
+            Executes the button click callback.
+            </summary>
+            <param name="name">The name.</param>
+            <param name="dialog">The dialog.</param>
+            <param name="field">The field.</param>
+            <param name="buttonType">Type of the button.</param>
+            <param name="parameter">The parameter.</param>
+        </member>
+        <member name="M:Tekla.Structures.Service.TeklaStructuresService.Dispose(System.Boolean)">
+            <summary>
+            Releases unmanaged and - optionally - managed resources.
+            </summary>
+            <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
+        </member>
+        <member name="M:Tekla.Structures.Service.TeklaStructuresService.CollectSearchPaths(System.IO.DirectoryInfo)">
+            <summary>
+            Collect all directories to search for assemblies
+            </summary>
+            <param name="binDirectory">Directory of the binary</param>
+            <returns>List of search paths</returns>
+        </member>
+        <member name="M:Tekla.Structures.Service.TeklaStructuresService.GetXsDataDirFromTsIni(System.IO.DirectoryInfo)">
+            <summary>
+            Reads the value for XSDATADIR from teklastructures.ini
+            </summary>
+            <param name="binDirectory">Directory of the binary</param>
+            <returns>Value for XSDATADIR if found or empty string</returns>
+        </member>
+        <member name="M:Tekla.Structures.Service.TeklaStructuresService.FindBinDirectory">
+            <summary>
+            Finds the bin directory.
+            </summary>
+            <returns>bin directory</returns>
+        </member>
+        <member name="M:Tekla.Structures.Service.TeklaStructuresService.TryGetFolderFromRegistry">
+            <summary>
+            Get TS path from registry
+            </summary>
+            <returns>Path from registry entry, if version was found, null otherwise</returns>
+        </member>
+        <member name="M:Tekla.Structures.Service.TeklaStructuresService.StartTeklaStructures(System.String,System.String,System.String,System.String,System.Boolean,System.String)">
+            <summary>
+            Starts tekla structures.
+            </summary>
+            <param name="modelName">Name of the model.</param>
+            <param name="license">The license.</param>
+            <param name="trimbleIdentityIdToken">The trimble identity id_token.</param>
+            <param name="trimbleAccessToken">The Trimble access token</param>
+            <param name="useExistingLogin">Flag whether to use existing Online login from UI TS</param>
+            <param name="organizationId">The organization from which the Online license will be consumed</param>
+        </member>
+        <member name="M:Tekla.Structures.Service.TeklaStructuresService.PreInitialize(System.String,System.String,System.String)">
+            <summary>
+            Starts tekla structures.
+            </summary>
+            <param name="language">Language.</param>
+            <param name="environment">Path to environment file</param>
+            <param name="role">Path to role file</param>
+        </member>
+    </members>
+</doc>
