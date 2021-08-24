@@ -15,6 +15,7 @@
 	<PackageReference Update="Tekla.Structures.Drawing"                             Version="2021.0.0" />
     <PackageReference Update="Tekla.Structures.Model"                               Version="2021.0.0" />
     <PackageReference Update="Tekla.Structures.Plugins"                             Version="2021.0.0" />
+	<PackageReference Update="Tekla.Structures.Service"                             Version="2021.0.0" />
 	
 	<!-- ########## -->
     <!-- TS Basic Helper Packages -->
