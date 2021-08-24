@@ -35,9 +35,9 @@ namespace SimpleHeadless
         private static readonly FileInfo RoleFile =
             new FileInfo(@"C:\ProgramData\Trimble\Tekla Structures\2021.0 Daily\Environments\USA\Role_Imperial_Steel_Detailing.ini");
 
-        private static string licenseStr = "FULL";
         private static string languageStr = "ENGLISH";
         //private static string licenseStr = "DIAMOND";
+        private static string licenseStr = "FULL";
 
         static void Main(string[] args)
         {
@@ -81,6 +81,9 @@ namespace SimpleHeadless
                     var flag = beam.Insert();
                     Console.WriteLine($"Beam insert flag: {flag}.");
                     new Model().CommitChanges();
+
+                    //Save model
+                    new ModelHandler().Save();
 
                     //Add log entry and pause
                     Console.WriteLine("End of headless operations...Press any key to end");
