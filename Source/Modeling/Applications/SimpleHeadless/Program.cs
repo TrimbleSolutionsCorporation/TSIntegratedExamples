@@ -48,8 +48,12 @@ namespace SimpleHeadless
             {
                 using (var tss = new TeklaStructuresService(BinDirectory, languageStr, EnvironmentFile, RoleFile))
                 {
-                    //Initialize console service
+                    //Initialize console service with model
                     tss.Initialize(ModelDirectory, licenseStr);
+
+                    //Pause to attach debugger
+                    //Console.WriteLine("Attach debugger, then press a key...");
+                    //Console.ReadKey();
 
                     //Check connection to service
                     if (!CheckAndLogConnectionStatus()) return;
