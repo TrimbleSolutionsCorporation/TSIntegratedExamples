@@ -45,6 +45,7 @@
             this.polygonPickingTool.ObjectPicked += this.Polygon_OnObjectPicked;
             this.polygonPickingTool.PickUndone += this.Polygon_OnPickingUndone;
             this.polygonPickingTool.PickSessionEnded += this.Polygon_OnPickEnded;
+
             this.polygonPickingTool.StartPickingSession("Pick points to define polygonal area.");
         }
 
@@ -113,7 +114,10 @@
                 var ls = new LineSegment(this.pickedPolygonPoints[0], eventArgs.HitPoint);
                 var yDir = Vector.Cross(new Vector(0, 0, 1), ls.GetDirectionVector());
                 var zDir = Vector.Cross(ls.GetDirectionVector(), yDir).GetNormal();
-                this.Graphics.DrawDimension(ls, zDir, DimensionEndPointSizeType.Dynamic);
+                if (ls.Length() > GeometryConstants.DISTANCE_EPSILON)
+                {
+                    this.Graphics.DrawDimension(ls, zDir, DimensionEndPointSizeType.Dynamic);
+                }
             }
             else
             {
@@ -127,7 +131,10 @@
                     var ls = new LineSegment(curPt, nextPt);
                     var yDir = Vector.Cross(new Vector(0, 0, 1), ls.GetDirectionVector());
                     var zDir = Vector.Cross(ls.GetDirectionVector(), yDir).GetNormal();
-                    this.Graphics.DrawDimension(ls, zDir, DimensionEndPointSizeType.Dynamic);
+                    if (ls.Length() > GeometryConstants.DISTANCE_EPSILON)
+                    {
+                        this.Graphics.DrawDimension(ls, zDir, DimensionEndPointSizeType.Dynamic);
+                    }
                 }
 
                 //Close polygon loop to 1st point with dimension graphic

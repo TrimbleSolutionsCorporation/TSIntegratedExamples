@@ -1,9 +1,9 @@
 ﻿namespace SpreadsheetReinforcement.PartProxy
 {
-    using System;
-    using System.Collections.ObjectModel;
     using Data;
     using ModelLogic;
+    using System;
+    using System.Collections.ObjectModel;
     using Tekla.Structures.Model;
 
     /// <summary>
@@ -40,12 +40,16 @@
             //Get existing component to modify
             var useExisting = false;
             var foundComponent = GetExistingComponent();
-            if (foundComponent != null) useExisting = true;
+            if (foundComponent != null)
+            {
+                useExisting = true;
+            }
             else //Create new component with input
             {
                 foundComponent = new Component(componentInput)
                 {
-                    Name = _savedSetting.FootingComponentName, Number = _savedSetting.FootingComponentNumber
+                    Name = _savedSetting.FootingComponentName,
+                    Number = _savedSetting.FootingComponentNumber
                 };
             }
 

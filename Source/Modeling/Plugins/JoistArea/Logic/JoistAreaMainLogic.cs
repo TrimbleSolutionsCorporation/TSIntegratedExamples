@@ -82,7 +82,7 @@
         /// <summary>
         /// Spacing type used: list vs center to center
         /// </summary>
-        public MainViewModel.SpacingTypeEnum SpacingTyp => (MainViewModel.SpacingTypeEnum) _uiData.SpacingType;
+        public MainViewModel.SpacingTypeEnum SpacingTyp => (MainViewModel.SpacingTypeEnum)_uiData.SpacingType;
 
         /// <summary>
         /// Transformation from local plugin coordinate system to global
@@ -303,68 +303,68 @@
                 switch (SpacingTyp)
                 {
                     case MainViewModel.SpacingTypeEnum.albl_ExactList:
-                    {
-                        //Insert 1st Joist at zero
-                        //Get beam start and end points clipped by polygon edges
-                        var startPt = GetPtIntersectPolygon(currentPosition, JoistDir * -1, false, false);
-                        var endPt = GetPtIntersectPolygon(currentPosition, JoistDir, false, false);
-
-                        //Add 1st virtual beam joist to results list
-                        if (startPt != null && endPt != null)
                         {
-                            var vj = GetVirtualJoist(startPt, endPt);
-                            result.Add(vj);
-                        }
-
-                        if (DistanceList == null) return false;
-                        foreach (var dv in DistanceList.DistanceValues)
-                        {
-                            currentPosition.Translate(SpanDir * dv.Millimeters);
-
-                            //Calculate position to next spacing value and distance to edge boundary
-                            var distLeft = new Vector(boundaryPt - currentPosition).Dot(SpanDir);
-                            if (distLeft < 0) break; //Past boundary
-
+                            //Insert 1st Joist at zero
                             //Get beam start and end points clipped by polygon edges
-                            startPt = GetPtIntersectPolygon(currentPosition, JoistDir * -1, false, false);
-                            endPt = GetPtIntersectPolygon(currentPosition, JoistDir, false, false);
+                            var startPt = GetPtIntersectPolygon(currentPosition, JoistDir * -1, false, false);
+                            var endPt = GetPtIntersectPolygon(currentPosition, JoistDir, false, false);
 
-                            //Add virtual beam joist to results list
+                            //Add 1st virtual beam joist to results list
                             if (startPt != null && endPt != null)
                             {
                                 var vj = GetVirtualJoist(startPt, endPt);
                                 result.Add(vj);
                             }
-                        }
-                        break;
-                    }
-                    case MainViewModel.SpacingTypeEnum.albl_CenterToCenter:
-                    {
-                        //Calculate 1st position and distance to boundary end point
-                        var distLeft = new Vector(boundaryPt - currentPosition).Dot(SpanDir);
 
-                        //Check each distance moving along span
-                        while (distLeft >= CenterSpacingMax)
-                        {
-                            //Get beam start and end points clipped by polygon edges
-                            var startPt = GetPtIntersectPolygon(currentPosition, JoistDir * -1, false, false);
-                            var endPt = GetPtIntersectPolygon(currentPosition, JoistDir, false, false);
-
-                            //Add virtual beam joist to results list
-                            if (startPt != null && endPt != null &&
-                                Distance.PointToPoint(startPt, endPt) > MinJoistLength)
+                            if (DistanceList == null) return false;
+                            foreach (var dv in DistanceList.DistanceValues)
                             {
-                                var vj = GetVirtualJoist(startPt, endPt);
-                                result.Add(vj);
+                                currentPosition.Translate(SpanDir * dv.Millimeters);
+
+                                //Calculate position to next spacing value and distance to edge boundary
+                                var distLeft = new Vector(boundaryPt - currentPosition).Dot(SpanDir);
+                                if (distLeft < 0) break; //Past boundary
+
+                                //Get beam start and end points clipped by polygon edges
+                                startPt = GetPtIntersectPolygon(currentPosition, JoistDir * -1, false, false);
+                                endPt = GetPtIntersectPolygon(currentPosition, JoistDir, false, false);
+
+                                //Add virtual beam joist to results list
+                                if (startPt != null && endPt != null)
+                                {
+                                    var vj = GetVirtualJoist(startPt, endPt);
+                                    result.Add(vj);
+                                }
+                            }
+                            break;
+                        }
+                    case MainViewModel.SpacingTypeEnum.albl_CenterToCenter:
+                        {
+                            //Calculate 1st position and distance to boundary end point
+                            var distLeft = new Vector(boundaryPt - currentPosition).Dot(SpanDir);
+
+                            //Check each distance moving along span
+                            while (distLeft >= CenterSpacingMax)
+                            {
+                                //Get beam start and end points clipped by polygon edges
+                                var startPt = GetPtIntersectPolygon(currentPosition, JoistDir * -1, false, false);
+                                var endPt = GetPtIntersectPolygon(currentPosition, JoistDir, false, false);
+
+                                //Add virtual beam joist to results list
+                                if (startPt != null && endPt != null &&
+                                    Distance.PointToPoint(startPt, endPt) > MinJoistLength)
+                                {
+                                    var vj = GetVirtualJoist(startPt, endPt);
+                                    result.Add(vj);
+                                }
+
+                                //Move position to next spot along span
+                                distLeft = new Vector(boundaryPt - currentPosition).Dot(SpanDir);
+                                currentPosition.Translate(SpanDir * CenterSpacingMax);
                             }
 
-                            //Move position to next spot along span
-                            distLeft = new Vector(boundaryPt - currentPosition).Dot(SpanDir);
-                            currentPosition.Translate(SpanDir * CenterSpacingMax);
+                            break;
                         }
-
-                        break;
-                    }
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
@@ -383,6 +383,8 @@
         private Point GetPtIntersectPolygon(Point currentPosition, Vector intDir, bool drawPlanes,
             bool offsetFromOrigin)
         {
+            if (currentPosition == null) throw new ArgumentNullException(nameof(currentPosition));
+            if (intDir == null) throw new ArgumentNullException(nameof(intDir));
             var boundaryPoints = new List<Point>();
             try
             {
@@ -411,11 +413,11 @@
                     var endBoundaryIntPt = Intersection.LineSegmentToPlane(checkLineSegment, edgeLinePlane);
                     if (endBoundaryIntPt != null) boundaryPoints.Add(endBoundaryIntPt);
                 }
+                if (boundaryPoints.Count < 1) return null;
 
                 //Return shortest found plane if beam line check, longest if boundary check
-                if (offsetFromOrigin)
-                    return boundaryPoints.OrderBy(f => Distance.PointToPoint(currentPosition, f)).Last();
-                return boundaryPoints.OrderBy(f => Distance.PointToPoint(currentPosition, f)).First();
+                return offsetFromOrigin ? boundaryPoints.OrderBy(f => Distance.PointToPoint(currentPosition, f)).Last() :
+                    boundaryPoints.OrderBy(f => Distance.PointToPoint(currentPosition, f)).First();
             }
             catch (Exception ex)
             {
@@ -436,8 +438,8 @@
                 {
                     StartPoint = startPt,
                     EndPoint = endPt,
-                    Profile = {ProfileString = _uiData.JoistProfile},
-                    Material = {MaterialString = _uiData.Material},
+                    Profile = { ProfileString = _uiData.JoistProfile },
+                    Material = { MaterialString = _uiData.Material },
                     Class = _uiData.JoistClass.ToString(),
                     Finish = _uiData.Finish,
                     AssemblyNumber = new NumberingSeries(_uiData.AssmNoPrefix, _uiData.AssmStartNo),

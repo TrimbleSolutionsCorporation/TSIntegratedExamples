@@ -19,7 +19,7 @@
     public sealed class JoistHandlesAddMc : ManipulationContext
     {
         private readonly IHandleManager handleManager;
-        private List<SpacingZone> addHandleZones;
+        private List<SpacingZone> addHandleZones = new List<SpacingZone>();
         private JoistAreaMainLogic liftingLogic;
 
         /// <summary>
@@ -50,7 +50,6 @@
                 var spacingTyp = (MainViewModel.SpacingTypeEnum)uiData.SpacingType;
                 if (spacingTyp == MainViewModel.SpacingTypeEnum.albl_CenterToCenter)
                 {
-                    this.Dispose();
                     return;
                 }
 
