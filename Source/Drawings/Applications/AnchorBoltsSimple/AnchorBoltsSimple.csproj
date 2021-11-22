@@ -11,7 +11,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Installer\ProgramData\Environments\common\macros\drawings\AnchorBoltsSimple.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="TeklaStructuresExtension.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Installer\ProgramData\Environments\common\macros\drawings\AnchorBoltsSimple.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -28,9 +36,5 @@
       <HintPath>..\..\..\..\Library\Tekla.Application.Library.dll</HintPath>
       <Private>True</Private>
     </Reference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Remove="Installer\ProgramData\Environments\common\macros\drawings\AnchorBoltsSimple.cs" />
   </ItemGroup>
 </Project>

@@ -1,8 +1,8 @@
-﻿using System;
+﻿using AnchorBoltsSimple.Tools;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using AnchorBoltsSimple.Tools;
 using Tekla.Structures.Drawing;
 using Tekla.Structures.Geometry3d;
 using Tekla.Structures.Model;
@@ -67,7 +67,7 @@ namespace AnchorBoltsSimple.ModelLogic
 
                 //Create dimension settings to use
                 var dimSettings = new StraightDimensionSet.StraightDimensionSetAttributes(null, DimensionSettingsName);
-                dimSettings.Placing.Placing = DimensionSetBaseAttributes.Placings.Fixed;
+                dimSettings.Placing.Placing = DimensionSetBaseAttributes.Placings.Free;
                 var dimSet = new StraightDimensionSetHandler();
 
                 //Create new dimensions sets
@@ -136,7 +136,7 @@ namespace AnchorBoltsSimple.ModelLogic
 
                 //Get model part from drawing part
                 var mdlPart = new Model().SelectModelObject(dwgPart.ModelIdentifier) as Tekla.Structures.Model.Part;
-                if(mdlPart==null) continue;
+                if (mdlPart == null) continue;
 
                 //Check if model part is anchor bolt by using filter check method, add to result list if pass
                 if (!Tekla.Structures.Model.Operations.Operation.ObjectMatchesToFilter(mdlPart, filterName)) continue;
