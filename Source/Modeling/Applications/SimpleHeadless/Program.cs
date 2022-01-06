@@ -36,7 +36,6 @@ namespace SimpleHeadless
             new FileInfo(@"C:\ProgramData\Trimble\Tekla Structures\2021.0 Daily\Environments\USA\Role_Imperial_Steel_Detailing.ini");
 
         private static string languageStr = "ENGLISH";
-        //private static string licenseStr = "DIAMOND";
         private static string licenseStr = "FULL";
 
         static void Main(string[] args)
