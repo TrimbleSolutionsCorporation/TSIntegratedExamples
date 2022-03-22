@@ -6,7 +6,7 @@
 		Description= "Example model plugin to place joist beams in polygonal area."
 		IconPath="%TEPDEFINITIONFILEFOLDER%\Icon.png">
 		<TeklaVersions>
-			<TeklaVersion Name="2020.0"/>
+			<TeklaVersion Name="2021.0"/>
 			<MinTeklaVersion Name="2019.0"/>
 			<MaxTeklaVersion Name="2099.1"/>		
 		</TeklaVersions>
@@ -24,8 +24,8 @@
 		<SourcePathVariable Id="SourceModelPlugins" Value="%SourceBin%\plugins\Tekla\Model\%ExtensionName%"/>
 		<SourcePathVariable Id="SourceDrawingApps" Value="%SourceBin%\applications\Tekla\Drawings\%ExtensionName%"/>
 		<SourcePathVariable Id="SourceModelApps" Value="%SourceBin%\applications\Tekla\Model\%ExtensionName%"/>
-		<SourcePathVariable Id="SourceCommmon" Value="%TEPDEFINITIONFILEFOLDER%\ProgramData\Environments\common"/>
-		<SourcePathVariable Id="SourceUsaRoot" Value="%TEPDEFINITIONFILEFOLDER%\ProgramData\Environments\USA"/>
+		<!-- <SourcePathVariable Id="SourceCommmon" Value="%TEPDEFINITIONFILEFOLDER%\ProgramData\Environments\common"/> -->
+		<!-- <SourcePathVariable Id="SourceUsaRoot" Value="%TEPDEFINITIONFILEFOLDER%\ProgramData\Environments\USA"/> -->
     </SourcePathVariables>
 	
 	<TargetPathVariables>
@@ -46,8 +46,8 @@
 		<!-- <File Id="RibbonImages" Source="%SourceImages%\*.*" Target="%ExtensionsDir%\Images" Recursive="yes" /> -->
 		<File Id="PluginFiles" Source="%SourceModelPlugins%\*.*" Target="%ModelPluginsDir%" Recursive="yes" />
 		<File Id="TranslationsFiles" Source="%SourceMessages%\*.*" Target="%ModelPluginsDir%" Recursive="yes" />
-		<File Id="GlobalCommon" Source="%SourceCommmon%\*.*" Target="%TargetCommonDir%" Recursive="yes" />
-		<File Id="USARootFiles" Source="%SourceUsaRoot%\*.*" Target="%TargetUsaRoot%" Recursive="yes" />
+		<!-- <File Id="GlobalCommon" Source="%SourceCommmon%\*.*" Target="%TargetCommonDir%" Recursive="yes" /> -->
+		<!-- <File Id="USARootFiles" Source="%SourceUsaRoot%\*.*" Target="%TargetUsaRoot%" Recursive="yes" /> -->
 		<File Id="ComponentCatalogFiles" Source="%SourceCatalog%\*.*" Target="%ModelPluginsDir%" Recursive="yes" />
 	</Component>
 

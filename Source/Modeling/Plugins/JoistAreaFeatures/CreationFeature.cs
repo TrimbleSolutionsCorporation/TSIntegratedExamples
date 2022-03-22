@@ -105,7 +105,7 @@
         private void Polygon_OnPreviewRequested(object sender, ToleratedObjectEventArgs eventArgs)
         {
             this.Graphics.Clear();
-            var currentAppliedValues = this.Component.GetDataFromComponent();
+            //var currentAppliedValues = GetAppliedAttributes(Component);     //this method seems to have been removed
 
             if (this.pickedPolygonPoints.Count < 1) return;
             if (this.pickedPolygonPoints.Count == 1)
@@ -209,7 +209,7 @@
         private void Guideline_OnPreviewRequested(object sender, ToleratedObjectEventArgs eventArgs)
         {
             this.Graphics.Clear();
-            var currentAppliedValues = this.Component.GetDataFromComponent();
+            //var currentAppliedValues = GetAppliedAttributes(Component); 
 
             if (!this.guidlinePoints.Any() || eventArgs.HitPoint == null) return;
             var p1 = new Point(this.guidlinePoints[0]);

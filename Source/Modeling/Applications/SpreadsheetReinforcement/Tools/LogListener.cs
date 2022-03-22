@@ -128,7 +128,8 @@ namespace SpreadsheetReinforcement.Tools
             var secondsSince1970 = BitConverter.ToInt32(b, i + cLinkerTimestampOffset);
             var dt = new DateTime(1970, 1, 1, 0, 0, 0);
             dt = dt.AddSeconds(secondsSince1970);
-            dt = dt.AddHours(TimeZone.CurrentTimeZone.GetUtcOffset(dt).Hours);
+            //dt = dt.AddHours(TimeZone.CurrentTimeZone.GetUtcOffset(dt).Hours);
+            dt = dt.AddHours(TimeZoneInfo.Local.GetUtcOffset(dt).Hours);
             return dt;
         }
 
