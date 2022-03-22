@@ -28,7 +28,7 @@
             Debug.WriteLine("Y value: " + Math.Round(ln.Direction.Y, 5));
             Debug.WriteLine("Z value: " + Math.Round(ln.Direction.Z, 5));
             Debug.WriteLine("===================================================");
-            Debug.WriteLine(System.Environment.NewLine);
+            Debug.WriteLine(Environment.NewLine);
         }
     }
 }

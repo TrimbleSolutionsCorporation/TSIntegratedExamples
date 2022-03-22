@@ -1,12 +1,12 @@
-﻿using System;
-using AnchorBoltsWinform.Tools;
-using AnchorBoltsWinform.ViewModel;
-using Tekla.Structures.Geometry3d;
-using Tekla.Structures.Model;
-using Tekla.Structures.Model.Operations;
-
-namespace AnchorBoltsWinform.ModelLogic
+﻿namespace AnchorBoltsWinform.ModelLogic
 {
+    using System;
+    using Tools;
+    using ViewModel;
+    using Tekla.Structures.Geometry3d;
+    using Tekla.Structures.Model;
+    using Tekla.Structures.Model.Operations;
+
     /// <summary>
     /// Custom class to represent model anchor bolt
     /// </summary>

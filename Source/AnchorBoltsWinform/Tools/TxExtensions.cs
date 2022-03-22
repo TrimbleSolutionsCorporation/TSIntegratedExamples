@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
-using Tekla.Structures.Drawing;
-using Tekla.Structures.Geometry3d;
-using Tekla.Structures.Model;
-using Tekla.Structures.Model.UI;
-using Tekla.Structures.Solid;
-
-namespace AnchorBoltsWinform.Tools
+﻿namespace AnchorBoltsWinform.Tools
 {
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using Tekla.Structures.Drawing;
+    using Tekla.Structures.Geometry3d;
+    using Tekla.Structures.Model;
+    using Tekla.Structures.Model.UI;
+    using Tekla.Structures.Solid;
+
     /// <summary>
     /// Basic class extensions
     /// </summary>
@@ -40,11 +40,12 @@ namespace AnchorBoltsWinform.Tools
         public static PointList ToPointList(this IEnumerable points, bool round)
         {
             if (points == null) throw new ArgumentNullException(nameof(points));
+
             var result = new PointList();
             foreach (Point pt in points)
             {
                 result.Add(round ? new Point(pt.Round(1)) : 
-                    new Point(pt));
+                                   new Point(pt));
             }
             return result;
         }
@@ -57,6 +58,8 @@ namespace AnchorBoltsWinform.Tools
         /// <returns>Rounded 3d Point</returns>
         public static Point Round(this Point pt, int rndPlaces = 2)
         {
+            if (pt == null) throw new ArgumentNullException(nameof(pt));
+
             var dx = Math.Round(pt.X, rndPlaces);
             var dy = Math.Round(pt.Y, rndPlaces);
             var dz = Math.Round(pt.Z, rndPlaces);
@@ -82,6 +85,7 @@ namespace AnchorBoltsWinform.Tools
         public static bool IsConcrete(this Tekla.Structures.Model.Part pt)
         {
             if (pt == null) throw new ArgumentNullException(nameof(pt));
+
             var assmTyp = pt.GetAssembly().GetAssemblyType();
             if (assmTyp == Assembly.AssemblyTypeEnum.IN_SITU_ASSEMBLY) return true;
             if (assmTyp == Assembly.AssemblyTypeEnum.PRECAST_ASSEMBLY) return true;
@@ -96,6 +100,7 @@ namespace AnchorBoltsWinform.Tools
         public static double GetVolume(this Tekla.Structures.Model.Part pt)
         {
             if (pt == null) throw new ArgumentNullException(nameof(pt));
+
             var tempValue = 0.0;
             pt.GetReportProperty("VOLUME", ref tempValue);
             return tempValue;
@@ -109,6 +114,9 @@ namespace AnchorBoltsWinform.Tools
         /// <returns>New point translated</returns>
         public static Point Translate(this Point pt, Vector tVector)
         {
+            if (pt == null) throw new ArgumentNullException(nameof(pt));
+            if (tVector == null) throw new ArgumentNullException(nameof(tVector));
+
             var result = new Point(pt);
             result.Translate(tVector.X, tVector.Y, tVector.Z);
             return result;
@@ -270,6 +278,7 @@ namespace AnchorBoltsWinform.Tools
         /// <returns>List of faces</returns>
         public static IEnumerable<Face> GetFaces(this Solid solid)
         {
+            if (solid == null) throw new ArgumentNullException(nameof(solid));
             var faceList = solid.GetFaceEnumerator();
             while(faceList.MoveNext())
             {
@@ -285,6 +294,8 @@ namespace AnchorBoltsWinform.Tools
         /// <returns>New list of loops</returns>
         public static IEnumerable<Loop> GetLoops(this Face face)
         {
+            if (face == null) throw new ArgumentNullException(nameof(face));
+
             var loopList = face.GetLoopEnumerator();
             while(loopList.MoveNext())
             {
@@ -300,6 +311,8 @@ namespace AnchorBoltsWinform.Tools
         /// <returns>List of points from loop</returns>
         public static IEnumerable<Point> GetPoints(this Loop loop)
         {
+            if (loop == null) throw new ArgumentNullException(nameof(loop));
+
             var vertexList = loop.GetVertexEnumerator();
             while(vertexList.MoveNext())
             {

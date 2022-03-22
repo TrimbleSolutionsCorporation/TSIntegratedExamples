@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TEP Version="2.0">
+
+	<Product Id="DrawingRectangle" UpgradeCode="DF9689EE-DDC5-4EC6-BA01-08F4B83161CD" Version="1.0" Language="1033" 
+		Name="Drawing Rectangle" Manufacturer="Trimble Solutions, Inc."  
+		Description= "Example plugin to create drawing rectangle and text."
+		IconPath="%TEPDEFINITIONFILEFOLDER%\Icon.png" Type="Extension">
+		<TeklaVersions>
+			<TeklaVersion Name="2022.0"/>
+			<MinTeklaVersion Name="2017.0"/>
+			<MaxTeklaVersion Name="2099.1"/>
+		</TeklaVersions>
+	</Product>
+	 
+	<SourcePathVariables>
+		<SourcePathVariable Id="TepOutputFolder"  Value="%TEPDEFINITIONFILEFOLDER%\output" />		
+		<SourcePathVariable Id="SourceBinaries"   Value="%TEPDEFINITIONFILEFOLDER%\BuildDrop"/>
+		<SourcePathVariable Id="SourceEnv"        Value="%TEPDEFINITIONFILEFOLDER%\Environments"/>
+		<SourcePathVariable Id="SourceCatalog"    Value="%TEPDEFINITIONFILEFOLDER%\Catalog"/>
+		<SourcePathVariable Id="SourceRibbon"     Value="%TEPDEFINITIONFILEFOLDER%\Ribbon"/>
+		<SourcePathVariable Id="SourceBitmaps"    Value="%TEPDEFINITIONFILEFOLDER%\Bitmaps"/>
+		<SourcePathVariable Id="SourceMessages"   Value="%TEPDEFINITIONFILEFOLDER%\Messages"/>
+    </SourcePathVariables>
+	
+	<TargetPathVariables>
+		<PathVariable Id="ExtensionName"         Value="DrawingRectangle"/>
+	    <PathVariable Id="ExtensionsRootDir"     Value="%commonEnvFolder%\extensions"/>		
+		<PathVariable Id="ExtensionsDir"         Value="%ENVDIR%\..\Extensions"/>
+		<PathVariable Id="TargetBinaries"        Value="%ExtensionsRootDir%\%ExtensionName%"/>
+		<PathVariable Id="TargetBitmaps"         Value="%ENVDIR%\..\bitmaps"/>
+	</TargetPathVariables>
+
+	<Component Id="TheExtensionComponent" Guid="CC3378A5-617C-495C-97F1-3CC85E6E6485">
+        <File Id="CopyBinaries" Source="%SourceBinaries%\*.*"  Target="%TargetBinaries%"       Recursive="yes" />
+	    <File Id="CopyEnvs"     Source="%SourceEnv%\*.*"       Target="%ENVDIR%"               Recursive="yes" />				
+		<File Id="CopyCatalog"  Source="%SourceCatalog%\*.*"   Target="%TargetBinaries%"       Recursive="yes" />
+		<File Id="CopyBitmaps"  Source="%SourceBitmaps%\*.*"   Target="%TargetBitmaps%"        Recursive="yes" />
+		<File Id="CopyMsgs"     Source="%SourceMessages%\*.*"  Target="%TargetBinaries%"       Recursive="yes" />
+	</Component>
+
+	<Feature Id="TheExtensionFeature" Title="ExtensionFeature">
+		<ComponentRef ReferenceId="TheExtensionComponent" />
+	</Feature>
+
+ </TEP>

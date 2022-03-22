@@ -1,12 +1,15 @@
 ﻿namespace JoistAreaFeatures.Tools
 {
+    using System;
     using Tekla.Structures.Model;
 
     public static class TxComponent
     {
         public static Part GetPrimaryPart(this Component component)
         {
+            if (component == null) throw new ArgumentNullException(nameof(component));
             Part result = null;
+
             var ci = component.GetComponentInput();
             if (ci == null) return null;
 

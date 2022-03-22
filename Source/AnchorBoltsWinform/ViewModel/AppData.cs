@@ -1,9 +1,9 @@
-﻿using System;
-using AnchorBoltsWinform.Tools;
-using Tekla.Structures.Plugins;
-
-namespace AnchorBoltsWinform.ViewModel
+﻿namespace AnchorBoltsWinform.ViewModel
 {
+    using System;
+    using Tools;
+    using Tekla.Structures.Plugins;
+
     /// <summary>
     /// Main user interface storage data class
     /// </summary>

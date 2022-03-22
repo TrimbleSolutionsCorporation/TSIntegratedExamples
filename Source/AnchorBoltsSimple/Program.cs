@@ -1,6 +1,4 @@
-﻿using AnchorBoltsSimple.ModelLogic;
-
-namespace AnchorBoltsSimple
+﻿namespace AnchorBoltsSimple
 {
     class Program
     {

@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using Tekla.Structures.Dialog.UIControls;
-
-namespace AnchorBoltsWinform.Tools
+﻿namespace AnchorBoltsWinform.Tools
 {
+    using System.Collections.Generic;
+    using Tekla.Structures.Dialog.UIControls;
+
     /// <summary>
     /// Settings class to get Tekla files
     /// </summary>

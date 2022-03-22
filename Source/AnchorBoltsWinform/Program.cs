@@ -1,15 +1,15 @@
-﻿using System;
-using System.Diagnostics;
-using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Threading;
-using System.Windows.Forms;
-using AnchorBoltsWinform.View;
-using AnchorBoltsWinform.ViewModel;
-using Tekla.Structures;
-
-namespace AnchorBoltsWinform
+﻿namespace AnchorBoltsWinform
 {
+    using System;
+    using System.Diagnostics;
+    using System.Reflection;
+    using System.Runtime.InteropServices;
+    using System.Threading;
+    using System.Windows.Forms;
+    using View;
+    using ViewModel;
+    using Tekla.Structures;
+
     static class Program
     {
         /// <summary>

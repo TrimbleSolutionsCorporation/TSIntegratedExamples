@@ -1,15 +1,14 @@
-﻿using AnchorBoltsSimple.Tools;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using Tekla.Structures.Drawing;
-using Tekla.Structures.Geometry3d;
-using Tekla.Structures.Model;
-
-namespace AnchorBoltsSimple.ModelLogic
+﻿namespace AnchorBoltsSimple
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.Linq;
     using System.Windows;
+    using Tekla.Structures.Drawing;
+    using Tekla.Structures.Geometry3d;
+    using Tekla.Structures.Model;
+    using Tools;
     using Point = Tekla.Structures.Geometry3d.Point;
     using Vector = Tekla.Structures.Geometry3d.Vector;
 
@@ -38,7 +37,7 @@ namespace AnchorBoltsSimple.ModelLogic
             while (views.MoveNext())
             {
                 //Cast to model view, check if null
-                var tView = views.Current as Tekla.Structures.Drawing.View;
+                var tView = views.Current as View;
                 if (tView == null) continue;
 
                 //Find certain view to dimension only
@@ -52,7 +51,7 @@ namespace AnchorBoltsSimple.ModelLogic
         /// </summary>
         /// <param name="tView">Drawing view to dimension</param>
         /// <returns>False exception caught or CreateDimensionSet returns null</returns>
-        private static bool CreateDimensions(Tekla.Structures.Drawing.View tView)
+        private static bool CreateDimensions(View tView)
         {
             if (tView == null) throw new ArgumentNullException(nameof(tView));
             try
@@ -71,8 +70,10 @@ namespace AnchorBoltsSimple.ModelLogic
                 var dimSet = new StraightDimensionSetHandler();
 
                 //Create new dimensions sets
-                var dim1 = dimSet.CreateDimensionSet(tView, dimensionPoints.CopyTo(), new Vector(-1, 0, 0), DimensionLineOffset, dimSettings);
-                var dim2 = dimSet.CreateDimensionSet(tView, dimensionPoints.CopyTo(), new Vector(0, 1, 0), DimensionLineOffset, dimSettings);
+                var dim1 = dimSet.CreateDimensionSet(tView, dimensionPoints.CopyTo(), 
+                                                     new Vector(-1, 0, 0), DimensionLineOffset, dimSettings);
+                var dim2 = dimSet.CreateDimensionSet(tView, dimensionPoints.CopyTo(), 
+                                                     new Vector(0, 1, 0), DimensionLineOffset, dimSettings);
 
                 //Check result and save to drawing database
                 if (dim1 == null || dim2 == null) return false;
@@ -93,8 +94,7 @@ namespace AnchorBoltsSimple.ModelLogic
         /// <param name="anchorBolts">Parts in model that are anchor bolts to dimension</param>
         /// <param name="tView">Drawing view to get coordinate system from</param>
         /// <returns>List of points to dimension in view display coordinate system</returns>
-        private static List<Point> GetAnchorBoltPositions(List<Tekla.Structures.Model.Part> anchorBolts,
-                                                          Tekla.Structures.Drawing.View tView)
+        private static List<Point> GetAnchorBoltPositions(List<Tekla.Structures.Model.Part> anchorBolts, View tView)
         {
             if (anchorBolts == null) throw new ArgumentNullException(nameof(anchorBolts));
             if (tView == null) throw new ArgumentNullException(nameof(tView));
@@ -122,8 +122,7 @@ namespace AnchorBoltsSimple.ModelLogic
         /// <param name="tView">Drawing view</param>
         /// <param name="filterName">Pre-existing select filter name to distinguish anchor bolt parts, cannot be null/empty</param>
         /// <returns>List of anchor bolt model parts found</returns>
-        private static List<Tekla.Structures.Model.Part> GetDimensionObjects(
-            Tekla.Structures.Drawing.View tView, string filterName)
+        private static List<Tekla.Structures.Model.Part> GetDimensionObjects(View tView, string filterName)
         {
             if (tView == null) throw new ArgumentNullException(nameof(tView));
             var result = new List<Tekla.Structures.Model.Part>();
@@ -150,7 +149,7 @@ namespace AnchorBoltsSimple.ModelLogic
         /// </summary>
         /// <param name="tView">Drawing view to check orientation of</param>
         /// <returns>True if view coordinate system has z vector matching global z</returns>
-        private static bool IsPlanView(Tekla.Structures.Drawing.View tView)
+        private static bool IsPlanView(View tView)
         {
             if (tView == null) throw new ArgumentNullException(nameof(tView));
             var coordSys = tView.DisplayCoordinateSystem;

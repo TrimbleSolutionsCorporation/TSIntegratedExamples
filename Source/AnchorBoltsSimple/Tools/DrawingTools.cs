@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using Tekla.Structures.Drawing;
-
-namespace AnchorBoltsSimple.Tools
+﻿namespace AnchorBoltsSimple.Tools
 {
+    using System.Collections.Generic;
+    using Tekla.Structures.Drawing;
+
     /// <summary>
     /// Drawing level extensions methods 
     /// </summary>

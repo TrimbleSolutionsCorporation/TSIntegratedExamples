@@ -1,4 +1,4 @@
-﻿namespace DrawingRectangle
+﻿namespace DrawingRectangle.Tools
 {
     using System;
     using Tekla.Structures.Geometry3d;
@@ -12,8 +12,8 @@
         /// <returns>New 3d point at midpoint</returns>
         public static Point GetMidPoint(this LineSegment ls)
         {
-            if(ls == null)
-                throw new ApplicationException();
+            if(ls == null) throw new ApplicationException();
+
             var startPoint = new Point(ls.Point1);
             var displacement = ls.GetDirectionVector().GetNormal() * ls.Length() * 0.5;
             startPoint.Translate(displacement.X, displacement.Y, displacement.Z);

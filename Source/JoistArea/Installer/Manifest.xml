@@ -4,51 +4,33 @@
     <Product Id="JoistArea" UpgradeCode="0225DECD-AE82-4EA3-888A-825F75964F0C" Version="1.0" Language="1033"
 		Name="Joist Area" Manufacturer="Trimble Solutions, Inc."
 		Description= "Example model plugin to place joist beams in polygonal area."
-		IconPath="%TEPDEFINITIONFILEFOLDER%\Icon.png">
+		IconPath="%TEPDEFINITIONFILEFOLDER%\Icon.png" Type="Extension">
 		<TeklaVersions>
-			<TeklaVersion Name="2021.0"/>
+			<TeklaVersion Name="2022.0"/>
 			<MinTeklaVersion Name="2019.0"/>
 			<MaxTeklaVersion Name="2099.1"/>		
 		</TeklaVersions>
 	</Product>
 	 
 	<SourcePathVariables>
-		<SourcePathVariable Id="ExtensionName" Value="JoistArea"/>
-		<SourcePathVariable Id="TepOutputFolder" Value="%TEPDEFINITIONFILEFOLDER%\output" Comment="This provides the location where the package builder is to save the package."/>
-		<SourcePathVariable Id="SourceCatalog" Value="%TEPDEFINITIONFILEFOLDER%\Catalog"/>
-		<SourcePathVariable Id="SourceImages" Value="%TEPDEFINITIONFILEFOLDER%\ProgramData\Extensions\Images"/>
-		<SourcePathVariable Id="SourceMessages" Value="%TEPDEFINITIONFILEFOLDER%\ProgramFiles\Messages\DotAppsStrings"/>
-		<SourcePathVariable Id="SourceBin" Value="%TEPDEFINITIONFILEFOLDER%\ProgramFiles\Nt\bin"/>
-		<SourcePathVariable Id="SourceBitmaps" Value="%TEPDEFINITIONFILEFOLDER%\ProgramData\Bitmaps"/>
-		<SourcePathVariable Id="SourceDrawingPlugins" Value="%SourceBin%\plugins\Tekla\Drawings\%ExtensionName%"/>
-		<SourcePathVariable Id="SourceModelPlugins" Value="%SourceBin%\plugins\Tekla\Model\%ExtensionName%"/>
-		<SourcePathVariable Id="SourceDrawingApps" Value="%SourceBin%\applications\Tekla\Drawings\%ExtensionName%"/>
-		<SourcePathVariable Id="SourceModelApps" Value="%SourceBin%\applications\Tekla\Model\%ExtensionName%"/>
-		<!-- <SourcePathVariable Id="SourceCommmon" Value="%TEPDEFINITIONFILEFOLDER%\ProgramData\Environments\common"/> -->
-		<!-- <SourcePathVariable Id="SourceUsaRoot" Value="%TEPDEFINITIONFILEFOLDER%\ProgramData\Environments\USA"/> -->
+		<SourcePathVariable Id="TepOutputFolder"  Value="%TEPDEFINITIONFILEFOLDER%\output" />		
+		<SourcePathVariable Id="SourceBinaries"   Value="%TEPDEFINITIONFILEFOLDER%\BuildDrop"/>
+		<SourcePathVariable Id="SourceEnv"        Value="%TEPDEFINITIONFILEFOLDER%\Environments"/>
+		<SourcePathVariable Id="SourceCatalog"    Value="%TEPDEFINITIONFILEFOLDER%\Catalog"/>
+		<SourcePathVariable Id="SourceRibbon"     Value="%TEPDEFINITIONFILEFOLDER%\Ribbon"/>
     </SourcePathVariables>
 	
 	<TargetPathVariables>
-		<PathVariable Id="ExtensionName" Value="JoistArea"/>
-	    <PathVariable Id="ExtensionsRootDir" Value="%commonEnvFolder%\extensions"/>
-		<PathVariable Id="ModelPluginsDir" Value="%ExtensionsRootDir%\plugins\tekla\model\%ExtensionName%"/>
-		<PathVariable Id="DrawingsPluginsDir" Value="%ExtensionsRootDir%\plugins\tekla\drawings\%ExtensionName%"/>
-		<PathVariable Id="ModelAppsDir" Value="%ExtensionsRootDir%\applications\tekla\model\%ExtensionName%"/>
-		<PathVariable Id="DrawingAppsDir" Value="%ExtensionsRootDir%\applications\tekla\drawings\%ExtensionName%"/>		
-		<PathVariable Id="BitmapsDir" Value="%ENVDIR%\..\bitmaps"/>
-		<PathVariable Id="ExtensionsDir" Value="%ENVDIR%\..\Extensions"/>	
-		<PathVariable Id="TargetUsaRoot" Value="%ENVDIR%\USA"/>
-		<PathVariable Id="TargetCommonDir" Value="%commonEnvFolder%"/>
+		<PathVariable Id="ExtensionName"         Value="JoistArea"/>
+	    <PathVariable Id="ExtensionsRootDir"     Value="%commonEnvFolder%\extensions"/>		
+		<PathVariable Id="ExtensionsDir"         Value="%ENVDIR%\..\Extensions"/>
+		<PathVariable Id="TargetBinaries"        Value="%ExtensionsRootDir%\%ExtensionName%"/>
 	</TargetPathVariables>
 
 	<Component Id="TheExtensionComponent" Guid="E0E6E007-C876-4713-9507-E352BF150FC8">
-		<File Id="CatalogBitmaps" Source="%SourceBitmaps%\*.*" Target="%BitmapsDir%" Recursive="yes" />
-		<!-- <File Id="RibbonImages" Source="%SourceImages%\*.*" Target="%ExtensionsDir%\Images" Recursive="yes" /> -->
-		<File Id="PluginFiles" Source="%SourceModelPlugins%\*.*" Target="%ModelPluginsDir%" Recursive="yes" />
-		<File Id="TranslationsFiles" Source="%SourceMessages%\*.*" Target="%ModelPluginsDir%" Recursive="yes" />
-		<!-- <File Id="GlobalCommon" Source="%SourceCommmon%\*.*" Target="%TargetCommonDir%" Recursive="yes" /> -->
-		<!-- <File Id="USARootFiles" Source="%SourceUsaRoot%\*.*" Target="%TargetUsaRoot%" Recursive="yes" /> -->
-		<File Id="ComponentCatalogFiles" Source="%SourceCatalog%\*.*" Target="%ModelPluginsDir%" Recursive="yes" />
+        <File Id="CopyBinaries" Source="%SourceBinaries%\*.*"  Target="%TargetBinaries%"       Recursive="yes" />
+	    <File Id="CopyEnvs"     Source="%SourceEnv%\*.*"       Target="%ENVDIR%"               Recursive="yes" />			
+		<File Id="CopyCatalog"  Source="%SourceCatalog%\*.*"   Target="%TargetBinaries%"       Recursive="yes" />		
 	</Component>
 
 	<Feature Id="TheExtensionFeature" Title="ExtensionFeature">

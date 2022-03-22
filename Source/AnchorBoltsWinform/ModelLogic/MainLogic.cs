@@ -1,16 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Windows.Forms;
-using AnchorBoltsWinform.Tools;
-using AnchorBoltsWinform.ViewModel;
-using Tekla.Structures.Drawing;
-using Tekla.Structures.Geometry3d;
-using Tekla.Structures.Model;
-
-namespace AnchorBoltsWinform.ModelLogic
+﻿namespace AnchorBoltsWinform.ModelLogic
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.Linq;
+    using System.Windows.Forms;
+    using Tools;
+    using ViewModel;
+    using Tekla.Structures.Drawing;
+    using Tekla.Structures.Geometry3d;
+    using Tekla.Structures.Model;
+
     /// <summary>
     /// Main logic service class for dimensioning
     /// </summary>

@@ -143,7 +143,7 @@
             var results = new List<Point>();
             if (lineS1 == null) throw new ArgumentNullException();
             var extLine = lineS2.GetElongated(lineS2.Length() * (1 + extrudedTolerance / 100));
-            var intersectLine = TxLineSegment.Intersect(lineS1, extLine);
+            var intersectLine = Intersect(lineS1, extLine);
             if (intersectLine == null || Math.Abs(intersectLine.Length()) > GeometryConstants.DISTANCE_EPSILON)
                 return results;
             results.Add(intersectLine.Point1);

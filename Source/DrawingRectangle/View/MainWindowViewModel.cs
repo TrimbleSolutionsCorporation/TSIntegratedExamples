@@ -14,29 +14,29 @@
         [StructuresDialog("TempName", typeof(TSD.String))]
         public string TempName
         {
-            get { return tempName; }
-            set { tempName = value; OnPropertyChanged(nameof(TempName)); }
+            get { return this.tempName; }
+            set { this.tempName = value; this.OnPropertyChanged(nameof(this.TempName)); }
         }
 
         [StructuresDialog("HorizOffset", typeof(TSD.Distance))]
         public TSD.Distance HorizOffset
         {
-            get { return horizOffset; }
-            set { horizOffset = value; OnPropertyChanged(nameof(HorizOffset)); }
+            get { return this.horizOffset; }
+            set { this.horizOffset = value; this.OnPropertyChanged(nameof(this.HorizOffset)); }
         }
 
         [StructuresDialog("RectHeight", typeof(TSD.Distance))]
         public TSD.Distance RectHeight
         {
-            get { return rectHeight; }
-            set { rectHeight = value; OnPropertyChanged(nameof(RectHeight)); }
+            get { return this.rectHeight; }
+            set { this.rectHeight = value; this.OnPropertyChanged(nameof(this.RectHeight)); }
         }
 
         [StructuresDialog("RectWidth", typeof(TSD.Distance))]
         public TSD.Distance RectWidth
         {
-            get { return rectWidth; }
-            set { rectWidth = value; OnPropertyChanged(nameof(RectWidth)); }
+            get { return this.rectWidth; }
+            set { this.rectWidth = value; this.OnPropertyChanged(nameof(this.RectWidth)); }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

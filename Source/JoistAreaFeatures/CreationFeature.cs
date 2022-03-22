@@ -1,7 +1,6 @@
 ﻿namespace JoistAreaFeatures
 {
     using JoistArea.View;
-    using Services;
     using System;
     using System.Collections;
     using System.Collections.Generic;

@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using Tekla.Structures.Drawing;
-
-namespace AnchorBoltsWinform.Tools
+﻿namespace AnchorBoltsWinform.Tools
 {
+    using System.Collections.Generic;
+    using Tekla.Structures.Drawing;
+
     /// <summary>
     /// Drawing level extensions methods 
     /// </summary>
@@ -37,8 +37,7 @@ namespace AnchorBoltsWinform.Tools
             {
                 var result = new List<Drawing>();
                 var dwgs = Handler.GetDrawings();
-                while(dwgs.MoveNext())
-                    result.Add(dwgs.Current);
+                while(dwgs.MoveNext()) result.Add(dwgs.Current);
                 return result;
             }
         }

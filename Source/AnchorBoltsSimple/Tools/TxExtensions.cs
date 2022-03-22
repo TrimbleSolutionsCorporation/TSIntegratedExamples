@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections;
-using Tekla.Structures.Drawing;
-using Tekla.Structures.Geometry3d;
-
-namespace AnchorBoltsSimple.Tools
+﻿namespace AnchorBoltsSimple.Tools
 {
+    using System;
+    using System.Collections;
+    using Tekla.Structures.Drawing;
+    using Tekla.Structures.Geometry3d;
+
     /// <summary>
     /// General class extension methods
     /// </summary>

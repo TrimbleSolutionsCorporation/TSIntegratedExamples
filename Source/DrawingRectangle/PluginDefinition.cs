@@ -13,16 +13,19 @@
 
         public DrawingRectanglePlugin(PluginData data)
         {
-            Data = data;
+            this.Data = data;
         }
 
         public override List<InputDefinition> DefineInput()
         {
             var inputList = new List<InputDefinition>();
             var drawingHandler = new DrawingHandler();
-            if(!drawingHandler.GetConnectionStatus()) return inputList;
+
             try
             {
+                //Check if drawing is open
+                if (!drawingHandler.GetConnectionStatus()) return inputList;
+
                 //Setup picker and get input from user
                 var picker = drawingHandler.GetPicker().PickPoint("Pick a point...");
                 inputList.Add(InputDefinitionFactory.CreateInputDefinition(picker.Item2, picker.Item1));
@@ -40,7 +43,7 @@
             if(input == null || input.Count < 1) return false;
 
             //Set defaults for attributes
-            Data.CheckDefaults();
+            this.Data.CheckDefaults();
 
             //Get data from picker
             var viewBase = InputDefinitionFactory.GetView(input[0]);
@@ -49,7 +52,7 @@
             var pickedPoint = InputDefinitionFactory.GetPoint(input[0]);
 
             //Main method here
-            PluginLogic.RunLogic(pickedView, pickedPoint, Data);
+            MainLogic.RunLogic(pickedView, pickedPoint, this.Data);
             return false;
         }
     }

@@ -1,0 +1,75 @@
+﻿string_utf8 albl_US_Extensions
+{
+    entry = ("enu", "US Extensions");
+    entry = ("chs", "US Extensions");
+    entry = ("cht", "US Extensions");
+    entry = ("csy", "US Extensions");
+    entry = ("deu", "US Extensions");
+    entry = ("esp", "US Extensions");
+    entry = ("fra", "US Extensions");
+    entry = ("hun", "US Extensions");
+    entry = ("ita", "US Extensions");
+    entry = ("jpn", "US Extensions");
+    entry = ("nld", "US Extensions");
+    entry = ("plk", "US Extensions");
+    entry = ("ptb", "US Extensions");
+    entry = ("ptg", "US Extensions");
+    entry = ("rus", "US Extensions");
+};
+
+string_utf8 albl_DrawingRectangle
+{
+    entry = ("enu", "Drawing Rectangle");
+    entry = ("chs", "Drawing Rectangle");
+    entry = ("cht", "Drawing Rectangle");
+    entry = ("csy", "Drawing Rectangle");
+    entry = ("deu", "Drawing Rectangle");
+    entry = ("esp", "Drawing Rectangle");
+    entry = ("fra", "Drawing Rectangle");
+    entry = ("hun", "Drawing Rectangle");
+    entry = ("ita", "Drawing Rectangle");
+    entry = ("jpn", "Drawing Rectangle");
+    entry = ("nld", "Drawing Rectangle");
+    entry = ("plk", "Drawing Rectangle");
+    entry = ("ptb", "Drawing Rectangle");
+    entry = ("ptg", "Drawing Rectangle");
+    entry = ("rus", "Drawing Rectangle");
+};
+
+string_utf8 albl_DrawingRectangle_Description
+{
+    entry = ("enu", "Example plugin to create drawing rectangle and text");
+    entry = ("chs", "Example plugin to create drawing rectangle and text");
+    entry = ("cht", "Example plugin to create drawing rectangle and text");
+    entry = ("csy", "Example plugin to create drawing rectangle and text");
+    entry = ("deu", "Example plugin to create drawing rectangle and text");
+    entry = ("esp", "Example plugin to create drawing rectangle and text");
+    entry = ("fra", "Example plugin to create drawing rectangle and text");
+    entry = ("hun", "Example plugin to create drawing rectangle and text");
+    entry = ("ita", "Example plugin to create drawing rectangle and text");
+    entry = ("jpn", "Example plugin to create drawing rectangle and text");
+    entry = ("nld", "Example plugin to create drawing rectangle and text");
+    entry = ("plk", "Example plugin to create drawing rectangle and text");
+    entry = ("ptb", "Example plugin to create drawing rectangle and text");
+    entry = ("ptg", "Example plugin to create drawing rectangle and text");
+    entry = ("rus", "Example plugin to create drawing rectangle and text");
+};
+
+string_utf8 albl_US_Extensions_Description
+{
+    entry = ("enu", "US extensions catalog folder");
+    entry = ("chs", "US extensions catalog folder");
+    entry = ("cht", "US extensions catalog folder");
+    entry = ("csy", "US extensions catalog folder");
+    entry = ("deu", "US extensions catalog folder");
+    entry = ("esp", "US extensions catalog folder");
+    entry = ("fra", "US extensions catalog folder");
+    entry = ("hun", "US extensions catalog folder");
+    entry = ("ita", "US extensions catalog folder");
+    entry = ("jpn", "US extensions catalog folder");
+    entry = ("nld", "US extensions catalog folder");
+    entry = ("plk", "US extensions catalog folder");
+    entry = ("ptb", "US extensions catalog folder");
+    entry = ("ptg", "US extensions catalog folder");
+    entry = ("rus", "US extensions catalog folder");
+};

@@ -1,10 +1,10 @@
-﻿using System;
-using Tekla.Structures.Geometry3d;
-using Tekla.Structures.Model;
-using Tekla.Structures.Model.UI;
-
-namespace SpreadsheetReinforcement.Tools
+﻿namespace SpreadsheetReinforcement.Tools
 {
+    using System;
+    using Tekla.Structures.Geometry3d;
+    using Tekla.Structures.Model;
+    using Tekla.Structures.Model.UI;
+
     /// <summary>
     /// Tekla ModelObject service extensions
     /// </summary>

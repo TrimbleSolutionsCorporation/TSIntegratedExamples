@@ -15,6 +15,7 @@
         /// <returns></returns>
         public static List<Point> GetPoints(this Polygon pg)
         {
+            if (pg == null) throw new ArgumentNullException(nameof(pg));
             return (from object pt in pg.Points select pt as Point).ToList();
         }
 

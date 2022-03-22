@@ -1,7 +1,6 @@
 ﻿namespace SpreadsheetReinforcement.Data
 {
     using System;
-    using System.ComponentModel;
     using System.Xml.Serialization;
     using Tools.Serialize;
 

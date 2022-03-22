@@ -1,24 +1,13 @@
-﻿namespace DrawingRectangle
+﻿namespace DrawingRectangle.Tools
 {
     using System;
     using Tekla.Structures.Geometry3d;
-    using Tekla.Structures.Plugins;
 
-    public abstract class PluginDataBase
+    public abstract class PluginDataHelper
     {
         public static int DEFAULT_VALUE = int.MinValue;
 
-        [StructuresField("HorizOffset")]
-        public double HorizOffset;
-
-        [StructuresField("TempName")]
-        public string TempName;
-
-        public virtual void CheckDefaults()
-        {
-            if(IsDefaultValue(HorizOffset)) HorizOffset = 0.0;
-            if (IsDefaultValue(TempName)) TempName = string.Empty;
-        }
+        public abstract void CheckDefaults();
 
         /// <summary>
         /// Returns true if the given value is set to the default value for this type.

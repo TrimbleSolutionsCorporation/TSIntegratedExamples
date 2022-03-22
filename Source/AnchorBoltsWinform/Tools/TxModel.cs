@@ -1,7 +1,7 @@
-﻿using Tekla.Structures;
-
-namespace AnchorBoltsWinform.Tools
+﻿namespace AnchorBoltsWinform.Tools
 {
+    using Tekla.Structures;
+
     /// <summary>
     /// Tekla model class extensions
     /// </summary>

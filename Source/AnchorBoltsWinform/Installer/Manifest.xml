@@ -4,60 +4,34 @@
     <Product Id="AnchorBoltsWinform" UpgradeCode="B3F4D182-C4F7-457D-A149-E3FEA55CE5AC" Version="1.0" Language="1033" 
         Name="Anchor Bolts Winform" Manufacturer="Trimble Solutions, Inc."  
         Description= "Creates anchor bolt dimensions on existing drawing plan views with dialog."
-        IconPath="%TEPDEFINITIONFILEFOLDER%\Icon.png">
+        IconPath="%TEPDEFINITIONFILEFOLDER%\Icon.png" Type="Extension">
         <TeklaVersions>
-            <TeklaVersion Name="2021.0"/>
+            <TeklaVersion Name="2022.0"/>
             <MinTeklaVersion Name="2017.0"/>
             <MaxTeklaVersion Name="2099.1"/>
         </TeklaVersions>
     </Product>
      
     <SourcePathVariables>
-        <SourcePathVariable Id="ExtensionName" Value="AnchorBoltsWinform"/>
-        <SourcePathVariable Id="TepOutputFolder" Value="%TEPDEFINITIONFILEFOLDER%\output" Comment="Package output location."/>
-        <SourcePathVariable Id="SourceCatalog" Value="%TEPDEFINITIONFILEFOLDER%\Catalog"/>
-        <SourcePathVariable Id="SourceImages" Value="%TEPDEFINITIONFILEFOLDER%\ProgramData\Extensions\Images"/>
-        <SourcePathVariable Id="SourceMessages" Value="%TEPDEFINITIONFILEFOLDER%\ProgramFiles\Messages\DotAppsStrings"/>
-        <SourcePathVariable Id="SourceBin" Value="%TEPDEFINITIONFILEFOLDER%\ProgramFiles\Nt\bin"/>
-        <SourcePathVariable Id="SourceEnv" Value="%TEPDEFINITIONFILEFOLDER%\ProgramData\Environments"/>
-        <SourcePathVariable Id="SourceBitmaps" Value="%TEPDEFINITIONFILEFOLDER%\ProgramData\Bitmaps"/>
-        <SourcePathVariable Id="SourceCommmonRoot" Value="%SourceEnv%\common"/>
-        <SourcePathVariable Id="SourceUsimpRoot" Value="%SourceEnv%\usimp"/>
-        <SourcePathVariable Id="SourceUsmetRoot" Value="%SourceEnv%\usmet"/>
-        <SourcePathVariable Id="SourceDrawingPlugins" Value="%SourceBin%\plugins\Tekla\Drawings\%ExtensionName%"/>
-        <SourcePathVariable Id="SourceModelPlugins" Value="%SourceBin%\plugins\Tekla\Model\%ExtensionName%"/>
-        <SourcePathVariable Id="SourceDrawingApps" Value="%SourceBin%\applications\Tekla\Drawings\%ExtensionName%"/>
-        <SourcePathVariable Id="SourceModelApps" Value="%SourceBin%\applications\Tekla\Model\%ExtensionName%"/>
+		<SourcePathVariable Id="TepOutputFolder"  Value="%TEPDEFINITIONFILEFOLDER%\output" />		
+		<SourcePathVariable Id="SourceBinaries"   Value="%TEPDEFINITIONFILEFOLDER%\BuildDrop"/>
+		<SourcePathVariable Id="SourceEnv"        Value="%TEPDEFINITIONFILEFOLDER%\Environments"/>
+		<SourcePathVariable Id="SourceCatalog"    Value="%TEPDEFINITIONFILEFOLDER%\Catalog"/>
+		<SourcePathVariable Id="SourceRibbon"     Value="%TEPDEFINITIONFILEFOLDER%\Ribbon"/>
     </SourcePathVariables>
     
     <TargetPathVariables>
-        <PathVariable Id="ExtensionName" Value="AnchorBoltsWinform"/>
-        <PathVariable Id="ExtensionsRootDir" Value="%commonEnvFolder%\extensions"/>
-        <PathVariable Id="TargetBitmaps" Value="%commonEnvFolder%\..\bitmaps"/>
-        <PathVariable Id="TargetCommonRoot" Value="%commonEnvFolder%"/>
-        <PathVariable Id="TargetUsimpRoot" Value="%commonEnvFolder%\..\usimp"/>
-        <PathVariable Id="TargetUsmetRoot" Value="%commonEnvFolder%\..\usmet"/>
-        <PathVariable Id="TargetModelPlugins" Value="%ExtensionsRootDir%\plugins\tekla\model\%ExtensionName%"/>
-        <PathVariable Id="TargetDrawingPlugins" Value="%ExtensionsRootDir%\plugins\tekla\drawings\%ExtensionName%"/>
-        <PathVariable Id="TargetModelApps" Value="%ExtensionsRootDir%\applications\tekla\model\%ExtensionName%"/>
-        <PathVariable Id="TargetDrawingApps" Value="%ExtensionsRootDir%\applications\tekla\drawings\%ExtensionName%"/>
+        <PathVariable Id="ExtensionName"         Value="AnchorBoltsWinform"/>
+	    <PathVariable Id="ExtensionsRootDir"     Value="%commonEnvFolder%\extensions"/>		
+		<PathVariable Id="ExtensionsDir"         Value="%ENVDIR%\..\Extensions"/>
+		<PathVariable Id="TargetBinaries"        Value="%ExtensionsRootDir%\%ExtensionName%"/>
     </TargetPathVariables>
 
     <Component Id="TheExtensionComponent" Guid="A8A5A1E5-8ED6-4C79-B05A-49F9A8BDBF53">
-        <!-- <File Id="CopyPluginBitmaps" Source="%SourceBitmaps%\*.*" Target="%TargetBitmaps%" Recursive="yes" /> -->
-        <File Id="CopyRibbonImages" Source="%SourceImages%\*.*" Target="%ExtensionsRootDir%\Images" Recursive="yes" />
-        <File Id="CopyDrawingApps" Source="%SourceDrawingApps%\*.*" Target="%TargetDrawingApps%" Recursive="yes" />
-        <!-- <File Id="CopyDrawingPlugins" Source="%SourceDrawingPlugins%\*.*" Target="%TargetDrawingPlugins%" Recursive="yes" /> -->
-        <!-- <File Id="CopyModelApps" Source="%SourceModelApps%\*.*" Target="%TargetModelApps%" Recursive="yes" /> -->
-        <!-- <File Id="CopyModelPlugins" Source="%SourceModelPlugins%\*.*" Target="%TargetModelPlugins%" Recursive="yes" /> -->
-        <File Id="CopyCommonRoot" Source="%SourceCommmonRoot%\*.*" Target="%TargetCommonRoot%" Recursive="yes" />
-        <File Id="CopyUsimpRoot" Source="%SourceUsimpRoot%\*.*" Target="%TargetUsimpRoot%" Recursive="yes" />
-        <File Id="CopyUsmetRoot" Source="%SourceUsmetRoot%\*.*" Target="%TargetUsmetRoot%" Recursive="yes" />
-        <File Id="CloneMacrosToUsimp" Source="%SourceCommmonRoot%\macros\*.*" Target="%TargetUsimpRoot%\macros" Recursive="yes" />
-        <File Id="CloneMacrosToUsmet" Source="%SourceCommmonRoot%\macros\*.*" Target="%TargetUsmetRoot%\macros" Recursive="yes" />
-        <!-- <File Id="CloneSystemToUsimp" Source="%SourceCommmonRoot%\system\*.*" Target="%TargetUsimpRoot%\system" Recursive="yes" /> -->
-        <!-- <File Id="CloneSystemToUsmet" Source="%SourceCommmonRoot%\system\*.*" Target="%TargetUsmetRoot%\system" Recursive="yes" /> -->
-        <File Id="ComponentCatalogFiles" Source="%SourceCatalog%\*.*" Target="%TargetDrawingApps%" Recursive="yes" />
+        <File Id="CopyBinaries" Source="%SourceBinaries%\*.*"  Target="%TargetBinaries%"       Recursive="yes" />
+	    <File Id="CopyEnvs"     Source="%SourceEnv%\*.*"       Target="%ENVDIR%"               Recursive="yes" />		
+		<File Id="CopyRibbon"   Source="%SourceRibbon%\*.*"    Target="%ExtensionsDir%\Images" Recursive="yes" />		
+		<File Id="CopyCatalog"  Source="%SourceCatalog%\*.*"   Target="%TargetBinaries%"       Recursive="yes" />
     </Component>
 
     <Feature Id="TheExtensionFeature" Title="ExtensionFeature">

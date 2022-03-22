@@ -1,8 +1,8 @@
-﻿using System;
-using SpreadsheetReinforcement.ViewModel;
-
-namespace SpreadsheetReinforcement.View
+﻿namespace SpreadsheetReinforcement.View
 {
+    using System;
+    using ViewModel;
+
     /// <summary>
     /// Interaction logic for OptionsWindow.xaml
     /// </summary>

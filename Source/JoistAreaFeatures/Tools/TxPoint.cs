@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using JoistArea.Tools;
     using Tekla.Common.Geometry;
     using Tekla.Structures.Geometry3d;
 
@@ -11,7 +10,6 @@
         public static List<LineSegment> ToSegments(IEnumerable<Point> pxList)
         {
             if (pxList == null) throw new ArgumentNullException();
-
             var ptList = new List<Point>(pxList);
             var lsgList = new List<LineSegment>();
             for (var i = 0; i < ptList.Count; i++)

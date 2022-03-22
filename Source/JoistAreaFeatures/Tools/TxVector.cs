@@ -20,7 +20,8 @@
         /// <returns>True if angle is close to 0</returns>
         public static bool IsSameDirection(this Vector v1, Vector v2, double angleTolerance = GeometryConstants.ANGULAR_EPSILON)
         {
-            if (v2 == null) return false;
+            if (v1 == null) throw new ArgumentNullException(nameof(v1));
+            if (v2 == null) throw new ArgumentNullException(nameof(v2));
             var angle = v1.GetAngleBetween(v2) * 180 / Math.PI;
             return Math.Abs(angle) < angleTolerance;
         }
@@ -34,7 +35,8 @@
         /// <returns>True if angle is close to 180</returns>
         public static bool IsOppositeDirection(this Vector v1, Vector v2, double angleTolerance = GeometryConstants.ANGULAR_EPSILON)
         {
-            if (v2 == null) return false;
+            if (v1 == null) throw new ArgumentNullException(nameof(v1));
+            if (v2 == null) throw new ArgumentNullException(nameof(v2));
             var angle = v1.GetAngleBetween(v2) * 180 / Math.PI;
             return Math.Abs(angle - 180) < angleTolerance;
         }
@@ -48,6 +50,8 @@
         /// <returns>True if perpendicular</returns>
         public static bool IsPerpendicular(this Vector v1, Vector v2, double angleTolerance = GeometryConstants.ANGULAR_EPSILON)
         {
+            if (v1 == null) throw new ArgumentNullException(nameof(v1));
+            if (v2 == null) throw new ArgumentNullException(nameof(v2));
             return Math.Abs(v1.Dot(v2) - 0) < angleTolerance;
         }
 
@@ -58,17 +62,19 @@
         /// <returns>True if already unit vector</returns>
         public static bool IsUnitVector(Vector v1)
         {
+            if (v1 == null) throw new ArgumentNullException(nameof(v1));
             return Math.Abs(v1.GetLength() - 1) < GeometryConstants.DISTANCE_EPSILON;
         }
 
         /// <summary>
         /// Gets new Point from Vector
         /// </summary>
-        /// <param name="tVector">Vector to use</param>
+        /// <param name="v1">Vector to use</param>
         /// <returns>New Geometry3d Point</returns>
-        public static Point ToPoint(this Vector tVector)
+        public static Point ToPoint(this Vector v1)
         {
-            return new Point(tVector.X, tVector.Y, tVector.Z);
+            if (v1 == null) throw new ArgumentNullException(nameof(v1));
+            return new Point(v1.X, v1.Y, v1.Z);
         }
 
         /// <summary>
@@ -79,6 +85,9 @@
         /// <returns>Multiplier vector</returns>
         public static Vector Mutiplier(this Vector v, Matrix m)
         {
+            if (v == null) throw new ArgumentNullException(nameof(v));
+            if (m == null) throw new ArgumentNullException(nameof(m));
+
             var dx = v.X * m[0, 0] + v.Y * m[1, 0] + v.Z * m[2, 0] + 1 * m[3, 0];
             var dy = v.X * m[0, 1] + v.Y * m[1, 1] + v.Z * m[2, 1] + 1 * m[3, 1];
             var dz = v.X * m[0, 2] + v.Y * m[1, 2] + v.Z * m[2, 2] + 1 * m[3, 2];
@@ -93,6 +102,9 @@
         /// <returns></returns>
         public static Vector Translate(this Vector v1, Vector v2)
         {
+            if (v1 == null) throw new ArgumentNullException(nameof(v1));
+            if (v2 == null) throw new ArgumentNullException(nameof(v2));
+
             var result = new Vector(v1);
             result.X = v2.X * result.X;
             result.Y = v2.Y * result.Y;
@@ -103,16 +115,17 @@
         /// <summary>
         /// Rounds vector to five decimal places for each leg
         /// </summary>
-        /// <param name="vector">Vector that needs rounding</param>
+        /// <param name="v1">Vector that needs rounding</param>
         /// <param name="decimalPlaces">How many places past zero to round to</param>
         /// <returns>Resulting rounded vector</returns>
-        public static Vector Round(this Vector vector, int decimalPlaces = 5)
+        public static Vector Round(this Vector v1, int decimalPlaces = 5)
         {
+            if (v1 == null) throw new ArgumentNullException(nameof(v1));
             var result = new Vector
                          {
-                             X = Math.Round(vector.X, decimalPlaces),
-                             Y = Math.Round(vector.Y, decimalPlaces),
-                             Z = Math.Round(vector.Z, decimalPlaces)
+                             X = Math.Round(v1.X, decimalPlaces),
+                             Y = Math.Round(v1.Y, decimalPlaces),
+                             Z = Math.Round(v1.Z, decimalPlaces)
                          };
             return result;
         }
@@ -120,25 +133,27 @@
         /// <summary>
         /// Creates small line segment graphic in model view to represent point
         /// </summary>
-        /// <param name="v"></param>
+        /// <param name="v1"></param>
         /// <param name="color"></param>
-        public static void Paint(this Vector v, Color color = null)
+        public static void Paint(this Vector v1, Color color = null)
         {
+            if (v1 == null) throw new ArgumentNullException(nameof(v1));
             if (color == null) color = new Color(1, 0, 0);
             var gd = new GraphicsDrawer();
-            var ln = new LineSegment(new Point(0, 0, 0), new Point(v));
+            var ln = new LineSegment(new Point(0, 0, 0), new Point(v1));
             gd.DrawLineSegment(ln, color);
         }
 
         /// <summary>
         /// Prints vector information to global log and output/console
         /// </summary>
-        /// <param name="v">Vector to get info from</param>
+        /// <param name="v1">Vector to get info from</param>
         /// <param name="header">Header text for this block</param>
-        public static void Print(this Vector v, string header = "Vector")
+        public static void Print(this Vector v1, string header = "Vector")
         {
+            if (v1 == null) return;
             Trace.WriteLine(header);
-            Trace.WriteLine(string.Format("{0}: ( X:{1}:0.000, Y:{2}:0.000, Z:{3}:0.000 )", header, v.X, v.Y, v.Z));
+            Trace.WriteLine($"{header}: ( X:{v1.X}:0.000, Y:{v1.Y}:0.000, Z:{v1.Z}:0.000 )");
         }
 
         /// <summary>
@@ -149,7 +164,8 @@
         /// <returns></returns>
         public static Vector Transform(this Matrix m, Vector v)
         {
-            if (m == null || v == null) throw new ArgumentNullException();
+            if (v == null) throw new ArgumentNullException(nameof(v));
+            if (m == null) throw new ArgumentNullException(nameof(m));
             var p1 = m.Transform(new Point());
             var p2 = m.Transform(new Point(v.X, v.Y, v.Z));
             return new Vector(p2.X - p1.X, p2.Y - p1.Y, p2.Z - p1.Z);
@@ -162,6 +178,7 @@
 
         public static Vector3 ToVector3(this Point pt)
         {
+            if (pt == null) throw new ArgumentNullException(nameof(pt));
             return new Vector3(pt.X, pt.Y, pt.Z);
         }
     }

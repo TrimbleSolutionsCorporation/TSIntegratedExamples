@@ -1,7 +1,7 @@
-﻿using System.Reflection;
-
-namespace AnchorBoltsWinform.ViewModel
+﻿namespace AnchorBoltsWinform.ViewModel
 {
+    using System.Reflection;
+
     /// <summary>
     /// Application level strings and general shared properties
     /// </summary>

@@ -1,16 +1,16 @@
-﻿using System;
-using System.Linq;
-using System.Windows.Forms;
-using AnchorBoltsWinform.ModelLogic;
-using AnchorBoltsWinform.Tools;
-using AnchorBoltsWinform.ViewModel;
-using Tekla.Structures;
-using Tekla.Structures.Datatype;
-using Tekla.Structures.Dialog;
-using Tekla.Structures.Dialog.UIControls;
-
-namespace AnchorBoltsWinform.View
+﻿namespace AnchorBoltsWinform.View
 {
+    using System;
+    using System.Linq;
+    using System.Windows.Forms;
+    using ModelLogic;
+    using Tools;
+    using ViewModel;
+    using Tekla.Structures;
+    using Tekla.Structures.Datatype;
+    using Tekla.Structures.Dialog;
+    using Tekla.Structures.Dialog.UIControls;
+
     public partial class DiaMain : ApplicationFormBase
     {
         public DiaMain()

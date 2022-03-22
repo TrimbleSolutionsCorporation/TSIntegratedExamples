@@ -3,8 +3,9 @@
     using System;
     using Tekla.Structures.Drawing;
     using Tekla.Structures.Geometry3d;
+    using Tools;
 
-    public static class PluginLogic
+    public static class MainLogic
     {
         public static bool RunLogic(ViewBase tView, Point pt, PluginData data)
         {

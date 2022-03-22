@@ -11,9 +11,9 @@
 
         public MainWindow(MainWindowViewModel viewModel)
         {
-            InitializeComponent();
+            this.InitializeComponent();
             this._viewModel = viewModel;
-            DataContext = _viewModel;
+            this.DataContext = this._viewModel;
         }
 
         private void ApplyClicked(object sender, EventArgs e)
