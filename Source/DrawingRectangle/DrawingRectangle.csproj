@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+  <PropertyGroup>
+    <CopyOutputSubfolderName>DrawingRectangle</CopyOutputSubfolderName>
+    <OutputPath>$(MSBuildProjectDirectory)\Installer\BuildDrop\</OutputPath>
+    <OutputPath2>$(EnvExtensionsDir)\$(CopyOutputSubfolderName)\</OutputPath2>
+    <OutputType>Library</OutputType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Tekla.Structures.Dialog" />
+    <PackageReference Include="Tekla.Structures.Drawing" />
+    <PackageReference Include="Tekla.Structures.Plugins" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Installer\**" />
+    <EmbeddedResource Remove="Installer\**" />
+    <None Remove="Installer\**" />
+    <Page Remove="Installer\**" />
+  </ItemGroup>
+
+</Project>

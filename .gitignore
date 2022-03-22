@@ -28,6 +28,9 @@ Thumbs.db
 *.vspscc
 *.vsscc
 *.VC.db
+*.msi
+/.vs/
+
 
 # Developer tool generated files
 *My Amplifier XE Results - *
@@ -36,7 +39,6 @@ Thumbs.db
 *.orig
 *.rej
 *unittest-report*
-CodeCounter.exe
 
 #Movies
 *.avi
@@ -60,10 +62,12 @@ obj/
 [Tt]est[Rr]esult*/
 _ReSharper*/
 [Ii]nstaller_bin/
+TSEP/
 OpenCover/
 [Uu]sbuild/[Ll]ogs
 */output/
-.vs
+**/extensions/
+Installer/Extensions/
 
 # Other version control
 .svn/
@@ -76,7 +80,6 @@ Z_MiscTools/
 TSProjects/
 toolkits/
 solidkernel/
-References/
 MSBuild/settings.props
 *_interface_hash.h
 *.tlog
@@ -85,26 +88,15 @@ MSBuild/settings.props
 *.clr
 *.sln.ide/
 *_attr_res.h
-*.tsep
-
-Settings.StyleCop
 
 # NuGet
 packages/
-Packages/
 *.swp
 *.pyc
 *.py~
 *.unittest.report.xml
-*.VC.opendb
-**/.sonarqube/**
-**/.cxxresults/**
-Core/TeklaStructures/TeklaStructuresWPF/native_resources.res
-packages.dgml
-**/.vs/*.sqlite
-**/.vs/**
-Core/Catalogs/**
-BuildTools/**
 
-.clang-tidy
-compile_commands.json
+ObjDir
+*.tsep
+
+*.zip

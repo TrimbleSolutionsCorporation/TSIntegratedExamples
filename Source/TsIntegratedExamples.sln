@@ -1,0 +1,68 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.32106.194
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JoistArea", "JoistArea\JoistArea.csproj", "{FD7AFA59-2677-4696-82CD-0136D86DCA07}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1051ABF0-6ACB-4FD9-93F6-E2AA461DA7F9}"
+	ProjectSection(SolutionItems) = preProject
+		..\.editorconfig = ..\.editorconfig
+		..\Directory.Build.props = ..\Directory.Build.props
+		..\Directory.Build.targets = ..\Directory.Build.targets
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JoistAreaFeatures", "JoistAreaFeatures\JoistAreaFeatures.csproj", "{AE7AF04D-C3C6-4040-B70F-DD007C1D9840}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AnchorBoltsSimple", "AnchorBoltsSimple\AnchorBoltsSimple.csproj", "{ACDBD891-6513-49CC-ADD4-8679FD839D0F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AnchorBoltsWinform", "AnchorBoltsWinform\AnchorBoltsWinform.csproj", "{D1537312-7C17-48CE-8189-10560E43DB10}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DrawingRectangle", "DrawingRectangle\DrawingRectangle.csproj", "{EC00D4FD-4FFD-4B5C-8402-190FA6EE2E49}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleHeadless", "SimpleHeadless\SimpleHeadless.csproj", "{3FC6F4D9-F7D5-4F28-A711-367E5F9DD8E0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpreadsheetReinforcement", "SpreadsheetReinforcement\SpreadsheetReinforcement.csproj", "{B6A8941F-BE7F-4F0E-8FEB-B35FE8A06607}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FD7AFA59-2677-4696-82CD-0136D86DCA07}.Debug|x64.ActiveCfg = Debug|x64
+		{FD7AFA59-2677-4696-82CD-0136D86DCA07}.Debug|x64.Build.0 = Debug|x64
+		{FD7AFA59-2677-4696-82CD-0136D86DCA07}.Release|x64.ActiveCfg = Release|x64
+		{FD7AFA59-2677-4696-82CD-0136D86DCA07}.Release|x64.Build.0 = Release|x64
+		{AE7AF04D-C3C6-4040-B70F-DD007C1D9840}.Debug|x64.ActiveCfg = Debug|x64
+		{AE7AF04D-C3C6-4040-B70F-DD007C1D9840}.Debug|x64.Build.0 = Debug|x64
+		{AE7AF04D-C3C6-4040-B70F-DD007C1D9840}.Release|x64.ActiveCfg = Release|x64
+		{AE7AF04D-C3C6-4040-B70F-DD007C1D9840}.Release|x64.Build.0 = Release|x64
+		{ACDBD891-6513-49CC-ADD4-8679FD839D0F}.Debug|x64.ActiveCfg = Debug|x64
+		{ACDBD891-6513-49CC-ADD4-8679FD839D0F}.Debug|x64.Build.0 = Debug|x64
+		{ACDBD891-6513-49CC-ADD4-8679FD839D0F}.Release|x64.ActiveCfg = Release|x64
+		{ACDBD891-6513-49CC-ADD4-8679FD839D0F}.Release|x64.Build.0 = Release|x64
+		{D1537312-7C17-48CE-8189-10560E43DB10}.Debug|x64.ActiveCfg = Debug|x64
+		{D1537312-7C17-48CE-8189-10560E43DB10}.Debug|x64.Build.0 = Debug|x64
+		{D1537312-7C17-48CE-8189-10560E43DB10}.Release|x64.ActiveCfg = Release|x64
+		{D1537312-7C17-48CE-8189-10560E43DB10}.Release|x64.Build.0 = Release|x64
+		{EC00D4FD-4FFD-4B5C-8402-190FA6EE2E49}.Debug|x64.ActiveCfg = Debug|x64
+		{EC00D4FD-4FFD-4B5C-8402-190FA6EE2E49}.Debug|x64.Build.0 = Debug|x64
+		{EC00D4FD-4FFD-4B5C-8402-190FA6EE2E49}.Release|x64.ActiveCfg = Release|x64
+		{EC00D4FD-4FFD-4B5C-8402-190FA6EE2E49}.Release|x64.Build.0 = Release|x64
+		{3FC6F4D9-F7D5-4F28-A711-367E5F9DD8E0}.Debug|x64.ActiveCfg = Debug|x64
+		{3FC6F4D9-F7D5-4F28-A711-367E5F9DD8E0}.Debug|x64.Build.0 = Debug|x64
+		{3FC6F4D9-F7D5-4F28-A711-367E5F9DD8E0}.Release|x64.ActiveCfg = Release|x64
+		{3FC6F4D9-F7D5-4F28-A711-367E5F9DD8E0}.Release|x64.Build.0 = Release|x64
+		{B6A8941F-BE7F-4F0E-8FEB-B35FE8A06607}.Debug|x64.ActiveCfg = Debug|x64
+		{B6A8941F-BE7F-4F0E-8FEB-B35FE8A06607}.Debug|x64.Build.0 = Debug|x64
+		{B6A8941F-BE7F-4F0E-8FEB-B35FE8A06607}.Release|x64.ActiveCfg = Release|x64
+		{B6A8941F-BE7F-4F0E-8FEB-B35FE8A06607}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3232A36B-6DFC-4A99-9C3B-D4BD7A1DD7FD}
+	EndGlobalSection
+EndGlobal

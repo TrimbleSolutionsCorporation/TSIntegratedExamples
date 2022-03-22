@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+  <PropertyGroup>
+    <OutputPath2>$(MSBuildProjectDirectory)\Installer\BuildDrop\</OutputPath2>
+    <OutputType>WinExe</OutputType>
+    <ApplicationIcon>TeklaStructuresExtension.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Tekla.Structures" />
+    <PackageReference Update="Tekla.Structures.Catalogs" />
+    <PackageReference Include="Tekla.Structures.Datatype" />
+    <PackageReference Include="Tekla.Structures.Dialog" />
+    <PackageReference Include="Tekla.Structures.Drawing" />
+    <PackageReference Include="Tekla.Structures.Model" />
+    <PackageReference Include="Tekla.Structures.Plugins" />
+    <PackageReference Include="Tekla.Application.Library" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\*.*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Installer\**" />
+    <EmbeddedResource Remove="Installer\**" />
+    <None Remove="Installer\**" />
+    <Page Remove="Installer\**" />
+  </ItemGroup>
+
+</Project>

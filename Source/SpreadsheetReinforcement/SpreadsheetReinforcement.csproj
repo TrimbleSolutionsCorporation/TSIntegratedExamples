@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+  <PropertyGroup>
+    <OutputPath>$(MSBuildProjectDirectory)\Installer\BuildDrop\</OutputPath>
+    <OutputType>WinExe</OutputType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Office.Interop.Excel" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf">
+      <TreatAsUsed>true</TreatAsUsed>
+    </PackageReference>
+    <PackageReference Include="Tekla.Structures.Dialog" />
+    <PackageReference Include="Tekla.Structures.Drawing" />
+    <PackageReference Include="Tekla.Application.Library" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Tekla.BIM.Toolkit">
+      <HintPath>..\..\Library\Tekla.BIM.Toolkit.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <AppDesigner Include="Properties\" />
+    <Resource Include="Resources\*.*" />
+    <ApplicationDefinition Include="View\App.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Installer\**" />
+    <EmbeddedResource Remove="Installer\**" />
+    <None Remove="Installer\**" />
+    <Page Remove="Installer\**" />
+  </ItemGroup>
+
+</Project>
