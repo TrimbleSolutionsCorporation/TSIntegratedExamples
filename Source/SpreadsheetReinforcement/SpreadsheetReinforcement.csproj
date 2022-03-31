@@ -6,7 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Office.Interop.Excel" />
-    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf">
+    <PackageReference Include="System.Windows.Interactivity.WPF">
       <TreatAsUsed>true</TreatAsUsed>
     </PackageReference>
     <PackageReference Include="Tekla.Structures.Dialog" />

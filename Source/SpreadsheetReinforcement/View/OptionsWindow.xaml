@@ -92,60 +92,6 @@
             </Grid>
         </GroupBox>
 
-        <!--<GroupBox Grid.Row="2" Header="Pilar Component">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="165" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="26" />
-                    <RowDefinition Height="26" />
-                    <RowDefinition Height="26" />
-                </Grid.RowDefinitions>
-
-                <Label Grid.Column="0" Grid.Row="0" Content="Component Name" />
-                <TextBox Grid.Column="1" Grid.Row="0"
-                         Text="{Binding Path=CurrentSetting.PillarComponentName, Mode=TwoWay}" />
-
-                <Label Grid.Column="0" Grid.Row="1" Content="Component Number" />
-                <TextBox Grid.Column="1" Grid.Row="1"
-                         Text="{Binding Path=CurrentSetting.PillarComponentNumber, Mode=TwoWay}" />
-
-                <Label Grid.Column="0" Grid.Row="2" Content="Component Settings" />
-                <TextBox Grid.Column="1" Grid.Row="2"
-                         Text="{Binding Path=CurrentSetting.PillarComponentSettings, Mode=TwoWay}" />
-
-            </Grid>
-        </GroupBox>
-
-        <GroupBox Grid.Row="3" Header="Footing Component">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="165" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="26" />
-                    <RowDefinition Height="26" />
-                    <RowDefinition Height="26" />
-                </Grid.RowDefinitions>
-
-                <Label Grid.Column="0" Grid.Row="0" Content="Component Name" />
-                <TextBox Grid.Column="1" Grid.Row="0"
-                         Text="{Binding Path=CurrentSetting.FootingComponentName, Mode=TwoWay}" />
-
-                <Label Grid.Column="0" Grid.Row="1" Content="Component Number" />
-                <TextBox Grid.Column="1" Grid.Row="1"
-                         Text="{Binding Path=CurrentSetting.FootingComponentNumber, Mode=TwoWay}" />
-
-                <Label Grid.Column="0" Grid.Row="2" Content="Component Settings" />
-                <TextBox Grid.Column="1" Grid.Row="2"
-                         Text="{Binding Path=CurrentSetting.FootingComponentSettings, Mode=TwoWay}" />
-
-            </Grid>
-        </GroupBox>-->
-
         <GroupBox Grid.Row="4" Header="General">
             <StackPanel Orientation="Vertical">
 

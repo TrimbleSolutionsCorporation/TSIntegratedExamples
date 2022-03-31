@@ -1,55 +1,53 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
-  <!-- Custom USA build properties -->
-  <PropertyGroup>
-    <TsFolder>2022.0</TsFolder>
-    <SetSrcForTesting Condition="'$(SetSrcForTesting)'==''">True</SetSrcForTesting>
-    <EnvExtensionsDir>C:\ProgramData\Trimble\Tekla Structures\$(TsFolder)\Environments\common\extensions</EnvExtensionsDir>
+	<!-- Custom USA build properties -->
+	<PropertyGroup>
+		<TsFolder>C:\ProgramData\Trimble\Tekla Structures\2022.0</TsFolder>
+		<EnvExtDir>$(TsFolder)\Environments\common\extensions</EnvExtDir>
 
-    <!-- US Custom build settings -->
-    <PurgeOutputPathAfterClean>False</PurgeOutputPathAfterClean>
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <OutputPath2></OutputPath2>
-    <LangVersion>7</LangVersion>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <Company>Trimble Solutions, USA Inc.</Company>
-    <Product>Tekla Structures</Product>
-    <Copyright>Copyright © 1992-$([System.DateTime]::Now.ToString("yyyy")) Trimble Solutions Corporation and its licensors. All rights reserved.</Copyright>
-    <Description>Tekla Structures Extension</Description>
-    <UseWPF>true</UseWPF>
-    <UseWindowsForms>true</UseWindowsForms>
-    <Platforms>x64</Platforms>
-    <Configuration>Debug</Configuration>
-    <PlatformTarget>x64</PlatformTarget>
-    <TargetFramework>net472</TargetFramework>
-  </PropertyGroup>
+		<!-- US Custom build settings -->
+		<PurgeOutputPathAfterClean>False</PurgeOutputPathAfterClean>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<OutputPath2></OutputPath2>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<Company>Trimble Solutions, USA Inc.</Company>
+		<Product>Tekla Structures</Product>
+		<Copyright>Copyright © 1992-$([System.DateTime]::Now.ToString("yyyy")) Trimble Solutions Corporation and its licensors. All rights reserved.</Copyright>
+		<Description>Tekla Structures Extension</Description>
+		<UseWPF>true</UseWPF>
+		<UseWindowsForms>true</UseWindowsForms>
+		<Platforms>x64</Platforms>
+		<Configuration>Debug</Configuration>
+		<PlatformTarget>x64</PlatformTarget>
+		<TargetFramework>net472</TargetFramework>
+	</PropertyGroup>
 
-  <!-- Custom routines to copy build output (after cleaned up) to different additional locations -->
-  <Target Name="CopyAction2" AfterTargets="Build" Condition="'$(OutputPath2)'!='' AND '$(SetSrcForTesting)'=='True'">
-    <ItemGroup>
-      <MySourceFiles Include="$(OutputPath)\*.*" />
-    </ItemGroup>
-    <Copy SourceFiles="@(MySourceFiles)" DestinationFolder="$(OutputPath2)\"
-      SkipUnchangedFiles="true" OverwriteReadOnlyFiles="true" Retries="1" />
-    <Message Text="Copied output to: $(OutputPath2)" Importance="High" />
-  </Target>
+	<!-- Custom routines to copy build output (after cleaned up) to different additional locations -->
+	<Target Name="CopyAction2" AfterTargets="Build" Condition="'$(OutputPath2)'!='' AND '$(SetSrcForTesting)'=='True'">
+		<ItemGroup>
+			<MySourceFiles Include="$(OutputPath)\*.*" />
+		</ItemGroup>
+		<Copy SourceFiles="@(MySourceFiles)" DestinationFolder="$(OutputPath2)\"
+		  SkipUnchangedFiles="true" OverwriteReadOnlyFiles="true" Retries="1" />
+		<Message Text="Copied output to: $(OutputPath2)" Importance="High" />
+	</Target>
 
-  <!-- Custom routine to clean build output folder(s) -->
-  <Target Name="CleanAction2" AfterTargets="Clean" Condition="'$(PurgeOutputPathAfterClean)'=='True' AND '$(OutputPath2)'!='' AND '$(SetSrcForTesting)'=='True'">
-    <Exec Command="Del $(OutputPath)\*.* /s /q /f"        IgnoreExitCode="true" Condition="'$(OutputPath)'!=''"/>
-    <Exec Command="Del $(OutputPath2)\*.* /s /q /f"       IgnoreExitCode="true" Condition="'$(OutputPath2)'!=''"/>
-    <Message Text="Cleared output folder: $(OutputPath)"  Importance="High" />
-    <Message Text="Cleared output folder: $(OutputPath2)" Importance="High" />
-  </Target>
+	<!-- Custom routine to clean build output folder(s) -->
+	<Target Name="CleanAction2" AfterTargets="Clean" Condition="'$(PurgeOutputPathAfterClean)'=='True' AND '$(OutputPath2)'!='' AND '$(SetSrcForTesting)'=='True'">
+		<Exec Command="Del $(OutputPath)\*.* /s /q /f"        IgnoreExitCode="true" Condition="'$(OutputPath)'!=''"/>
+		<Exec Command="Del $(OutputPath2)\*.* /s /q /f"       IgnoreExitCode="true" Condition="'$(OutputPath2)'!=''"/>
+		<Message Text="Cleared output folder: $(OutputPath)"  Importance="High" />
+		<Message Text="Cleared output folder: $(OutputPath2)" Importance="High" />
+	</Target>
 
-  <Target Name="PrintPaths" AfterTargets="Clean">
-    <Message Text="TSFolder:                         $(TSFolder)" />
-    <Message Text="EnvExtensionsDir:                 $([System.IO.Path]::GetFullPath('$(EnvExtensionsDir)'))" />
-    <Message Text="OutputPath:                       $([System.IO.Path]::GetFullPath('$(OutputPath)'))" />
-    <Message Text="OutputPath2:                      $([System.IO.Path]::GetFullPath('$(OutputPath2)'))" Condition="'$(OutputPath2)'!=''" />
-    <Message Text="IntermediateOutputPath:           $([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)'))" />
-  </Target>
+	<Target Name="PrintPaths" AfterTargets="Clean">
+		<Message Text="TSFolder:                        $(TSFolder)" />
+		<Message Text="OutputPath:                      $(OutputPath)" />
+		<Message Text="OutputPath2:                     $(OutputPath2)"             Condition="'$(OutputPath2)'!=''" />
+		<Message Text="EnvTafBuildDir:                  $(EnvExtDir)"               Condition="'$(EnvExtDir)'!=''" />
+		<Message Text="IntermediateOutputPath:          $(IntermediateOutputPath)" />
+	</Target>
 
 </Project>
 
