@@ -3,6 +3,8 @@
     <OutputPath2>$(MSBuildProjectDirectory)\Installer\BuildDrop\</OutputPath2>
     <OutputType>WinExe</OutputType>
     <ApplicationIcon>Resources\TeklaStructuresExtension.ico</ApplicationIcon>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>

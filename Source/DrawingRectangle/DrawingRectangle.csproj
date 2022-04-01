@@ -4,6 +4,8 @@
     <OutputPath>$(MSBuildProjectDirectory)\Installer\BuildDrop\</OutputPath>
     <OutputPath2>$(EnvExtensionsDir)\$(CopyOutputSubfolderName)\</OutputPath2>
     <OutputType>Library</OutputType>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>

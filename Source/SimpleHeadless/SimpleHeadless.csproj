@@ -2,6 +2,8 @@
   <PropertyGroup>
     <OutputPath>$(MSBuildProjectDirectory)\Installer\BuildDrop\</OutputPath>
     <OutputType>Exe</OutputType>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>

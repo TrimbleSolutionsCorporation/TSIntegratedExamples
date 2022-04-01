@@ -10,7 +10,6 @@
 		<PurgeOutputPathAfterClean>False</PurgeOutputPathAfterClean>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<OutputPath2></OutputPath2>
-		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<Company>Trimble Solutions, USA Inc.</Company>
 		<Product>Tekla Structures</Product>
 		<Copyright>Copyright © 1992-$([System.DateTime]::Now.ToString("yyyy")) Trimble Solutions Corporation and its licensors. All rights reserved.</Copyright>
