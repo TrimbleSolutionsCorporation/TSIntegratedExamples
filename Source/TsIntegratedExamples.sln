@@ -24,6 +24,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleHeadless", "SimpleHea
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpreadsheetReinforcement", "SpreadsheetReinforcement\SpreadsheetReinforcement.csproj", "{B6A8941F-BE7F-4F0E-8FEB-B35FE8A06607}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Listener", "Launch\Listener.csproj", "{A3DD83E0-CCA5-4B70-AE4F-4D34DE4A05CC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -58,6 +60,10 @@ Global
 		{B6A8941F-BE7F-4F0E-8FEB-B35FE8A06607}.Debug|x64.Build.0 = Debug|x64
 		{B6A8941F-BE7F-4F0E-8FEB-B35FE8A06607}.Release|x64.ActiveCfg = Release|x64
 		{B6A8941F-BE7F-4F0E-8FEB-B35FE8A06607}.Release|x64.Build.0 = Release|x64
+		{A3DD83E0-CCA5-4B70-AE4F-4D34DE4A05CC}.Debug|x64.ActiveCfg = Debug|x64
+		{A3DD83E0-CCA5-4B70-AE4F-4D34DE4A05CC}.Debug|x64.Build.0 = Debug|x64
+		{A3DD83E0-CCA5-4B70-AE4F-4D34DE4A05CC}.Release|x64.ActiveCfg = Release|x64
+		{A3DD83E0-CCA5-4B70-AE4F-4D34DE4A05CC}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,0 +1,68 @@
+﻿<Window x:Class="Listener.View.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:viewModel="clr-namespace:Listener.ViewModel"
+        Loaded="TempLoadEventDel" Topmost="True"
+        mc:Ignorable="d" SizeToContent="WidthAndHeight" Title="Launch"
+        MaxHeight="650" MaxWidth="1200" MinHeight="250" MinWidth="400">
+
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding OnLoadedCommand}" />
+        </i:EventTrigger>
+        <i:EventTrigger EventName="Closing">
+            <i:InvokeCommandAction Command="{Binding OnClosingCommand}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+
+    <Window.DataContext>
+        <viewModel:MainViewModel/>
+    </Window.DataContext>
+
+    <Grid Margin="5">
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <GroupBox Header="Connection" Grid.Row="0" Padding="5">
+            <StackPanel Orientation="Vertical">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="IsConnected: " />
+                    <TextBlock Text="{Binding IsConnected, Mode=OneWay}" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="IsModelOpen: " />
+                    <TextBlock Text="{Binding IsModelOpen, Mode=OneWay}" />
+                </StackPanel>
+            </StackPanel>
+        </GroupBox>
+
+        <GroupBox Header="Model" Grid.Row="1" Padding="5">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Model Path: " />
+                <TextBlock Text="{Binding ModelInfo.ModelPath, Mode=OneWay}" />
+            </StackPanel>
+        </GroupBox>
+
+        <GroupBox Header="Listen" Grid.Row="2" Padding="5">
+            <StackPanel Orientation="Vertical">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Start time: " />
+                    <TextBlock Text="{Binding StartTime, Mode=OneWay, 
+                           StringFormat={}{0:hh}:{0:mm}:{0:ss}}" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Listen Mode time: " />
+                    <TextBlock Text="{Binding ListenTime, Mode=OneWay, 
+                           StringFormat={}{0:hh}:{0:mm}:{0:ss}}" />
+                </StackPanel>
+                <Button Content="Start" Command="{Binding StartTeklaCommand}" />
+            </StackPanel>
+        </GroupBox>
+    </Grid>
+</Window>
