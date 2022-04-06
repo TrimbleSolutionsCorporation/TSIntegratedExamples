@@ -24,16 +24,16 @@ namespace SimpleHeadless
         private static string logFileName = "SimpleHeadless_log.txt";
 
         private static readonly DirectoryInfo BinDirectory =
-            new DirectoryInfo(@"C:\Program Files\Tekla Structures\2021.0 Daily\nt\bin");
+            new DirectoryInfo(@"C:\Program Files\Tekla Structures\2022.0 Daily\bin");
 
         private static readonly DirectoryInfo ModelDirectory =
-            new DirectoryInfo(@"C:\TeklaStructuresModels\2021_Headless");
+            new DirectoryInfo(@"C:\TeklaStructuresModels\2022_Headless");
 
         private static readonly FileInfo EnvironmentFile =
-            new FileInfo(@"C:\ProgramData\Trimble\Tekla Structures\2021.0 Daily\Environments\USA\env_US.ini");
+            new FileInfo(@"C:\ProgramData\Trimble\Tekla Structures\2022.0 Daily\Environments\USA\env_US.ini");
 
         private static readonly FileInfo RoleFile =
-            new FileInfo(@"C:\ProgramData\Trimble\Tekla Structures\2021.0 Daily\Environments\USA\Role_Imperial_Steel_Detailing.ini");
+            new FileInfo(@"C:\ProgramData\Trimble\Tekla Structures\2022.0 Daily\Environments\USA\Role_Imperial_Steel_Detailing.ini");
 
         private static string languageStr = "ENGLISH";
         private static string licenseStr = "FULL";
@@ -85,8 +85,8 @@ namespace SimpleHeadless
                     new ModelHandler().Save();
 
                     //Add log entry and pause
-                    Console.WriteLine("End of headless operations...Press any key to end");
-                    Console.ReadKey();
+                    Console.WriteLine("End of headless operations...");
+                    //Console.ReadKey();
                 }
             }
             catch (Exception ex)
@@ -185,8 +185,8 @@ namespace SimpleHeadless
         private static void CacheTsAssemblyPaths()
         {
             //Cache path only once per session
-            if (!BinDirectory.Exists) return;
             _paths = new List<string>();
+            if (!BinDirectory.Exists) return;
 
             //Add paths and print to debug trace
             _paths.Add(BinDirectory.FullName);
