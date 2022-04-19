@@ -81,20 +81,36 @@
             {
                 this._timer?.Stop();
 
-                //Check if Tekla Structures is running first
-                var tsProcess = MainLogic.GetTeklaProcess();
-                if (!tsProcess.Any())
-                {
-                    this.SetStatusNotConnected();
-                    return;
-                }
+                var TsIsConnectable = MainLogic.CheckTeklaStructuresStatus();
 
-                //If Tekla Structures is running, try connection via API
-                var tModel = new Model();
-                this.IsConnected = tModel.GetConnectionStatus();
-                if (this.IsConnected)
+                //Check if Tekla Structures is running first
+                //var tsProcess = MainLogic.GetTeklaProcess();
+                //if (!tsProcess.Any())
+                //{
+                //    this.SetStatusNotConnected();
+                //    return;
+                //}
+
+                //foreach (var p in tsProcess)
+                //{
+                //    if (p.Modules.Count < 360)
+                //    {
+                //        return;
+                //    }
+                //}
+                if (TsIsConnectable == 0 )
                 {
-                    this.ModelInfo = tModel.GetInfo();
+                    var tModel = new Model();
+                    this.IsConnected = tModel.GetConnectionStatus();
+                }
+                //If Tekla Structures is running, try connection via API
+                //var tModel = new Model();
+                //this.IsConnected = tModel.GetConnectionStatus();
+                if (this.IsConnected )
+                {
+                    var tModel = new Model();
+                    //the connection breaks here sometimes
+                    this.ModelInfo = tModel.GetInfo(); 
                     this.IsModelOpen = !string.IsNullOrEmpty(this.ModelInfo.ModelPath);
                 }
                 else
@@ -105,9 +121,20 @@
             }
             catch (System.Runtime.Remoting.RemotingException)
             {
-                this.SetStatusNotConnected();
+                if (this.IsConnected)
+                {
+                    this.IsModelOpen = false;
+                    this.ModelInfo = null;
+                }
+                else
+                {
+                    this.SetStatusNotConnected();
+                }
                 //Expected - not connected yet
                 //todo: find if can re-activate connection once failed?
+
+                // ends up here if there is issue getting ModelInfo even if IsConnected is true
+                // need to restart the app?
             }
             catch (Exception ex)
             {

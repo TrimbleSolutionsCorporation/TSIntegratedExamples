@@ -17,6 +17,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Checker\Checker.csproj">
+      <Private>true</Private>
+    </ProjectReference>
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="Bypass.ini">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

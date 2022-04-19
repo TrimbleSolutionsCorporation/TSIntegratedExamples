@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+  <PropertyGroup>
+    <OutputPath>$(MSBuildProjectDirectory)\Installer\BuildDrop\</OutputPath>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Tekla.Structures" />
+    <PackageReference Include="Tekla.Structures.Model" />
+  </ItemGroup>
+
+</Project>

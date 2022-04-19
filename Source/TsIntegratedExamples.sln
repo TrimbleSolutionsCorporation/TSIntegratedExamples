@@ -24,7 +24,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleHeadless", "SimpleHea
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpreadsheetReinforcement", "SpreadsheetReinforcement\SpreadsheetReinforcement.csproj", "{B6A8941F-BE7F-4F0E-8FEB-B35FE8A06607}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Listener", "Launch\Listener.csproj", "{A3DD83E0-CCA5-4B70-AE4F-4D34DE4A05CC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Listener", "Launch\Listener.csproj", "{A3DD83E0-CCA5-4B70-AE4F-4D34DE4A05CC}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9664602B-CDDE-4618-A05D-7B1882F76821} = {9664602B-CDDE-4618-A05D-7B1882F76821}
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Checker", "Checker\Checker.csproj", "{9664602B-CDDE-4618-A05D-7B1882F76821}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -64,6 +69,10 @@ Global
 		{A3DD83E0-CCA5-4B70-AE4F-4D34DE4A05CC}.Debug|x64.Build.0 = Debug|x64
 		{A3DD83E0-CCA5-4B70-AE4F-4D34DE4A05CC}.Release|x64.ActiveCfg = Release|x64
 		{A3DD83E0-CCA5-4B70-AE4F-4D34DE4A05CC}.Release|x64.Build.0 = Release|x64
+		{9664602B-CDDE-4618-A05D-7B1882F76821}.Debug|x64.ActiveCfg = Debug|x64
+		{9664602B-CDDE-4618-A05D-7B1882F76821}.Debug|x64.Build.0 = Debug|x64
+		{9664602B-CDDE-4618-A05D-7B1882F76821}.Release|x64.ActiveCfg = Release|x64
+		{9664602B-CDDE-4618-A05D-7B1882F76821}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
