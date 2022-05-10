@@ -3,7 +3,7 @@
 
 	<!-- Custom USA build properties -->
 	<PropertyGroup>
-		<TsFolder>C:\ProgramData\Trimble\Tekla Structures\2022.0</TsFolder>
+		<TsFolder>C:\ProgramData\Trimble\Tekla Structures\2022.0 Daily</TsFolder>
 		<EnvExtDir>$(TsFolder)\Environments\common\extensions</EnvExtDir>
 
 		<!-- US Custom build settings -->
