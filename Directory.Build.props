@@ -44,7 +44,7 @@
 		<Message Text="TSFolder:                        $(TSFolder)" />
 		<Message Text="OutputPath:                      $(OutputPath)" />
 		<Message Text="OutputPath2:                     $(OutputPath2)"             Condition="'$(OutputPath2)'!=''" />
-		<Message Text="EnvTafBuildDir:                  $(EnvExtDir)"               Condition="'$(EnvExtDir)'!=''" />
+		<Message Text="EnvExtDir:                       $(EnvExtDir)"               Condition="'$(EnvExtDir)'!=''" />
 		<Message Text="IntermediateOutputPath:          $(IntermediateOutputPath)" />
 	</Target>
 
