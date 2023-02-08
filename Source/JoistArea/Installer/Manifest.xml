@@ -6,7 +6,7 @@
 		Description= "Example model plugin to place joist beams in polygonal area."
 		IconPath="%TEPDEFINITIONFILEFOLDER%\Icon.png" Type="Extension">
 		<TeklaVersions>
-			<TeklaVersion Name="2022.0"/>
+			<TeklaVersion Name="2023.0"/>
 			<MinTeklaVersion Name="2019.0"/>
 			<MaxTeklaVersion Name="2099.1"/>		
 		</TeklaVersions>

@@ -7,17 +7,18 @@
     <!-- ########## -->
     <!-- Tekla Structures API and Related Version Specific Packages -->
     <!-- ########## -->
-    <PackageReference Update="Tekla.Application.Library"                    Version="2022.0.10075"  ExcludeAssets="runtime" />
-    <PackageReference Update="Tekla.Structures"                             Version="2022.0.10075"  ExcludeAssets="runtime" />
-    <PackageReference Update="Tekla.Structures.Catalogs"                    Version="2022.0.10075"  ExcludeAssets="runtime" />
-    <PackageReference Update="Tekla.Structures.Datatype"                    Version="2022.0.10075"  ExcludeAssets="runtime" />
-    <PackageReference Update="Tekla.Structures.Dialog"                      Version="2022.0.10075"  ExcludeAssets="runtime" />
-    <PackageReference Update="Tekla.Structures.Drawing"                     Version="2022.0.10075"  ExcludeAssets="runtime" />
-    <PackageReference Update="Tekla.Structures.Model"                       Version="2022.0.10075"  ExcludeAssets="runtime" />
-    <PackageReference Update="Tekla.Structures.Plugins"                     Version="2022.0.10075"  ExcludeAssets="runtime" />
-    <PackageReference Update="Tekla.Structures.Service"                     Version="2022.0.10075"  ExcludeAssets="runtime" />
-    <PackageReference Update="Tekla.BIM.DirectManipulation"                 Version="2022.0.10075"  ExcludeAssets="runtime" />
-    <PackageReference Update="Tekla.Structures.Plugins.DirectManipulation"  Version="2022.0.10075"  ExcludeAssets="runtime" />
+    <PackageReference Update="Tekla.Application.Library"                 Version="2023.0.0"  ExcludeAssets="runtime" />
+    <PackageReference Update="Tekla.Structures"                          Version="2023.0.0"  ExcludeAssets="runtime" />
+    <PackageReference Update="Tekla.Structures.Catalogs"                 Version="2023.0.0"  ExcludeAssets="runtime" />
+    <PackageReference Update="Tekla.Structures.Datatype"                 Version="2023.0.0"  ExcludeAssets="runtime" />
+    <PackageReference Update="Tekla.Structures.Dialog"                   Version="2023.0.0"  ExcludeAssets="runtime" />
+    <PackageReference Update="Tekla.Structures.Dialog"                    PrivateAssets="all"   ExcludeAssets="runtime" />
+    <PackageReference Update="Tekla.Structures.Drawing"                  Version="2023.0.0"  ExcludeAssets="runtime" />
+    <PackageReference Update="Tekla.Structures.Model"                    Version="2023.0.0"  ExcludeAssets="runtime" />
+    <PackageReference Update="Tekla.Structures.Plugins"                  Version="2023.0.0"  ExcludeAssets="runtime" />
+    <PackageReference Update="Tekla.Structures.Service"                     Version="2023.0.0"  ExcludeAssets="runtime" />
+    <PackageReference Update="Tekla.BIM.DirectManipulation"                 Version="2023.0.0"  ExcludeAssets="runtime" />
+    <PackageReference Update="Tekla.Structures.Plugins.DirectManipulation"  Version="2023.0.0"  ExcludeAssets="runtime" />
 
     <!-- ########## -->
     <!-- TS Related NON-Version Specific Packages -->
@@ -27,8 +28,8 @@
     <!-- ########## -->
     <!-- Other Packages -->
     <!-- ########## -->
-    <PackageReference Update="Fusion"                                       Version="3.5.264" />
-    <PackageReference Update="Newtonsoft.Json"                              Version="12.0.1" />
+	<PackageReference Update="TeklaFusion"                              Version="4.0.8" />
+    <PackageReference Update="Newtonsoft.Json"                          Version="13.0.1" />
 	<PackageReference Update="System.Windows.Interactivity.WPF"             Version="4.5.0" />
     <PackageReference Update="Microsoft.CSharp"                             Version="4.7.0" />
     <PackageReference Update="Microsoft.Office.Interop.Excel"               Version="15.0.4795.1000" />
