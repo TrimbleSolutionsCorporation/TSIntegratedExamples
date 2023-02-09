@@ -28,4 +28,4 @@ Build Configuration:
 >Each project has PropertyGroup section in .csproj for setting custom variables for target cleaning and copying of output as well as to set the sub-folder name using installer output
 >Reference package versions are set in Packages.props at solution level
 
-+Select a different branch to see examples for that version of Tekla Structures
++Select a different branch to see examples for that version of Tekla Structures...
