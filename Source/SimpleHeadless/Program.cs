@@ -24,16 +24,16 @@ namespace SimpleHeadless
         private static string logFileName = "SimpleHeadless_log.txt";
 
         private static readonly DirectoryInfo BinDirectory =
-            new DirectoryInfo(@"C:\Program Files\Tekla Structures\2022.0 Daily\bin");
+            new DirectoryInfo(@"C:\Program Files\Tekla Structures\2023.0 Daily\bin");
 
         private static readonly DirectoryInfo ModelDirectory =
-            new DirectoryInfo(@"C:\TeklaStructuresModels\2022_Headless");
+            new DirectoryInfo(@"C:\TeklaStructuresModels\2023_Headless");
 
         private static readonly FileInfo EnvironmentFile =
-            new FileInfo(@"C:\ProgramData\Trimble\Tekla Structures\2022.0 Daily\Environments\USA\env_US.ini");
+            new FileInfo(@"C:\ProgramData\Trimble\Tekla Structures\2023.0 Daily\Environments\USA\env_US.ini");
 
         private static readonly FileInfo RoleFile =
-            new FileInfo(@"C:\ProgramData\Trimble\Tekla Structures\2022.0 Daily\Environments\USA\Role_Imperial_Steel_Detailing.ini");
+            new FileInfo(@"C:\ProgramData\Trimble\Tekla Structures\2023.0 Daily\Environments\USA\Role_Imperial_Steel_Detailing.ini");
 
         private static string languageStr = "ENGLISH";
         private static string licenseStr = "FULL";

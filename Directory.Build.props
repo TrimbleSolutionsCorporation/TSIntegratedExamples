@@ -19,12 +19,12 @@
 		<Platforms>x64</Platforms>
 		<Configuration>Debug</Configuration>
 		<PlatformTarget>x64</PlatformTarget>
-    		<TargetFramework>net48</TargetFramework>
+		<TargetFramework>net48</TargetFramework>
 		<NoWarn>NU1605</NoWarn>
 	</PropertyGroup>
 
 	<!-- Custom routines to copy build output (after cleaned up) to different additional locations -->
-	<Target Name="CopyAction2" AfterTargets="Build" Condition="'$(OutputPath2)'!='' AND '$(SetSrcForTesting)'=='True'">
+	<Target Name="CopyAction2" AfterTargets="Build" Condition="'$(OutputPath2)'!=''">
 		<ItemGroup>
 			<MySourceFiles Include="$(OutputPath)\*.*" />
 		</ItemGroup>
@@ -34,7 +34,7 @@
 	</Target>
 
 	<!-- Custom routine to clean build output folder(s) -->
-	<Target Name="CleanAction2" AfterTargets="Clean" Condition="'$(PurgeOutputPathAfterClean)'=='True' AND '$(OutputPath2)'!='' AND '$(SetSrcForTesting)'=='True'">
+	<Target Name="CleanAction2" AfterTargets="Clean" Condition="'$(PurgeOutputPathAfterClean)'=='True' AND '$(OutputPath2)'!=''">
 		<Exec Command="Del $(OutputPath)\*.* /s /q /f"        IgnoreExitCode="true" Condition="'$(OutputPath)'!=''"/>
 		<Exec Command="Del $(OutputPath2)\*.* /s /q /f"       IgnoreExitCode="true" Condition="'$(OutputPath2)'!=''"/>
 		<Message Text="Cleared output folder: $(OutputPath)"  Importance="High" />
